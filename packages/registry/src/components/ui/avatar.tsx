@@ -15,26 +15,6 @@ type AvatarFallbackProps = ViewProps & {
     className?: string;
 };
 
-function getSizeStyle(className?: string) {
-    if (!className) return undefined;
-    if (className.includes('h-20') || className.includes('w-20')) return styles.size20;
-    if (className.includes('h-16') || className.includes('w-16')) return styles.size16;
-    if (className.includes('h-14') || className.includes('w-14')) return styles.size14;
-    return undefined;
-}
-
-function Avatar({ className, style, ...props }: AvatarProps) {
-    return <View style={[styles.base, getSizeStyle(className), style]} {...props} />;
-}
-
-function AvatarImage({ style, src, source, ...props }: AvatarImageProps) {
-    return <Image style={[styles.image, style]} source={source ?? (src ? { uri: src } : undefined)} {...props} />;
-}
-
-function AvatarFallback({ style, ...props }: AvatarFallbackProps) {
-    return <View style={[styles.fallback, style]} {...props} />;
-}
-
 const styles = StyleSheet.create({
     base: {
         borderRadius: 999,
@@ -65,6 +45,26 @@ const styles = StyleSheet.create({
         width: 80,
     },
 });
+
+function getSizeStyle(className?: string) {
+    if (!className) return undefined;
+    if (className.includes('h-20') || className.includes('w-20')) return styles.size20;
+    if (className.includes('h-16') || className.includes('w-16')) return styles.size16;
+    if (className.includes('h-14') || className.includes('w-14')) return styles.size14;
+    return undefined;
+}
+
+function Avatar({ className, style, ...props }: AvatarProps) {
+    return <View style={[styles.base, getSizeStyle(className), style]} {...props} />;
+}
+
+function AvatarImage({ style, src, source, ...props }: AvatarImageProps) {
+    return <Image style={[styles.image, style]} source={source ?? (src ? { uri: src } : undefined)} {...props} />;
+}
+
+function AvatarFallback({ style, ...props }: AvatarFallbackProps) {
+    return <View style={[styles.fallback, style]} {...props} />;
+}
 
 export { Avatar, AvatarFallback, AvatarImage };
 export type { AvatarFallbackProps, AvatarImageProps, AvatarProps };

@@ -10,12 +10,7 @@
                     "type": "registry:ui"
                 }
             ],
-            "dependencies": [
-                "@rn-primitives/slot",
-                "class-variance-authority",
-                "lucide-react-native",
-                "react-native-svg"
-            ],
+            "dependencies": [],
             "registryDependencies": [
                 "text"
             ],
@@ -38,8 +33,7 @@
                 }
             ],
             "dependencies": [
-                "@rn-primitives/slot",
-                "class-variance-authority"
+                "@rn-primitives/slot"
             ],
             "registryDependencies": [],
             "tailwind": {
@@ -60,9 +54,7 @@
                     "type": "registry:ui"
                 }
             ],
-            "dependencies": [
-                "class-variance-authority"
-            ],
+            "dependencies": [],
             "registryDependencies": [],
             "tailwind": {
                 "config": {
@@ -82,9 +74,7 @@
                     "type": "registry:ui"
                 }
             ],
-            "dependencies": [
-                "class-variance-authority"
-            ],
+            "dependencies": [],
             "registryDependencies": [
                 "text"
             ],
@@ -148,9 +138,7 @@
                     "type": "registry:ui"
                 }
             ],
-            "dependencies": [
-                "@rn-primitives/label"
-            ],
+            "dependencies": [],
             "registryDependencies": [],
             "tailwind": {
                 "config": {
@@ -170,9 +158,7 @@
                     "type": "registry:ui"
                 }
             ],
-            "dependencies": [
-                "@rn-primitives/separator"
-            ],
+            "dependencies": [],
             "registryDependencies": [],
             "tailwind": {
                 "config": {

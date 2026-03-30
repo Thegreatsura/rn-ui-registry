@@ -1,3 +1,4 @@
+import { useRegistryTheme } from '@/registry/lib/theme';
 import * as React from 'react';
 import { StyleSheet, View, type ViewProps } from 'react-native';
 
@@ -7,13 +8,8 @@ type SeparatorProps = ViewProps & {
     orientation?: 'horizontal' | 'vertical';
 };
 
-function Separator({ orientation = 'horizontal', style, ...props }: SeparatorProps) {
-    return <View style={[styles.base, orientation === 'vertical' ? styles.vertical : styles.horizontal, style]} {...props} />;
-}
-
 const styles = StyleSheet.create({
     base: {
-        backgroundColor: '#e4e4e7',
         flexShrink: 0,
     },
     horizontal: {
@@ -25,6 +21,12 @@ const styles = StyleSheet.create({
         width: StyleSheet.hairlineWidth,
     },
 });
+
+function Separator({ orientation = 'horizontal', style, ...props }: SeparatorProps) {
+    const theme = useRegistryTheme();
+
+    return <View style={[styles.base, { backgroundColor: theme.border }, orientation === 'vertical' ? styles.vertical : styles.horizontal, style]} {...props} />;
+}
 
 export { Separator };
 export type { SeparatorProps };
