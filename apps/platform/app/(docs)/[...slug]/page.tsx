@@ -47,6 +47,11 @@ type ResolvedDocsPageData = {
   dependencies?: string[];
 };
 
+const DEFAULT_APP_STORE_HREF =
+  "https://apps.apple.com/app/expo-go/id982107779";
+const DEFAULT_PLAY_STORE_HREF =
+  "https://play.google.com/store/apps/details?id=host.exp.exponent";
+
 export function generateStaticParams() {
   return docsSource.generateParams();
 }
@@ -134,6 +139,9 @@ export default async function DocsPage({
   }
 
   const pager = getComponentPager(componentSlug);
+  const qrValue = pageData.qrValue ?? `showcase://components/${componentSlug}`;
+  const appStoreHref = pageData.appStoreHref ?? DEFAULT_APP_STORE_HREF;
+  const playStoreHref = pageData.playStoreHref ?? DEFAULT_PLAY_STORE_HREF;
 
   return (
     <MotionDiv
@@ -174,9 +182,7 @@ export default async function DocsPage({
         </section>
 
         <section className="mb-6 min-w-0 space-y-4">
-          {pageData.qrValue &&
-          pageData.appStoreHref &&
-          pageData.playStoreHref ? (
+          {qrValue ? (
             <div className="flex justify-start sm:justify-end">
               <Popover>
                 <PopoverTrigger asChild>
@@ -186,9 +192,9 @@ export default async function DocsPage({
                 </PopoverTrigger>
                 <PopoverContent>
                   <PreviewCard
-                    qrValue={pageData.qrValue}
-                    appStoreHref={pageData.appStoreHref}
-                    playStoreHref={pageData.playStoreHref}
+                    qrValue={qrValue}
+                    appStoreHref={appStoreHref}
+                    playStoreHref={playStoreHref}
                   />
                 </PopoverContent>
               </Popover>

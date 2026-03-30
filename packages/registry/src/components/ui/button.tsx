@@ -1,4 +1,5 @@
 import { TextStyleContext } from '@/registry/components/ui/text';
+import { useRegistryTheme } from '@/registry/lib/theme';
 import * as React from 'react';
 import {
     Pressable,
@@ -13,45 +14,70 @@ import {
 type ButtonVariant = 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
 type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
 
-type ButtonProps = Omit<PressableProps, 'children'> &
-    {
-        children?: React.ReactNode;
-        className?: string;
-        variant?: ButtonVariant;
-        size?: ButtonSize;
-    };
+type ButtonProps = Omit<PressableProps, 'children'> & {
+    children?: React.ReactNode;
+    className?: string;
+    variant?: ButtonVariant;
+    size?: ButtonSize;
+};
 
-function getButtonStyle(variant: ButtonVariant): StyleProp<ViewStyle> {
+function getButtonStyle(variant: ButtonVariant, theme: ReturnType<typeof useRegistryTheme>): StyleProp<ViewStyle> {
     switch (variant) {
         case 'destructive':
-            return styles.destructiveButton;
+            return {
+                backgroundColor: theme.destructive,
+                borderColor: theme.destructive,
+                borderWidth: 1,
+            };
         case 'outline':
-            return styles.outlineButton;
+            return {
+                backgroundColor: theme.background,
+                borderColor: theme.border,
+                borderWidth: 1,
+            };
         case 'secondary':
-            return styles.secondaryButton;
+            return {
+                backgroundColor: theme.secondary,
+                borderColor: 'transparent',
+                borderWidth: 1,
+            };
         case 'ghost':
-            return styles.ghostButton;
+            return {
+                backgroundColor: 'transparent',
+                borderColor: 'transparent',
+                borderWidth: 1,
+            };
         case 'link':
-            return styles.linkButton;
+            return {
+                backgroundColor: 'transparent',
+                borderColor: 'transparent',
+                borderWidth: 0,
+                paddingHorizontal: 0,
+                paddingVertical: 0,
+            };
         default:
-            return styles.defaultButton;
+            return {
+                backgroundColor: theme.primary,
+                borderColor: theme.primary,
+                borderWidth: 1,
+            };
     }
 }
 
-function getButtonTextStyle(variant: ButtonVariant): StyleProp<TextStyle> {
+function getButtonTextStyle(variant: ButtonVariant, theme: ReturnType<typeof useRegistryTheme>): TextStyle {
     switch (variant) {
         case 'destructive':
-            return styles.destructiveText;
+            return { color: theme.destructiveForeground };
         case 'outline':
-            return styles.outlineText;
+            return { color: theme.foreground };
         case 'secondary':
-            return styles.secondaryText;
+            return { color: theme.secondaryForeground };
         case 'ghost':
-            return styles.ghostText;
+            return { color: theme.foreground };
         case 'link':
-            return styles.linkText;
+            return { color: theme.foreground, textDecorationLine: 'underline' };
         default:
-            return styles.defaultText;
+            return { color: theme.primaryForeground };
     }
 }
 
@@ -69,16 +95,17 @@ function getSizeStyle(size: ButtonSize): StyleProp<ViewStyle> {
 }
 
 function Button({ style, variant = 'default', size = 'default', disabled, children, ...props }: ButtonProps) {
+    const theme = useRegistryTheme();
     const resolvedStyle = style as StyleProp<ViewStyle>;
 
     return (
         <Pressable disabled={disabled} role="button" style={resolvedStyle} {...props}>
             {({ pressed }) => (
-                <TextStyleContext.Provider value={[styles.buttonTextBase, getButtonTextStyle(variant)]}>
+                <TextStyleContext.Provider value={[styles.buttonTextBase, getButtonTextStyle(variant, theme)]}>
                     <View
                         style={[
                             styles.baseButton,
-                            getButtonStyle(variant),
+                            getButtonStyle(variant, theme),
                             getSizeStyle(size),
                             pressed && variant !== 'link' ? styles.pressed : undefined,
                             disabled ? styles.disabled : undefined,
@@ -99,28 +126,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 8,
         justifyContent: 'center',
-    },
-    defaultButton: {
-        backgroundColor: '#18181b',
-    },
-    destructiveButton: {
-        backgroundColor: '#ef4444',
-    },
-    outlineButton: {
-        backgroundColor: '#ffffff',
-        borderColor: '#e4e4e7',
-        borderWidth: 1,
-    },
-    secondaryButton: {
-        backgroundColor: '#f4f4f5',
-    },
-    ghostButton: {
-        backgroundColor: 'transparent',
-    },
-    linkButton: {
-        backgroundColor: 'transparent',
-        paddingHorizontal: 0,
-        paddingVertical: 0,
     },
     mdButton: {
         minHeight: 40,
@@ -152,25 +157,6 @@ const styles = StyleSheet.create({
     buttonTextBase: {
         fontSize: 14,
         fontWeight: '600',
-    },
-    defaultText: {
-        color: '#fafafa',
-    },
-    destructiveText: {
-        color: '#fafafa',
-    },
-    outlineText: {
-        color: '#18181b',
-    },
-    secondaryText: {
-        color: '#18181b',
-    },
-    ghostText: {
-        color: '#18181b',
-    },
-    linkText: {
-        color: '#18181b',
-        textDecorationLine: 'underline',
     },
 });
 

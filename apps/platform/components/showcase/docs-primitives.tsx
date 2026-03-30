@@ -57,9 +57,9 @@ export function ApiTable({
   }>;
 }) {
   return (
-    <GlassContainer variant="strong" className="w-full rounded-3xl p-0.5">
-      <div className="border-border/70 bg-card/86 w-full max-w-full overflow-x-auto rounded-[calc(1.5rem-2px)] border">
-        <table className="w-full min-w-[40rem] text-left text-sm">
+    <GlassContainer variant="strong" className="w-full rounded-[20px] p-0.5">
+      <div className="border-border/70 bg-card/86 w-full max-w-full overflow-x-auto rounded-[18px] border">
+        <table className="w-full min-w-160 text-left text-sm">
           <thead className="bg-muted/54 text-foreground">
             <tr>
               <th className="px-4 py-3 font-medium">prop</th>
@@ -170,40 +170,44 @@ export function DocsPager({
   next?: { href: string; title: string; description: string };
 }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className="grid gap-4 sm:grid-cols-2 lg:px-4">
       {previous ? (
-        <Link
-          href={previous.href}
-          className="group border-border/50 bg-card hover:bg-muted/50 flex items-center gap-3 rounded-xl border p-3 transition-colors"
-        >
-          <ChevronLeft className="text-muted-foreground group-hover:text-foreground size-4 transition-colors" />
-          <div className="flex flex-col gap-0.5">
-            <span className="text-muted-foreground text-[10px] font-medium uppercase tracking-wider">
-              Previous
-            </span>
-            <span className="text-foreground text-sm font-medium">
-              {previous.title}
-            </span>
-          </div>
-        </Link>
+        <GlassContainer variant="default">
+          <Link
+            href={previous.href}
+            className="group hover:bg-muted/50 bg-card/50 flex items-center gap-4 rounded-[18px] border border-neutral-400/20 p-4 transition-colors"
+          >
+            <ChevronLeft className="text-muted-foreground group-hover:text-foreground size-4 transition-colors" />
+            <div className="flex flex-col gap-0.5">
+              <span className="text-muted-foreground text-[10px] font-medium tracking-wider uppercase">
+                Previous
+              </span>
+              <span className="text-foreground text-sm font-medium">
+                {previous.title}
+              </span>
+            </div>
+          </Link>
+        </GlassContainer>
       ) : (
         <div />
       )}
       {next ? (
-        <Link
-          href={next.href}
-          className="group border-border/50 bg-card hover:bg-muted/50 flex items-center justify-end gap-3 rounded-xl border p-3 text-right transition-colors"
-        >
-          <div className="flex flex-col gap-0.5">
-            <span className="text-muted-foreground text-[10px] font-medium uppercase tracking-wider">
-              Next
-            </span>
-            <span className="text-foreground text-sm font-medium">
-              {next.title}
-            </span>
-          </div>
-          <ChevronRight className="text-muted-foreground group-hover:text-foreground size-4 transition-colors" />
-        </Link>
+        <GlassContainer variant="default">
+          <Link
+            href={next.href}
+            className="group hover:bg-muted/50 bg-card/50 flex items-center justify-end gap-4 rounded-[18px] border border-neutral-400/20 p-4 text-right transition-colors"
+          >
+            <div className="flex flex-col gap-0.5">
+              <span className="text-muted-foreground text-[10px] font-medium tracking-wider uppercase">
+                Next
+              </span>
+              <span className="text-foreground text-sm font-medium">
+                {next.title}
+              </span>
+            </div>
+            <ChevronRight className="text-muted-foreground group-hover:text-foreground size-4 transition-colors" />
+          </Link>
+        </GlassContainer>
       ) : null}
     </div>
   );

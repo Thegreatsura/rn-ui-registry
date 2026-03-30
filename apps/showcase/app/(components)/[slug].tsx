@@ -1,5 +1,6 @@
 import { Stack, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 import { SpotlightButton } from "@/components/animated/spotlight-button";
@@ -17,11 +18,10 @@ import {
   CardFooter,
   CardHeader,
 } from "@/registry/components/ui/card";
-import { Input } from "@/registry/components/ui/input";
 import { Label } from "@/registry/components/ui/label";
 import { Separator } from "@/registry/components/ui/separator";
 import { Text } from "@/registry/components/ui/text";
-import { Textarea } from "@/registry/components/ui/textarea";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 
 const COMPONENT_META = {
   avatar: { title: "Avatar" },
@@ -37,6 +37,139 @@ const COMPONENT_META = {
 } as const;
 
 type ComponentSlug = keyof typeof COMPONENT_META;
+const DemoNativeTextInput = require("react-native").TextInput as React.ComponentType<any>;
+
+function useDemoFieldPalette() {
+  const colorScheme = useColorScheme() ?? "light";
+
+  return colorScheme === "dark"
+    ? {
+        background: "#09090b",
+        foreground: "#fafafa",
+        muted: "#27272a",
+        mutedForeground: "#a1a1aa",
+        input: "#27272a",
+        ring: "#d4d4d8",
+        destructive: "#7f1d1d",
+      }
+    : {
+        background: "#ffffff",
+        foreground: "#09090b",
+        muted: "#f4f4f5",
+        mutedForeground: "#71717a",
+        input: "#e4e4e7",
+        ring: "#18181b",
+        destructive: "#ef4444",
+      };
+}
+
+function DemoInput({
+  leftSlot,
+  rightSlot,
+  invalid = false,
+  variant = "default",
+  editable = true,
+  style,
+  containerStyle,
+  onFocus,
+  onBlur,
+  ...props
+}: any) {
+  const [focused, setFocused] = useState(false);
+  const palette = useDemoFieldPalette();
+
+  return (
+    <View style={containerStyle}>
+      <View
+        style={[
+          styles.demoInputField,
+          {
+            backgroundColor: variant === "ghost" ? palette.muted : palette.background,
+            borderColor: invalid
+              ? palette.destructive
+              : focused
+                ? palette.ring
+                : variant === "ghost"
+                  ? "transparent"
+                  : palette.input,
+            opacity: editable === false ? 0.5 : 1,
+          },
+        ]}
+      >
+        {leftSlot ? <View style={styles.demoInputSlot}>{leftSlot}</View> : null}
+        {React.createElement(DemoNativeTextInput, {
+          ...props,
+          editable,
+          onFocus: (event: any) => {
+            setFocused(true);
+            onFocus?.(event);
+          },
+          onBlur: (event: any) => {
+            setFocused(false);
+            onBlur?.(event);
+          },
+          placeholderTextColor: props.placeholderTextColor ?? palette.mutedForeground,
+          selectionColor: invalid ? palette.destructive : palette.ring,
+          style: [styles.demoInputControl, { color: palette.foreground }, style],
+        })}
+        {rightSlot ? <View style={styles.demoInputSlot}>{rightSlot}</View> : null}
+      </View>
+    </View>
+  );
+}
+
+function DemoTextarea({
+  invalid = false,
+  variant = "default",
+  editable = true,
+  style,
+  containerStyle,
+  onFocus,
+  onBlur,
+  ...props
+}: any) {
+  const [focused, setFocused] = useState(false);
+  const palette = useDemoFieldPalette();
+
+  return (
+    <View style={containerStyle}>
+      <View
+        style={[
+          styles.demoTextareaField,
+          {
+            backgroundColor: variant === "ghost" ? palette.muted : palette.background,
+            borderColor: invalid
+              ? palette.destructive
+              : focused
+                ? palette.ring
+                : variant === "ghost"
+                  ? "transparent"
+                  : palette.input,
+            opacity: editable === false ? 0.5 : 1,
+          },
+        ]}
+      >
+        {React.createElement(DemoNativeTextInput, {
+          ...props,
+          editable,
+          multiline: true,
+          textAlignVertical: "top",
+          onFocus: (event: any) => {
+            setFocused(true);
+            onFocus?.(event);
+          },
+          onBlur: (event: any) => {
+            setFocused(false);
+            onBlur?.(event);
+          },
+          placeholderTextColor: props.placeholderTextColor ?? palette.mutedForeground,
+          selectionColor: invalid ? palette.destructive : palette.ring,
+          style: [styles.demoTextareaControl, { color: palette.foreground }, style],
+        })}
+      </View>
+    </View>
+  );
+}
 
 function Block({
   title,
@@ -336,13 +469,18 @@ function InputPreview({
 }) {
   return (
     <View style={styles.stackMd}>
-      <Input
+      <DemoInput
         placeholder="Email address"
         value={inputValue}
         onChangeText={onChangeText}
+        leftSlot={<MaterialIcons name="mail-outline" size={16} color="#71717a" />}
       />
-      <Input variant="ghost" placeholder="Search components..." />
-      <Input editable={false} value="Read only value" />
+      <DemoInput
+        variant="ghost"
+        placeholder="Search components..."
+        leftSlot={<MaterialIcons name="search" size={16} color="#71717a" />}
+      />
+      <DemoInput editable={false} value="Read only value" />
     </View>
   );
 }
@@ -359,17 +497,36 @@ function InputExamples({
       <Block title="Email">
         <View style={styles.stackMd}>
           <Label>Email</Label>
-          <Input
+          <DemoInput
             placeholder="name@example.com"
             value={inputValue}
             onChangeText={onChangeText}
+            leftSlot={<MaterialIcons name="mail-outline" size={16} color="#71717a" />}
           />
         </View>
       </Block>
       <Block title="Password">
         <View style={styles.stackMd}>
           <Label>Password</Label>
-          <Input placeholder="Enter password" secureTextEntry />
+          <DemoInput
+            placeholder="Enter password"
+            secureTextEntry
+            rightSlot={<MaterialIcons name="visibility" size={16} color="#71717a" />}
+          />
+        </View>
+      </Block>
+      <Block title="Invalid state">
+        <View style={styles.stackMd}>
+          <Label>Email</Label>
+          <DemoInput
+            invalid
+            placeholder="name@example.com"
+            value="broken-email"
+            leftSlot={<MaterialIcons name="error-outline" size={16} color="#ef4444" />}
+          />
+          <Text variant="muted">
+            Invalid, disabled, and slotted states now render through the same primitive.
+          </Text>
         </View>
       </Block>
     </>
@@ -385,8 +542,8 @@ function TextareaPreview({
 }) {
   return (
     <View style={styles.stackMd}>
-      <Textarea value={value} onChangeText={onChangeText} />
-      <Textarea
+      <DemoTextarea value={value} onChangeText={onChangeText} />
+      <DemoTextarea
         variant="ghost"
         placeholder="Drop in a draft or meeting notes..."
       />
@@ -404,12 +561,18 @@ function TextareaExamples({
   return (
     <>
       <Block title="Default">
-        <Textarea value={value} onChangeText={onChangeText} />
+        <DemoTextarea value={value} onChangeText={onChangeText} />
       </Block>
       <Block title="Readonly">
-        <Textarea
+        <DemoTextarea
           editable={false}
           value="This project has been archived and is no longer editable."
+        />
+      </Block>
+      <Block title="Validation">
+        <DemoTextarea
+          invalid
+          value="This field is required before publishing."
         />
       </Block>
     </>
@@ -695,11 +858,11 @@ function LabelPreview() {
     <View style={styles.stackLg}>
       <View style={styles.stackSm}>
         <Label>Email</Label>
-        <Input placeholder="team@watermelon.dev" />
+        <DemoInput placeholder="team@watermelon.dev" />
       </View>
       <View style={styles.stackSm}>
         <Label>Password</Label>
-        <Input secureTextEntry placeholder="Enter a secure password" />
+        <DemoInput secureTextEntry placeholder="Enter a secure password" />
       </View>
     </View>
   );
@@ -712,18 +875,18 @@ function LabelExamples() {
         <View style={styles.stackLg}>
           <View style={styles.stackSm}>
             <Label>Display name</Label>
-            <Input placeholder="Watermelon UI" />
+            <DemoInput placeholder="Watermelon UI" />
           </View>
           <View style={styles.stackSm}>
             <Label>Project description</Label>
-            <Textarea placeholder="Describe what this project is for..." />
+            <DemoTextarea placeholder="Describe what this project is for..." />
           </View>
         </View>
       </Block>
       <Block title="Readonly">
         <View style={styles.stackSm}>
           <Label>API key</Label>
-          <Input value="wm_live_••••••••••" editable={false} />
+          <DemoInput value="wm_live_••••••••••" editable={false} />
         </View>
       </Block>
     </>
@@ -764,6 +927,37 @@ const styles = StyleSheet.create({
   },
   stackXl: {
     gap: 22,
+  },
+  demoInputField: {
+    width: "100%",
+    minHeight: 40,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: 8,
+  },
+  demoInputControl: {
+    flex: 1,
+    minHeight: 20,
+    fontSize: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  demoInputSlot: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 12,
+  },
+  demoTextareaField: {
+    width: "100%",
+    borderWidth: 1,
+    borderRadius: 8,
+  },
+  demoTextareaControl: {
+    minHeight: 128,
+    fontSize: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
   },
   spotlightSurface: {
     borderRadius: 20,
