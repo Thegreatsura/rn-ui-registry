@@ -1,0 +1,107 @@
+---
+title: Skeleton
+description: Use for loading states within cards, lists, and other component surfaces that transition from a placeholder to a final data state.
+kind: component
+category: Components
+image: /logo.png
+dependencies:
+  - react-native
+install:
+  - watermelon add skeleton
+qrValue: showcase://components/skeleton
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/skeleton.tsx
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import {
+  ApiTable,
+  DocSection,
+  DocSubsection,
+} from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import {
+  SkeletonBasicInlinePreview,
+  SkeletonCircleInlinePreview,
+  SkeletonGridInlinePreview,
+} from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { Skeleton } from "@/components/ui/skeleton"`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  The `Skeleton` component provides a pulse animation for loading states. It is built using React Native's `Animated` API for maximum performance on mobile devices.
+
+### Basic Usage
+
+<DocSubsection>
+  Use a simple rectangular skeleton for text or content blocks.
+  <CompPreview
+    code={`<Skeleton className="h-4 w-[250px]" />
+<Skeleton className="h-4 w-[200px]" />`}
+  >
+    <SkeletonBasicInlinePreview />
+  </CompPreview>
+</DocSubsection>
+
+### Circle
+
+<DocSubsection>
+  Apply `rounded-full` to create circular skeletons for profile pictures or icons.
+  <CompPreview
+    code={`<div className="flex items-center gap-4">
+  <Skeleton className="size-12 rounded-full" />
+  <div className="space-y-2">
+    <Skeleton className="h-4 w-[150px]" />
+    <Skeleton className="h-4 w-[100px]" />
+  </div>
+</div>`}
+  >
+    <SkeletonCircleInlinePreview />
+  </CompPreview>
+</DocSubsection>
+
+### Grid Layouts
+
+<DocSubsection>
+  Compose skeletons within grid or flex layouts to match your final UI structure.
+  <CompPreview
+    code={`<div className="grid grid-cols-2 gap-4">
+  <Skeleton className="h-24 rounded-xl" />
+  <Skeleton className="h-24 rounded-xl" />
+  <Skeleton className="h-24 rounded-xl" />
+  <Skeleton className="h-24 rounded-xl" />
+</div>`}
+  >
+    <SkeletonGridInlinePreview />
+  </CompPreview>
+</DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  `Skeleton` extends all supported props from React Native `View`.
+  <ApiTable
+    rows={[
+      {
+        prop: "className",
+        type: "string",
+        default: "-",
+        description: "Standard Tailwind classes to control width, height, and border radius.",
+      },
+      {
+        prop: "style",
+        type: "StyleProp<ViewStyle>",
+        default: "-",
+        description: "Direct style object for advanced overrides.",
+      },
+    ]}
+  />
+</DocSection>

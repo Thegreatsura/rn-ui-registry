@@ -43,7 +43,8 @@ import {
 ## Usage
 
 <DocSection>
-  The `Input` component wraps React Native's `TextInput` with NativeWind v4 styles and a variant API for visual modes.
+  The `Input` component wraps React Native's `TextInput` with a small variant
+  API for visual modes, slots, validation, and focus styling.
 
 ### Basic Usage
 
@@ -110,16 +111,22 @@ import {
         description: "When false, disables the input and lowers opacity.",
       },
       {
+        prop: "size",
+        type: `"default" | "sm" | "lg"`,
+        default: `"default"`,
+        description: "Adjusts the control height and text sizing.",
+      },
+      {
         prop: "secureTextEntry",
         type: "boolean",
         default: "false",
         description: "Masks the text for password fields.",
       },
       {
-        prop: "className",
-        type: "string",
+        prop: "invalid",
+        type: "boolean",
         default: "-",
-        description: "Extends the NativeWind classes applied to the input.",
+        description: "Applies the destructive border and selection styling.",
       },
     ]}
   />

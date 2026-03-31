@@ -1,169 +1,100 @@
-import { useRegistryTheme } from '@/registry/lib/theme';
-import * as React from 'react';
-import {
-    StyleSheet,
-    View,
-    type StyleProp,
-    type TextInputProps,
-    type TextStyle,
-    type ViewStyle,
-} from 'react-native';
-
-const NativeTextInput = require('react-native').TextInput as React.ComponentType<any>;
+import * as React from "react";
+import { TextInput, View, type TextInputProps } from "react-native";
+import { cn } from "@/lib/utils";
 
 type InputProps = TextInputProps & {
-    className?: string;
-    containerStyle?: StyleProp<ViewStyle>;
-    inputStyle?: StyleProp<TextStyle>;
-    invalid?: boolean;
-    leftSlot?: React.ReactNode;
-    rightSlot?: React.ReactNode;
-    size?: 'default' | 'sm' | 'lg';
-    variant?: 'default' | 'ghost';
+  className?: string;
+  containerClassName?: string;
+  leftSlot?: React.ReactNode;
+  rightSlot?: React.ReactNode;
+  size?: "md" | "sm" | "lg";
+  variant?: "default" | "ghost";
+  invalid?: boolean;
 };
 
-const Input = React.forwardRef<any, InputProps>(function Input(
+const sizeStyles = {
+  sm: "h-9 px-2 text-sm",
+  md: "h-10 px-3 text-base",
+  lg: "h-11 px-4 text-base",
+};
+
+export const Input = React.forwardRef<TextInput, InputProps>(
+  (
     {
-        style,
-        containerStyle,
-        inputStyle,
-        variant = 'default',
-        size = 'default',
-        editable = true,
-        invalid = false,
-        leftSlot,
-        rightSlot,
-        onFocus,
-        onBlur,
-        placeholderTextColor,
-        className: _className,
-        value,
-        defaultValue,
-        placeholder,
-        onChangeText,
-        secureTextEntry,
-        keyboardType,
-        autoCapitalize,
-        autoCorrect,
-        autoComplete,
-        textContentType,
-        inputMode,
-        returnKeyType,
-        enterKeyHint,
-        blurOnSubmit,
-        onSubmitEditing,
-        onChange,
-        onEndEditing,
-        onKeyPress,
-        maxLength,
-        numberOfLines,
-        ...props
+      className,
+      containerClassName,
+      leftSlot,
+      rightSlot,
+      size = "md",
+      variant = "default",
+      editable = true,
+      invalid = false,
+      onFocus,
+      onBlur,
+      ...props
     },
     ref,
-) {
+  ) => {
     const [focused, setFocused] = React.useState(false);
-    const theme = useRegistryTheme();
 
-    const handleFocus = React.useCallback(
-        (event: Parameters<NonNullable<TextInputProps['onFocus']>>[0]) => {
-            setFocused(true);
-            onFocus?.(event);
-        },
-        [onFocus],
+    return (
+      <View className={cn("w-full", containerClassName)}>
+        <View
+          className={cn(
+            // base
+            "flex-row items-center rounded-lg border transition-colors",
+
+            // size
+            sizeStyles[size],
+
+            // variants
+            variant === "ghost"
+              ? "bg-muted border-transparent"
+              : "bg-background border-input",
+
+            // states
+            focused && "border-ring ring-2 ring-ring/50",
+            invalid && "border-destructive ring-2 ring-destructive/20",
+
+            // disabled
+            !editable && "opacity-50",
+          )}
+        >
+          {leftSlot && (
+            <View className="pl-2 pr-1 justify-center items-center">
+              {leftSlot}
+            </View>
+          )}
+
+          <TextInput
+            ref={ref}
+            editable={editable}
+            onFocus={(e) => {
+              setFocused(true);
+              onFocus?.(e);
+            }}
+            onBlur={(e) => {
+              setFocused(false);
+              onBlur?.(e);
+            }}
+            placeholderTextColor="#9ca3af"
+            className={cn(
+              "flex-1 text-foreground",
+              "placeholder:text-muted-foreground",
+              className,
+            )}
+            {...props}
+          />
+
+          {rightSlot && (
+            <View className="pl-1 pr-2 justify-center items-center">
+              {rightSlot}
+            </View>
+          )}
+        </View>
+      </View>
     );
+  },
+);
 
-    const handleBlur = React.useCallback(
-        (event: Parameters<NonNullable<TextInputProps['onBlur']>>[0]) => {
-            setFocused(false);
-            onBlur?.(event);
-        },
-        [onBlur],
-    );
-
-    return React.createElement(
-        View,
-        { style: containerStyle },
-        React.createElement(
-            View,
-            {
-                style: [
-                    styles.field,
-                    {
-                        backgroundColor: variant === 'ghost' ? theme.muted : theme.background,
-                        borderColor: invalid ? theme.destructive : focused ? theme.ring : variant === 'ghost' ? 'transparent' : theme.input,
-                    },
-                    size === 'sm' ? styles.sm : undefined,
-                    size === 'lg' ? styles.lg : undefined,
-                    editable === false ? styles.disabled : undefined,
-                ],
-            },
-            leftSlot ? React.createElement(View, { style: styles.slot }, leftSlot) : null,
-            React.createElement(NativeTextInput, {
-                ...props,
-                ref,
-                style: [styles.input, { color: theme.foreground }, style, inputStyle],
-                editable,
-                value,
-                defaultValue,
-                placeholder,
-                onChangeText,
-                secureTextEntry,
-                keyboardType,
-                autoCapitalize,
-                autoCorrect,
-                autoComplete,
-                textContentType,
-                inputMode,
-                returnKeyType,
-                enterKeyHint,
-                blurOnSubmit,
-                onSubmitEditing,
-                onChange,
-                onEndEditing,
-                onKeyPress,
-                maxLength,
-                numberOfLines,
-                onBlur: handleBlur,
-                onFocus: handleFocus,
-                placeholderTextColor: placeholderTextColor ?? theme.mutedForeground,
-                selectionColor: invalid ? theme.destructive : theme.ring,
-            }),
-            rightSlot ? React.createElement(View, { style: styles.slot }, rightSlot) : null,
-        ),
-    );
-});
-
-const styles = StyleSheet.create({
-    field: {
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderRadius: 8,
-        borderWidth: 1,
-        minHeight: 40,
-    },
-    input: {
-        flex: 1,
-        fontSize: 14,
-        minHeight: 20,
-        paddingHorizontal: 12,
-        paddingVertical: 10,
-    },
-    sm: {
-        minHeight: 36,
-    },
-    lg: {
-        minHeight: 44,
-    },
-    disabled: {
-        opacity: 0.5,
-    },
-    slot: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 12,
-    },
-});
-
-export { Input };
-export type { InputProps };
+Input.displayName = "Input";

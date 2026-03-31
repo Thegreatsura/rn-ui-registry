@@ -1,0 +1,95 @@
+---
+title: OTP Input
+description: A specialized input field for One-Time Passwords (OTPs), optimized for mobile forms with individual digit boxes and automatic focus management.
+kind: component
+category: Components
+image: /logo.png
+dependencies:
+  - react-native
+install:
+  - watermelon add otp-input
+qrValue: showcase://components/otp-input
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/otp-input.tsx
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import {
+  ApiTable,
+  DocSection,
+  DocSubsection,
+} from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import {
+  OTPBasicInlinePreview,
+} from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { OTPInput } from "@/components/ui/otp-input"`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  The `OTPInput` component handles the complexities of single-digit input fields, focus management, and keyboard handling. It uses a hidden `TextInput` to drive the state while rendering a custom 3D-styled grid of cells.
+
+### Basic Usage
+
+<DocSubsection>
+  Controlled usage with a string state.
+  <CompPreview
+    code={`const [value, setValue] = useState("");
+return <OTPInput value={value} onValueChange={setValue} maxLength={6} />;`}
+  >
+    <OTPBasicInlinePreview />
+  </CompPreview>
+</DocSubsection>
+
+### Custom Length
+
+<DocSubsection>
+  Adjust the `maxLength` to fit your verification code requirements (e.g., 4 or 8 digits).
+  <CompPreview
+    code={`<OTPInput value="1234" maxLength={4} />`}
+  >
+    <OTPBasicInlinePreview />
+  </CompPreview>
+</DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  `OTPInput` extends all supported props from React Native `View`.
+  <ApiTable
+    rows={[
+      {
+        prop: "value",
+        type: "string",
+        default: "''",
+        description: "The current OTP string.",
+      },
+      {
+        prop: "onValueChange",
+        type: "(value: string) => void",
+        default: "-",
+        description: "Callback called when the OTP value changes.",
+      },
+      {
+        prop: "maxLength",
+        type: "number",
+        default: "6",
+        description: "The number of digits to accept.",
+      },
+      {
+        prop: "disabled",
+        type: "boolean",
+        default: "false",
+        description: "Whether the input is interactive.",
+      },
+    ]}
+  />
+</DocSection>

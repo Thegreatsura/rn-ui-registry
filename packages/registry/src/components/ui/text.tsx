@@ -1,5 +1,6 @@
+/** @jsxImportSource react */
 import * as Slot from '@rn-primitives/slot';
-import { useRegistryTheme } from '@/registry/lib/theme';
+import { useRegistryTheme } from '../../lib/theme';
 import * as React from 'react';
 import {
     Platform,
@@ -52,28 +53,33 @@ const TextStyleContext = React.createContext<StyleProp<TextStyle> | undefined>(u
 const styles = StyleSheet.create({
     base: {
         fontSize: 16,
+        letterSpacing: -0.1,
     },
     defaultTextStyles: {},
     h1: {
         fontSize: 36,
         fontWeight: '800',
+        letterSpacing: -0.8,
         lineHeight: 40,
     },
     h2: {
         fontSize: 30,
-        fontWeight: '700',
+        fontWeight: '600',
+        letterSpacing: -0.6,
         lineHeight: 34,
         paddingBottom: 8,
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
     h3: {
         fontSize: 24,
-        fontWeight: '700',
+        fontWeight: '600',
+        letterSpacing: -0.4,
         lineHeight: 28,
     },
     h4: {
         fontSize: 20,
         fontWeight: '600',
+        letterSpacing: -0.2,
         lineHeight: 24,
     },
     p: {
@@ -105,6 +111,7 @@ const styles = StyleSheet.create({
     small: {
         fontSize: 14,
         fontWeight: '500',
+        lineHeight: 14,
     },
     muted: {
         fontSize: 14,

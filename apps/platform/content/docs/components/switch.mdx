@@ -1,0 +1,97 @@
+---
+title: Switch
+description: A modern, animated toggle switch for selecting between two mutually exclusive states, optimized for mobile interactions.
+kind: component
+category: Components
+image: /logo.png
+dependencies:
+  - react-native
+install:
+  - watermelon add switch
+qrValue: showcase://components/switch
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/switch.tsx
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import {
+  ApiTable,
+  DocSection,
+  DocSubsection,
+} from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import {
+  SwitchBasicInlinePreview,
+  SwitchDisabledInlinePreview,
+} from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { Switch } from "@/components/ui/switch"`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  The `Switch` component provides a familiar toggle interface. It uses React Native's `Animated` API for smooth thumb transitions and haptic-ready interactions.
+
+### Basic Usage
+
+<DocSubsection>
+  Use the switch as a controlled or uncontrolled component.
+  <CompPreview
+    code={`const [checked, setChecked] = useState(false);
+return <Switch checked={checked} onCheckedChange={setChecked} />;`}
+  >
+    <SwitchBasicInlinePreview />
+  </CompPreview>
+</DocSubsection>
+
+### Disabled State
+
+<DocSubsection>
+  The switch can be disabled in both checked and unchecked states.
+  <CompPreview
+    code={`<Switch disabled />
+<Switch checked disabled />`}
+  >
+    <SwitchDisabledInlinePreview />
+  </CompPreview>
+</DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  `Switch` extends all supported props from React Native `Pressable`.
+  <ApiTable
+    rows={[
+      {
+        prop: "checked",
+        type: "boolean",
+        default: "false",
+        description: "The controlled checked state of the switch.",
+      },
+      {
+        prop: "onCheckedChange",
+        type: "(checked: boolean) => void",
+        default: "-",
+        description: "Callback called when the checked state changes.",
+      },
+      {
+        prop: "disabled",
+        type: "boolean",
+        default: "false",
+        description: "Whether the switch is interactive.",
+      },
+      {
+        prop: "className",
+        type: "string",
+        default: "-",
+        description: "Standard Tailwind classes for the track.",
+      },
+    ]}
+  />
+</DocSection>

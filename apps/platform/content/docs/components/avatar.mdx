@@ -79,8 +79,8 @@ import { Text } from "@/components/ui/text";`}
 ### Custom Sizes
 
   <DocSubsection>
-    Override the default 40×40 size with NativeWind classes.
-    <CompPreview code={`<Avatar className="h-16 w-16">
+    Use the `size` prop to switch between the built-in avatar scales.
+    <CompPreview code={`<Avatar size="lg">
   <AvatarFallback>
     <Text variant="large">AB</Text>
   </AvatarFallback>
@@ -108,10 +108,10 @@ import { Text } from "@/components/ui/text";`}
         description: "Accessible label for the avatar image.",
       },
       {
-        prop: "className",
-        type: "string",
-        default: "-",
-        description: "Override classes on the Avatar root container.",
+        prop: "size",
+        type: `"default" | "sm" | "lg"`,
+        default: `"default"`,
+        description: "Selects one of the built-in avatar sizes.",
       },
     ]}
   />

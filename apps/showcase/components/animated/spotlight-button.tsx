@@ -12,7 +12,7 @@ import {
 
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { Text } from "@/registry/components/ui/text";
+import { Text } from "@/components/ui/text";
 
 type SpotlightButtonVariant = "default" | "neutral";
 type SpotlightButtonSize = "default" | "lg";

@@ -187,6 +187,106 @@
                     }
                 }
             }
+        },
+        "skeleton": {
+            "name": "skeleton",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/skeleton.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "switch": {
+            "name": "switch",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/switch.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "checkbox": {
+            "name": "checkbox",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/checkbox.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "progress": {
+            "name": "progress",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/progress.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "otp-input": {
+            "name": "otp-input",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/otp-input.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
         }
     }
 }

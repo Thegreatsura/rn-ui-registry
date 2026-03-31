@@ -1,4 +1,4 @@
 {
   "title": "Components",
-  "pages": ["button", "text", "input", "badge", "avatar", "card", "label", "separator", "textarea", "spotlight-button"]
+  "pages": ["button", "text", "input", "badge", "avatar", "card", "label", "separator", "textarea", "skeleton", "switch", "checkbox", "progress", "otp-input", "spotlight-button"]
 }

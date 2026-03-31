@@ -1,4 +1,5 @@
-import { useRegistryTheme } from '@/registry/lib/theme';
+/** @jsxImportSource react */
+import { useRegistryTheme } from '../../lib/theme';
 import * as React from 'react';
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
@@ -10,6 +11,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 14,
         fontWeight: '500',
+        lineHeight: 14,
     },
 });
 
