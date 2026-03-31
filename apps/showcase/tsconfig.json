@@ -3,13 +3,9 @@
   "compilerOptions": {
     "strict": true,
     "moduleResolution": "bundler",
-    "jsxImportSource": "nativewind",
     "paths": {
       "@/*": [
         "./*"
-      ],
-      "@/registry/*": [
-        "../../packages/registry/src/*"
       ]
     }
   },

@@ -1,5 +1,6 @@
-import { TextStyleContext } from '@/registry/components/ui/text';
-import { useRegistryTheme } from '@/registry/lib/theme';
+/** @jsxImportSource react */
+import { TextStyleContext } from './text';
+import { useRegistryTheme } from '../../lib/theme';
 import * as React from 'react';
 import { StyleSheet, View, type TextStyle, type ViewProps, type ViewStyle } from 'react-native';
 
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
     textBase: {
         fontSize: 12,
         fontWeight: '600',
+        lineHeight: 14,
     },
 });
 
@@ -34,7 +36,7 @@ function getContainerStyle(variant: BadgeVariant, theme: ReturnType<typeof useRe
             };
         case 'destructive':
             return {
-                backgroundColor: theme.destructive,
+                backgroundColor: 'rgba(239, 68, 68, 0.12)',
                 borderColor: 'transparent',
             };
         case 'outline':
@@ -55,7 +57,7 @@ function getTextStyle(variant: BadgeVariant, theme: ReturnType<typeof useRegistr
         case 'secondary':
             return { color: theme.secondaryForeground };
         case 'destructive':
-            return { color: theme.destructiveForeground };
+            return { color: '#dc2626' };
         case 'outline':
             return { color: theme.foreground };
         default:

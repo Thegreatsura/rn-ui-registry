@@ -1,5 +1,6 @@
-import { Text } from '@/registry/components/ui/text';
-import { useRegistryTheme } from '@/registry/lib/theme';
+/** @jsxImportSource react */
+import { Text } from './text';
+import { useRegistryTheme } from '../../lib/theme';
 import * as React from 'react';
 import { StyleSheet, View, type TextProps, type ViewProps } from 'react-native';
 
@@ -13,8 +14,13 @@ type CardTextProps = TextProps & {
 
 const styles = StyleSheet.create({
     card: {
-        borderRadius: 16,
+        borderRadius: 12,
         borderWidth: 1,
+        shadowColor: '#09090b',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.04,
+        shadowRadius: 3,
+        elevation: 1,
     },
     header: {
         gap: 6,
@@ -32,6 +38,7 @@ const styles = StyleSheet.create({
         paddingTop: 0,
     },
     title: {
+        letterSpacing: -0.2,
         fontWeight: '600',
         lineHeight: 20,
     },

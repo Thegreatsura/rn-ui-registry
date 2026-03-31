@@ -9,6 +9,9 @@
         "jsx": "react-jsx",
         "baseUrl": ".",
         "paths": {
+            "@/*": [
+                "src/*"
+            ],
             "@/registry/*": [
                 "src/*"
             ]

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,11 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Text } from "@/components/ui/text";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Progress } from "@/components/ui/progress";
+import { OTPInput } from "@/components/ui/otp-input";
 
 function PreviewShell({
   children,
@@ -100,7 +105,7 @@ function InputLivePreview() {
       <div className="mx-auto flex w-full max-w-md flex-col gap-4">
         <Input
           value={name}
-          onChange={(event) => setName(event.currentTarget.value)}
+          onChangeText={setName}
           placeholder="Enter your name"
         />
         <Input placeholder="Search components..." />
@@ -120,7 +125,7 @@ export function InputBasicInlinePreview() {
       <div className="mx-auto flex w-full max-w-md flex-col gap-3">
         <Input
           value={value}
-          onChange={(event) => setValue(event.currentTarget.value)}
+          onChangeText={setValue}
           placeholder="Enter your name"
         />
       </div>
@@ -136,8 +141,8 @@ export function InputGhostInlinePreview() {
       <div className="bg-muted/70 mx-auto w-full max-w-md rounded-xl p-4">
         <Input
           value={value}
-          onChange={(event) => setValue(event.currentTarget.value)}
-          className="bg-background/80 border-transparent"
+          onChangeText={setValue}
+          variant="ghost"
           placeholder="Search..."
         />
       </div>
@@ -149,7 +154,7 @@ export function InputDisabledInlinePreview() {
   return (
     <PreviewShell className="min-h-[170px]">
       <div className="mx-auto flex w-full max-w-md flex-col gap-3">
-        <Input value="Read-only value" disabled />
+        <Input value="Read-only value" editable={false} />
       </div>
     </PreviewShell>
   );
@@ -162,9 +167,9 @@ export function InputSecureInlinePreview() {
     <PreviewShell className="min-h-[170px]">
       <div className="mx-auto flex w-full max-w-md flex-col gap-3">
         <Input
-          type="password"
+          secureTextEntry
           value={value}
-          onChange={(event) => setValue(event.currentTarget.value)}
+          onChangeText={setValue}
           placeholder="Password"
         />
       </div>
@@ -225,7 +230,7 @@ export function AvatarSizeInlinePreview() {
   return (
     <PreviewShell className="min-h-[190px]">
       <div className="flex items-center justify-center">
-        <Avatar className="size-16">
+        <Avatar size="lg" className="size-16">
           <AvatarFallback className="text-lg">AB</AvatarFallback>
         </Avatar>
       </div>
@@ -417,6 +422,213 @@ export function TextareaInlinePreview() {
   );
 }
 
+export function SkeletonBasicInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[160px]">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+        <Skeleton className="h-4 w-[250px]" />
+        <Skeleton className="h-4 w-[200px]" />
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function SkeletonCircleInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[160px]">
+      <div className="flex items-center justify-center gap-4">
+        <Skeleton className="size-12 rounded-full" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-[150px]" />
+          <Skeleton className="h-4 w-[100px]" />
+        </div>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function SkeletonGridInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[200px]">
+      <div className="grid grid-cols-2 gap-4">
+        <Skeleton className="h-24 rounded-xl" />
+        <Skeleton className="h-24 rounded-xl" />
+        <Skeleton className="h-24 rounded-xl" />
+        <Skeleton className="h-24 rounded-xl" />
+      </div>
+    </PreviewShell>
+  );
+}
+
+function SkeletonLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="mx-auto flex w-full max-w-md flex-col gap-6">
+        <div className="flex items-center gap-4">
+          <Skeleton className="size-12 rounded-full" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-[150px]" />
+            <Skeleton className="h-4 w-[100px]" />
+          </div>
+        </div>
+        <Skeleton className="h-[200px] w-full rounded-xl" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-[90%]" />
+        </div>
+      </div>
+    </PreviewShell>
+  );
+}
+
+function SwitchLivePreview() {
+  const [checked, setChecked] = useState(false);
+
+  return (
+    <PreviewShell>
+      <div className="flex flex-col items-center gap-4">
+        <label className="flex items-center gap-3">
+          <Switch checked={checked} onCheckedChange={setChecked} />
+          <span className="text-sm font-medium">
+            Notifications: {checked ? "On" : "Off"}
+          </span>
+        </label>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function SwitchBasicInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[160px]">
+      <div className="flex items-center justify-center">
+        <Switch defaultChecked />
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function SwitchDisabledInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[160px]">
+      <div className="flex items-center justify-center gap-8">
+        <Switch disabled />
+        <Switch checked disabled />
+      </div>
+    </PreviewShell>
+  );
+}
+
+function CheckboxLivePreview() {
+  const [checked, setChecked] = useState(false);
+
+  return (
+    <PreviewShell>
+      <div className="flex flex-col items-center gap-4">
+        <label className="flex items-center gap-3">
+          <Checkbox checked={checked} onCheckedChange={(val) => setChecked(val === true)} />
+          <span className="text-sm font-medium">
+            I agree to the terms and conditions
+          </span>
+        </label>
+        <p className="text-muted-foreground text-xs">
+          State: {checked ? "Checked" : "Unchecked"}
+        </p>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function CheckboxBasicInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[160px]">
+      <div className="flex items-center justify-center">
+        <Checkbox defaultChecked />
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function CheckboxDisabledInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[160px]">
+      <div className="flex items-center justify-center gap-8">
+        <Checkbox disabled />
+        <Checkbox checked disabled />
+      </div>
+    </PreviewShell>
+  );
+}
+
+function ProgressLivePreview() {
+  const [value, setValue] = useState(33);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setValue(66), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <PreviewShell>
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+        <Progress value={value} />
+        <p className="text-muted-foreground text-center text-xs">
+          Loading... {value}%
+        </p>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function ProgressBasicInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[160px]">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-6">
+        <Progress value={45} />
+        <Progress value={80} />
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function ProgressIndeterminateInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[160px]">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-3">
+        <Progress value={100} className="bg-primary/20" />
+      </div>
+    </PreviewShell>
+  );
+}
+
+function OTPLivePreview() {
+  const [value, setValue] = useState("");
+
+  return (
+    <PreviewShell>
+      <div className="flex flex-col items-center gap-6">
+        <OTPInput value={value} onValueChange={setValue} maxLength={6} />
+        <p className="text-muted-foreground text-xs font-mono">
+          Current: {value || "______"}
+        </p>
+        <Button size="sm" onClick={() => setValue("")} variant="outline">
+          Clear Code
+        </Button>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function OTPBasicInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[160px]">
+      <div className="flex items-center justify-center">
+        <OTPInput value="1234" maxLength={4} />
+      </div>
+    </PreviewShell>
+  );
+}
+
 export function ComponentLivePreview({ slug }: { slug: string }) {
   switch (slug) {
     case "button":
@@ -439,6 +651,16 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
       return <TextareaInlinePreview />;
     case "spotlight-button":
       return <SpotlightButtonDemo />;
+    case "skeleton":
+      return <SkeletonLivePreview />;
+    case "switch":
+      return <SwitchLivePreview />;
+    case "checkbox":
+      return <CheckboxLivePreview />;
+    case "progress":
+      return <ProgressLivePreview />;
+    case "otp-input":
+      return <OTPLivePreview />;
     default:
       return null;
   }

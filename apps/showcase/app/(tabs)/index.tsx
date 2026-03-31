@@ -1,21 +1,26 @@
 import { View, ScrollView, Pressable } from "react-native";
 import { Link } from "expo-router";
-import { Text } from "@/registry/components/ui/text";
+import { Text } from "@/components/ui/text";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 
 const CATEGORIES = [
   { id: "button", name: "Button", icon: "square.and.pencil" as const },
+  { id: "checkbox", name: "Checkbox", icon: "checkmark.square" as const },
   {
     id: "spotlight-button",
     name: "Spotlight Button",
     icon: "sparkles" as const,
   },
   { id: "input", name: "Input", icon: "keyboard" as const },
+  { id: "otp-input", name: "OTP Input", icon: "number.square" as const },
+  { id: "progress", name: "Progress", icon: "chart.bar.fill" as const },
   { id: "textarea", name: "Textarea", icon: "note.text" as const },
   { id: "badge", name: "Badge", icon: "app.badge" as const },
   { id: "avatar", name: "Avatar", icon: "person.circle" as const },
   { id: "card", name: "Card", icon: "rectangle.stack.fill" as const },
   { id: "separator", name: "Separator", icon: "rectangle.split.3x1" as const },
+  { id: "skeleton", name: "Skeleton", icon: "square.grid.2x2" as const },
+  { id: "switch", name: "Switch", icon: "switch.2" as const },
   { id: "label", name: "Label", icon: "tag.fill" as const },
   { id: "text", name: "Typography", icon: "textformat" as const },
 ];
@@ -29,15 +34,13 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View className="mb-8">
-          <Text variant="h1" className="text-3xl font-extrabold">
-            Watermelon RN
-          </Text>
-          <Text variant="muted" className="mt-1">
+          <Text variant="h1">Watermelon RN</Text>
+          <Text variant="muted" style={{ marginTop: 4 }}>
             shadcn-like components for React Native
           </Text>
         </View>
 
-        <Text variant="h3" className="mb-4">
+        <Text variant="h3" style={{ marginBottom: 16 }}>
           Components
         </Text>
 
@@ -57,7 +60,9 @@ export default function HomeScreen() {
                       className="text-primary"
                     />
                   </View>
-                  <Text className="text-lg font-medium">{category.name}</Text>
+                  <Text style={{ fontSize: 18, fontWeight: "500" }}>
+                    {category.name}
+                  </Text>
                 </View>
                 <IconSymbol
                   name="chevron.right"

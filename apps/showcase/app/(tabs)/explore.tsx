@@ -1,6 +1,6 @@
 import { View, ScrollView, StyleSheet } from "react-native";
-import { Text } from "@/registry/components/ui/text";
-import { Badge } from "@/registry/components/ui/badge";
+import { Text } from "@/components/ui/text";
+import { Badge } from "@/components/ui/badge";
 
 const COMPONENTS = [
   {
@@ -9,6 +9,13 @@ const COMPONENTS = [
     description: "Pressable with size and variant APIs.",
     category: "Buttons",
     badgeVariant: "default" as const,
+  },
+  {
+    slug: "checkbox",
+    title: "Checkbox",
+    description: "Selectable control for boolean form state.",
+    category: "Forms",
+    badgeVariant: "outline" as const,
   },
   {
     slug: "spotlight-button",
@@ -30,6 +37,20 @@ const COMPONENTS = [
     description: "Styled TextInput with focus ring and variants.",
     category: "Forms",
     badgeVariant: "outline" as const,
+  },
+  {
+    slug: "otp-input",
+    title: "OTP Input",
+    description: "One-time passcode entry for verification flows.",
+    category: "Forms",
+    badgeVariant: "outline" as const,
+  },
+  {
+    slug: "progress",
+    title: "Progress",
+    description: "Animated determinate progress bar.",
+    category: "Feedback",
+    badgeVariant: "secondary" as const,
   },
   {
     slug: "textarea",
@@ -67,6 +88,20 @@ const COMPONENTS = [
     badgeVariant: "secondary" as const,
   },
   {
+    slug: "skeleton",
+    title: "Skeleton",
+    description: "Loading placeholder with a soft pulse animation.",
+    category: "Feedback",
+    badgeVariant: "secondary" as const,
+  },
+  {
+    slug: "switch",
+    title: "Switch",
+    description: "Animated toggle for on and off state.",
+    category: "Forms",
+    badgeVariant: "outline" as const,
+  },
+  {
     slug: "label",
     title: "Label",
     description: "Compact field label for forms and settings.",
@@ -83,11 +118,9 @@ export default function ExploreScreen() {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.header}>
-        <Text variant="h2" className="font-bold">
-          Components
-        </Text>
+        <Text variant="h2">Components</Text>
         <Text variant="muted">
-          {COMPONENTS.length} components in the registry
+          {COMPONENTS.length} components in the showcase
         </Text>
       </View>
 

@@ -1,11 +1,13 @@
-import { TextStyleContext } from '@/registry/components/ui/text';
-import { useRegistryTheme } from '@/registry/lib/theme';
+/** @jsxImportSource react */
+import { TextStyleContext } from './text';
+import { useRegistryTheme } from '../../lib/theme';
 import * as React from 'react';
 import {
     Pressable,
     StyleSheet,
     View,
     type PressableProps,
+    type PressableStateCallbackType,
     type StyleProp,
     type TextStyle,
     type ViewStyle,
@@ -25,8 +27,8 @@ function getButtonStyle(variant: ButtonVariant, theme: ReturnType<typeof useRegi
     switch (variant) {
         case 'destructive':
             return {
-                backgroundColor: theme.destructive,
-                borderColor: theme.destructive,
+                backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                borderColor: 'transparent',
                 borderWidth: 1,
             };
         case 'outline':
@@ -54,11 +56,12 @@ function getButtonStyle(variant: ButtonVariant, theme: ReturnType<typeof useRegi
                 borderWidth: 0,
                 paddingHorizontal: 0,
                 paddingVertical: 0,
+                minHeight: undefined,
             };
         default:
             return {
                 backgroundColor: theme.primary,
-                borderColor: theme.primary,
+                borderColor: 'transparent',
                 borderWidth: 1,
             };
     }
@@ -67,7 +70,7 @@ function getButtonStyle(variant: ButtonVariant, theme: ReturnType<typeof useRegi
 function getButtonTextStyle(variant: ButtonVariant, theme: ReturnType<typeof useRegistryTheme>): TextStyle {
     switch (variant) {
         case 'destructive':
-            return { color: theme.destructiveForeground };
+            return { color: '#dc2626' };
         case 'outline':
             return { color: theme.foreground };
         case 'secondary':
@@ -75,7 +78,7 @@ function getButtonTextStyle(variant: ButtonVariant, theme: ReturnType<typeof use
         case 'ghost':
             return { color: theme.foreground };
         case 'link':
-            return { color: theme.foreground, textDecorationLine: 'underline' };
+            return { color: theme.primary, textDecorationLine: 'underline' };
         default:
             return { color: theme.primaryForeground };
     }
@@ -96,10 +99,24 @@ function getSizeStyle(size: ButtonSize): StyleProp<ViewStyle> {
 
 function Button({ style, variant = 'default', size = 'default', disabled, children, ...props }: ButtonProps) {
     const theme = useRegistryTheme();
-    const resolvedStyle = style as StyleProp<ViewStyle>;
 
     return (
-        <Pressable disabled={disabled} role="button" style={resolvedStyle} {...props}>
+        <Pressable
+            disabled={disabled}
+            role="button"
+            style={(state: PressableStateCallbackType) => {
+                const resolvedStyle =
+                    typeof style === 'function'
+                        ? style(state)
+                        : (style as StyleProp<ViewStyle>);
+
+                return [
+                    styles.pressable,
+                    resolvedStyle,
+                ];
+            }}
+            {...props}
+        >
             {({ pressed }) => (
                 <TextStyleContext.Provider value={[styles.buttonTextBase, getButtonTextStyle(variant, theme)]}>
                     <View
@@ -107,7 +124,11 @@ function Button({ style, variant = 'default', size = 'default', disabled, childr
                             styles.baseButton,
                             getButtonStyle(variant, theme),
                             getSizeStyle(size),
-                            pressed && variant !== 'link' ? styles.pressed : undefined,
+                            pressed && variant !== 'link'
+                                ? variant === 'ghost'
+                                    ? styles.ghostPressed
+                                    : styles.pressed
+                                : undefined,
                             disabled ? styles.disabled : undefined,
                         ]}
                     >
@@ -120,43 +141,57 @@ function Button({ style, variant = 'default', size = 'default', disabled, childr
 }
 
 const styles = StyleSheet.create({
+    pressable: {
+        alignSelf: 'flex-start',
+    },
     baseButton: {
         alignItems: 'center',
         borderRadius: 8,
         flexDirection: 'row',
-        gap: 8,
         justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     mdButton: {
-        minHeight: 40,
-        paddingHorizontal: 16,
-        paddingVertical: 10,
+        gap: 6,
+        minHeight: 32,
+        paddingHorizontal: 10,
+        paddingVertical: 6,
     },
     smButton: {
+        gap: 4,
+        minHeight: 28,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+    },
+    lgButton: {
+        gap: 6,
         minHeight: 36,
         paddingHorizontal: 12,
         paddingVertical: 8,
     },
-    lgButton: {
-        minHeight: 44,
-        paddingHorizontal: 24,
-        paddingVertical: 12,
-    },
     iconButton: {
-        height: 40,
+        height: 32,
         justifyContent: 'center',
         paddingHorizontal: 0,
-        width: 40,
+        width: 32,
     },
     pressed: {
-        opacity: 0.9,
+        opacity: 0.96,
+        transform: [{ translateY: 1 }],
+    },
+    ghostPressed: {
+        backgroundColor: 'rgba(0,0,0,0.04)',
     },
     disabled: {
         opacity: 0.5,
     },
     buttonTextBase: {
         fontSize: 14,
-        fontWeight: '600',
+        fontWeight: '500',
+        lineHeight: 18,
     },
 });
 

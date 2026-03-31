@@ -7,7 +7,6 @@
         "build": "tsc",
         "clean": "rm -rf node_modules"
     },
-    "type": "module",
     "version": "0.0.0",
     "exports": {
         "./components/ui/button": "./src/components/ui/button.tsx",
@@ -16,8 +15,13 @@
         "./components/ui/badge": "./src/components/ui/badge.tsx",
         "./components/ui/avatar": "./src/components/ui/avatar.tsx",
         "./components/ui/card": "./src/components/ui/card.tsx",
+        "./components/ui/checkbox": "./src/components/ui/checkbox.tsx",
         "./components/ui/label": "./src/components/ui/label.tsx",
+        "./components/ui/otp-input": "./src/components/ui/otp-input.tsx",
+        "./components/ui/progress": "./src/components/ui/progress.tsx",
         "./components/ui/separator": "./src/components/ui/separator.tsx",
+        "./components/ui/skeleton": "./src/components/ui/skeleton.tsx",
+        "./components/ui/switch": "./src/components/ui/switch.tsx",
         "./components/ui/textarea": "./src/components/ui/textarea.tsx",
         "./lib/utils": "./src/lib/utils.ts"
     },
