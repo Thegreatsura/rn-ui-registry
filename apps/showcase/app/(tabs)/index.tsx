@@ -6,6 +6,23 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 const CATEGORIES = [
   { id: "button", name: "Button", icon: "square.and.pencil" as const },
   { id: "checkbox", name: "Checkbox", icon: "checkmark.square" as const },
+  { id: "collapsible", name: "Collapsible", icon: "chevron.down" as const },
+  {
+    id: "dialog",
+    name: "Dialog",
+    icon: "rectangle.portrait.on.rectangle.portrait" as const,
+  },
+  {
+    id: "popover",
+    name: "Popover",
+    icon: "bubble.left.and.bubble.right" as const,
+  },
+  {
+    id: "radio-group",
+    name: "Radio Group",
+    icon: "smallcircle.filled.circle" as const,
+  },
+  { id: "slider", name: "Slider", icon: "slider.horizontal.3" as const },
   {
     id: "spotlight-button",
     name: "Spotlight Button",
@@ -23,6 +40,7 @@ const CATEGORIES = [
   { id: "switch", name: "Switch", icon: "switch.2" as const },
   { id: "label", name: "Label", icon: "tag.fill" as const },
   { id: "text", name: "Typography", icon: "textformat" as const },
+  { id: "tooltip", name: "Tooltip", icon: "info.bubble" as const },
 ];
 
 export default function HomeScreen() {

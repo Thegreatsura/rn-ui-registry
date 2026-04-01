@@ -1,45 +1,147 @@
-import { PropsWithChildren, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import * as React from "react";
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  type PressableProps,
+  type ViewProps,
+} from "react-native";
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+type CollapsibleContextValue = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-export function Collapsible({ children, title }: PropsWithChildren & { title: string }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const theme = useColorScheme() ?? 'light';
+type CollapsibleProps = ViewProps & {
+  children?: React.ReactNode;
+  defaultOpen?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+};
+
+type CollapsibleTriggerProps = PressableProps & {
+  asChild?: boolean;
+  children?: React.ReactNode;
+};
+
+type CollapsibleContentProps = ViewProps & {
+  children?: React.ReactNode;
+};
+
+const CollapsibleContext = React.createContext<CollapsibleContextValue | null>(
+  null,
+);
+
+function useCollapsibleContext() {
+  const context = React.useContext(CollapsibleContext);
+
+  if (!context) {
+    throw new Error("Collapsible components must be used inside Collapsible.");
+  }
+
+  return context;
+}
+
+function Collapsible({
+  children,
+  defaultOpen = false,
+  open,
+  onOpenChange,
+  ...props
+}: CollapsibleProps) {
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
+  const isControlled = open !== undefined;
+  const resolvedOpen = isControlled ? open : internalOpen;
+
+  const setOpen = React.useCallback<React.Dispatch<React.SetStateAction<boolean>>>(
+    (value) => {
+      const nextValue =
+        typeof value === "function" ? value(resolvedOpen) : value;
+
+      if (!isControlled) {
+        setInternalOpen(nextValue);
+      }
+
+      onOpenChange?.(nextValue);
+    },
+    [isControlled, onOpenChange, resolvedOpen],
+  );
 
   return (
-    <ThemedView>
-      <TouchableOpacity
-        style={styles.heading}
-        onPress={() => setIsOpen((value) => !value)}
-        activeOpacity={0.8}>
-        <IconSymbol
-          name="chevron.right"
-          size={18}
-          weight="medium"
-          color={theme === 'light' ? Colors.light.icon : Colors.dark.icon}
-          style={{ transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }}
-        />
+    <CollapsibleContext.Provider value={{ open: resolvedOpen, setOpen }}>
+      <View {...props}>{children}</View>
+    </CollapsibleContext.Provider>
+  );
+}
 
-        <ThemedText type="defaultSemiBold">{title}</ThemedText>
-      </TouchableOpacity>
-      {isOpen && <ThemedView style={styles.content}>{children}</ThemedView>}
-    </ThemedView>
+function CollapsibleTrigger({
+  asChild = false,
+  children,
+  onPress,
+  ...props
+}: CollapsibleTriggerProps) {
+  const { open, setOpen } = useCollapsibleContext();
+
+  const handlePress = React.useCallback(
+    (event: Parameters<NonNullable<PressableProps["onPress"]>>[0]) => {
+      onPress?.(event);
+      setOpen((value) => !value);
+    },
+    [onPress, setOpen],
+  );
+
+  if (asChild && React.isValidElement(children)) {
+    return React.cloneElement(
+      children as React.ReactElement<{
+        onPress?: PressableProps["onPress"];
+        accessibilityState?: { expanded?: boolean };
+      }>,
+      {
+        onPress: handlePress,
+        accessibilityState: { expanded: open },
+      },
+    );
+  }
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ expanded: open }}
+      onPress={handlePress}
+      {...props}
+    >
+      {children}
+    </Pressable>
+  );
+}
+
+function CollapsibleContent({
+  children,
+  style,
+  ...props
+}: CollapsibleContentProps) {
+  const { open } = useCollapsibleContext();
+
+  if (!open) {
+    return null;
+  }
+
+  return (
+    <View style={[styles.content, style]} {...props}>
+      {children}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  heading: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
   content: {
-    marginTop: 6,
-    marginLeft: 24,
+    marginTop: 12,
   },
 });
+
+export { Collapsible, CollapsibleContent, CollapsibleTrigger };
+export type {
+  CollapsibleContentProps,
+  CollapsibleProps,
+  CollapsibleTriggerProps,
+};

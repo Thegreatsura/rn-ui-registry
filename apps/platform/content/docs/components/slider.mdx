@@ -1,0 +1,82 @@
+---
+title: Slider
+description: A continuous or stepped range control for progress, volume, zoom, and adjustable system values.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add slider
+qrValue: showcase://components/slider
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/slider.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { SliderInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { Slider } from "@/components/ui/slider";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Use the slider for values that benefit from direct manipulation and immediate feedback.
+
+  <DocSubsection>
+    <CompPreview
+      code={`<Slider
+  value={value}
+  onValueChange={setValue}
+  min={0}
+  max={100}
+  step={1}
+/>`}
+    >
+      <SliderInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  <ApiTable
+    rows={[
+      {
+        prop: "value",
+        type: "number",
+        default: "-",
+        description: "Controls the current slider value.",
+      },
+      {
+        prop: "defaultValue",
+        type: "number",
+        default: "min",
+        description: "Sets the initial value for uncontrolled usage.",
+      },
+      {
+        prop: "min / max",
+        type: "number",
+        default: "0 / 100",
+        description: "Defines the allowed numeric range.",
+      },
+      {
+        prop: "step",
+        type: "number",
+        default: "1",
+        description: "Snaps values to fixed increments.",
+      },
+    ]}
+  />
+</DocSection>

@@ -1,0 +1,95 @@
+---
+title: Popover
+description: A compact overlay for quick contextual details and lightweight actions without forcing a full dialog.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add popover
+qrValue: showcase://components/popover
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/popover.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { PopoverInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Use a popover when the user needs a little more context, but a full modal would feel heavy.
+
+  <DocSubsection>
+    <CompPreview
+      code={`<Popover>
+  <PopoverTrigger asChild>
+    <Button variant="outline">Inspect package</Button>
+  </PopoverTrigger>
+  <PopoverContent>
+    <PopoverHeader>
+      <PopoverTitle>@watermelon/registry</PopoverTitle>
+      <PopoverDescription>
+        Shared React Native building blocks with matching web docs.
+      </PopoverDescription>
+    </PopoverHeader>
+  </PopoverContent>
+</Popover>`}
+    >
+      <PopoverInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  <ApiTable
+    rows={[
+      {
+        prop: "defaultOpen",
+        type: "boolean",
+        default: "false",
+        description: "Sets the initial open state for uncontrolled popovers.",
+      },
+      {
+        prop: "open",
+        type: "boolean",
+        default: "-",
+        description: "Controls whether the popover is visible.",
+      },
+      {
+        prop: "onOpenChange",
+        type: "(open: boolean) => void",
+        default: "-",
+        description: "Called when the popover toggles.",
+      },
+      {
+        prop: "asChild",
+        type: "boolean",
+        default: "false",
+        description: "Lets the trigger forward interaction into an existing child element.",
+      },
+    ]}
+  />
+</DocSection>

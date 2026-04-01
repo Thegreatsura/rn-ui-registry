@@ -1,0 +1,83 @@
+---
+title: Radio Group
+description: A grouped single-select control for plan pickers, settings panels, and compact choice lists.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add radio-group
+qrValue: showcase://components/radio-group
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/radio-group.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { RadioGroupInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Radio groups let the user choose exactly one option from a related set.
+
+  <DocSubsection>
+    <CompPreview
+      code={`<RadioGroup value={value} onValueChange={setValue}>
+  <RadioGroupItem value="starter">
+    <Text>Starter</Text>
+  </RadioGroupItem>
+  <RadioGroupItem value="pro">
+    <Text>Pro</Text>
+  </RadioGroupItem>
+</RadioGroup>`}
+    >
+      <RadioGroupInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  <ApiTable
+    rows={[
+      {
+        prop: "value",
+        type: "string",
+        default: "-",
+        description: "Controls the selected item in the group.",
+      },
+      {
+        prop: "defaultValue",
+        type: "string",
+        default: "-",
+        description: "Sets the initial item for uncontrolled usage.",
+      },
+      {
+        prop: "onValueChange",
+        type: "(value: string) => void",
+        default: "-",
+        description: "Called whenever the user picks a new item.",
+      },
+      {
+        prop: "disabled",
+        type: "boolean",
+        default: "false",
+        description: "Disables interaction for the whole group or individual items.",
+      },
+    ]}
+  />
+</DocSection>

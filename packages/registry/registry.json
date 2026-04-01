@@ -248,12 +248,96 @@
                 }
             }
         },
+        "collapsible": {
+            "name": "collapsible",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/collapsible.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "dialog": {
+            "name": "dialog",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/dialog.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "text"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
         "progress": {
             "name": "progress",
             "type": "components:ui",
             "files": [
                 {
                     "path": "components/ui/progress.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "popover": {
+            "name": "popover",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/popover.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "text"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "radio-group": {
+            "name": "radio-group",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/radio-group.tsx",
                     "content": "",
                     "type": "registry:ui"
                 }
@@ -280,6 +364,48 @@
             ],
             "dependencies": [],
             "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "slider": {
+            "name": "slider",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/slider.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "tooltip": {
+            "name": "tooltip",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/tooltip.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "text"
+            ],
             "tailwind": {
                 "config": {
                     "theme": {

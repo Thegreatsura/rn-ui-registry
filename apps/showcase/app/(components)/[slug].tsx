@@ -1,7 +1,13 @@
 import { Stack, useLocalSearchParams } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 
 import { SpotlightButton } from "@/components/animated/spotlight-button";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -15,44 +21,83 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { OTPInput } from "@/components/ui/otp-input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Progress } from "@/components/ui/progress";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipText,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const COMPONENT_META = {
   avatar: { title: "Avatar" },
   badge: { title: "Badge" },
   button: { title: "Button" },
   checkbox: { title: "Checkbox" },
+  collapsible: { title: "Collapsible" },
+  dialog: { title: "Dialog" },
   "spotlight-button": { title: "Spotlight Button" },
   card: { title: "Card" },
   input: { title: "Input" },
   label: { title: "Label" },
   "otp-input": { title: "OTP Input" },
+  popover: { title: "Popover" },
   progress: { title: "Progress" },
+  "radio-group": { title: "Radio Group" },
   separator: { title: "Separator" },
   skeleton: { title: "Skeleton" },
+  slider: { title: "Slider" },
   switch: { title: "Switch" },
   text: { title: "Typography" },
   textarea: { title: "Textarea" },
+  tooltip: { title: "Tooltip" },
 } as const;
 
 type ComponentSlug = keyof typeof COMPONENT_META;
 function Block({
   title,
   children,
+  style,
 }: {
   title?: string;
   children: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
 }) {
   return (
-    <Card>
+    <Card style={style}>
       {title ? (
         <CardHeader>
           <Text variant="large">{title}</Text>
@@ -63,179 +108,26 @@ function Block({
   );
 }
 
-export default function ComponentScreen() {
-  const { slug } = useLocalSearchParams<{ slug: string }>();
-  const [inputValue, setInputValue] = useState("");
-  const [textareaValue, setTextareaValue] = useState(
-    "Ship the preview first, then show each example full width.",
-  );
-  const [checkboxChecked, setCheckboxChecked] = useState(true);
-  const [switchChecked, setSwitchChecked] = useState(false);
-  const [progressValue, setProgressValue] = useState(33);
-  const [otpValue, setOtpValue] = useState("");
-  const [spotlightCount, setSpotlightCount] = useState(0);
-  const backgroundColor = useThemeColor({}, "background");
-  const primarySurface = useThemeColor(
-    { light: "#082f49", dark: "#0f172a" },
-    "background",
-  );
-  const neutralSurface = useThemeColor(
-    { light: "#e4e4e7", dark: "#27272a" },
-    "background",
-  );
-
-  const resolvedSlug = (slug ?? "button") as ComponentSlug;
-  const meta = COMPONENT_META[resolvedSlug];
-
-  if (!meta) {
-    return (
-      <View style={styles.emptyState}>
-        <Text variant="h3">Component not found</Text>
-      </View>
-    );
-  }
-
-  return (
-    <View style={[styles.screen, { backgroundColor }]}>
-      <Stack.Screen options={{ title: meta.title, headerShown: true }} />
-      <ScrollView
-        style={[styles.screen, { backgroundColor }]}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.hero}>
-          <Text variant="h1">{meta.title}</Text>
-        </View>
-
-        <View style={styles.stackLg}>
-          <Text variant="large">Preview</Text>
-          {resolvedSlug === "button" && <ButtonPreview />}
-          {resolvedSlug === "spotlight-button" && (
-            <SpotlightButtonPreview
-              count={spotlightCount}
-              onPress={() => setSpotlightCount((value) => value + 1)}
-              primarySurface={primarySurface}
-              neutralSurface={neutralSurface}
-            />
-          )}
-          {resolvedSlug === "input" && (
-            <InputPreview
-              inputValue={inputValue}
-              onChangeText={setInputValue}
-            />
-          )}
-          {resolvedSlug === "textarea" && (
-            <TextareaPreview
-              value={textareaValue}
-              onChangeText={setTextareaValue}
-            />
-          )}
-          {resolvedSlug === "badge" && <BadgePreview />}
-          {resolvedSlug === "avatar" && <AvatarPreview />}
-          {resolvedSlug === "checkbox" && (
-            <CheckboxPreview
-              checked={checkboxChecked}
-              onCheckedChange={setCheckboxChecked}
-            />
-          )}
-          {resolvedSlug === "text" && <TypographyPreview />}
-          {resolvedSlug === "card" && <CardPreview />}
-          {resolvedSlug === "separator" && <SeparatorPreview />}
-          {resolvedSlug === "label" && <LabelPreview />}
-          {resolvedSlug === "progress" && (
-            <ProgressPreview value={progressValue} />
-          )}
-          {resolvedSlug === "skeleton" && <SkeletonPreview />}
-          {resolvedSlug === "switch" && (
-            <SwitchPreview
-              checked={switchChecked}
-              onCheckedChange={setSwitchChecked}
-            />
-          )}
-          {resolvedSlug === "otp-input" && (
-            <OTPInputPreview value={otpValue} onValueChange={setOtpValue} />
-          )}
-        </View>
-
-        <View style={styles.stackXl}>
-          {resolvedSlug === "button" && <ButtonExamples />}
-          {resolvedSlug === "spotlight-button" && (
-            <SpotlightButtonExamples
-              count={spotlightCount}
-              onPrimaryPress={() => setSpotlightCount((value) => value + 1)}
-              onReset={() => setSpotlightCount(0)}
-              primarySurface={primarySurface}
-              neutralSurface={neutralSurface}
-            />
-          )}
-          {resolvedSlug === "input" && (
-            <InputExamples
-              inputValue={inputValue}
-              onChangeText={setInputValue}
-            />
-          )}
-          {resolvedSlug === "textarea" && (
-            <TextareaExamples
-              value={textareaValue}
-              onChangeText={setTextareaValue}
-            />
-          )}
-          {resolvedSlug === "badge" && <BadgeExamples />}
-          {resolvedSlug === "avatar" && <AvatarExamples />}
-          {resolvedSlug === "checkbox" && (
-            <CheckboxExamples
-              checked={checkboxChecked}
-              onCheckedChange={setCheckboxChecked}
-            />
-          )}
-          {resolvedSlug === "text" && <TypographyExamples />}
-          {resolvedSlug === "card" && <CardExamples />}
-          {resolvedSlug === "separator" && <SeparatorExamples />}
-          {resolvedSlug === "label" && <LabelExamples />}
-          {resolvedSlug === "progress" && (
-            <ProgressExamples
-              value={progressValue}
-              onAdvance={() =>
-                setProgressValue((current) =>
-                  current >= 100 ? 20 : current + 20,
-                )
-              }
-              onReset={() => setProgressValue(0)}
-            />
-          )}
-          {resolvedSlug === "skeleton" && <SkeletonExamples />}
-          {resolvedSlug === "switch" && (
-            <SwitchExamples
-              checked={switchChecked}
-              onCheckedChange={setSwitchChecked}
-            />
-          )}
-          {resolvedSlug === "otp-input" && (
-            <OTPInputExamples value={otpValue} onValueChange={setOtpValue} />
-          )}
-        </View>
-      </ScrollView>
-    </View>
-  );
-}
 
 function SpotlightButtonPreview({
-  count,
-  onPress,
   primarySurface,
   neutralSurface,
 }: {
-  count: number;
-  onPress: () => void;
   primarySurface: string;
   neutralSurface: string;
 }) {
+  const [count, setCount] = useState(0);
+
   return (
     <View style={styles.stackMd}>
       <View
         style={[styles.spotlightSurface, { backgroundColor: primarySurface }]}
       >
-        <SpotlightButton size="lg" badge="Beta" onPress={onPress}>
+        <SpotlightButton
+          size="lg"
+          badge="Beta"
+          onPress={() => setCount((value) => value + 1)}
+        >
           {count === 0
             ? "Launch animation"
             : `Launched ${count} time${count === 1 ? "" : "s"}`}
@@ -244,7 +136,11 @@ function SpotlightButtonPreview({
       <View
         style={[styles.spotlightSurface, { backgroundColor: neutralSurface }]}
       >
-        <SpotlightButton variant="neutral" badge="Update" onPress={onPress}>
+        <SpotlightButton
+          variant="neutral"
+          badge="Update"
+          onPress={() => setCount((value) => value + 1)}
+        >
           View release notes
         </SpotlightButton>
       </View>
@@ -253,18 +149,14 @@ function SpotlightButtonPreview({
 }
 
 function SpotlightButtonExamples({
-  count,
-  onPrimaryPress,
-  onReset,
   primarySurface,
   neutralSurface,
 }: {
-  count: number;
-  onPrimaryPress: () => void;
-  onReset: () => void;
   primarySurface: string;
   neutralSurface: string;
 }) {
+  const [count, setCount] = useState(0);
+
   return (
     <>
       <Block title="Interactive hero">
@@ -279,7 +171,11 @@ function SpotlightButtonExamples({
               { backgroundColor: primarySurface },
             ]}
           >
-            <SpotlightButton size="lg" badge="Live" onPress={onPrimaryPress}>
+            <SpotlightButton
+              size="lg"
+              badge="Live"
+              onPress={() => setCount((value) => value + 1)}
+            >
               {count === 0 ? "Start preview build" : `Preview taps ${count}`}
             </SpotlightButton>
           </View>
@@ -296,12 +192,12 @@ function SpotlightButtonExamples({
             <SpotlightButton
               variant="neutral"
               badge="New"
-              onPress={onPrimaryPress}
+              onPress={() => setCount((value) => value + 1)}
             >
               Open changelog
             </SpotlightButton>
           </View>
-          <Button variant="outline" onPress={onReset}>
+          <Button variant="outline" onPress={() => setCount(0)}>
             <Text>Reset counter</Text>
           </Button>
         </View>
@@ -405,19 +301,15 @@ function ButtonExamples() {
   );
 }
 
-function InputPreview({
-  inputValue,
-  onChangeText,
-}: {
-  inputValue: string;
-  onChangeText: (value: string) => void;
-}) {
+function InputPreview() {
+  const [inputValue, setInputValue] = useState("");
+
   return (
     <View style={styles.stackMd}>
       <Input
         placeholder="Email address"
         value={inputValue}
-        onChangeText={onChangeText}
+        onChangeText={setInputValue}
         leftSlot={
           <MaterialIcons name="mail-outline" size={16} color="#71717a" />
         }
@@ -432,13 +324,7 @@ function InputPreview({
   );
 }
 
-function InputExamples({
-  inputValue,
-  onChangeText,
-}: {
-  inputValue: string;
-  onChangeText: (value: string) => void;
-}) {
+function InputExamples() {
   return (
     <>
       <Block title="Email">
@@ -485,16 +371,14 @@ function InputExamples({
   );
 }
 
-function TextareaPreview({
-  value,
-  onChangeText,
-}: {
-  value: string;
-  onChangeText: (value: string) => void;
-}) {
+function TextareaPreview() {
+  const [value, setValue] = useState(
+    "Ship the preview first, then show each example full width.",
+  );
+
   return (
     <View style={styles.stackMd}>
-      <Textarea value={value} onChangeText={onChangeText} />
+      <Textarea value={value} onChangeText={setValue} />
       <Textarea
         variant="ghost"
         placeholder="Drop in a draft or meeting notes..."
@@ -503,13 +387,7 @@ function TextareaPreview({
   );
 }
 
-function TextareaExamples({
-  value,
-  onChangeText,
-}: {
-  value: string;
-  onChangeText: (value: string) => void;
-}) {
+function TextareaExamples() {
   return (
     <>
       <Block title="Default">
@@ -881,36 +759,28 @@ function SkeletonExamples() {
   );
 }
 
-function SwitchPreview({
-  checked,
-  onCheckedChange,
-}: {
-  checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-}) {
+function SwitchPreview() {
+  const [checked, setChecked] = useState(false);
+
   return (
     <View style={styles.rowBetween}>
       <Text>
         {checked ? "Notifications enabled" : "Notifications disabled"}
       </Text>
-      <Switch checked={checked} onCheckedChange={onCheckedChange} />
+      <Switch checked={checked} onCheckedChange={setChecked} />
     </View>
   );
 }
 
-function SwitchExamples({
-  checked,
-  onCheckedChange,
-}: {
-  checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-}) {
+function SwitchExamples() {
+  const [checked, setChecked] = useState(false);
+
   return (
     <>
       <Block title="Interactive">
         <View style={styles.rowBetween}>
           <Text>Push notifications</Text>
-          <Switch checked={checked} onCheckedChange={onCheckedChange} />
+          <Switch checked={checked} onCheckedChange={setChecked} />
         </View>
       </Block>
       <Block title="Disabled states">
@@ -923,16 +793,12 @@ function SwitchExamples({
   );
 }
 
-function CheckboxPreview({
-  checked,
-  onCheckedChange,
-}: {
-  checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-}) {
+function CheckboxPreview() {
+  const [checked, setChecked] = useState(true);
+
   return (
     <View style={styles.checkboxRow}>
-      <Checkbox checked={checked} onCheckedChange={onCheckedChange} />
+      <Checkbox checked={checked} onCheckedChange={setChecked} />
       <Text>
         {checked ? "I agree to the terms." : "Tap to accept the terms."}
       </Text>
@@ -940,18 +806,14 @@ function CheckboxPreview({
   );
 }
 
-function CheckboxExamples({
-  checked,
-  onCheckedChange,
-}: {
-  checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-}) {
+function CheckboxExamples() {
+  const [checked, setChecked] = useState(true);
+
   return (
     <>
       <Block title="Consent">
         <View style={styles.checkboxRow}>
-          <Checkbox checked={checked} onCheckedChange={onCheckedChange} />
+          <Checkbox checked={checked} onCheckedChange={setChecked} />
           <Text>Receive release updates for this workspace.</Text>
         </View>
       </Block>
@@ -965,7 +827,325 @@ function CheckboxExamples({
   );
 }
 
-function ProgressPreview({ value }: { value: number }) {
+function CollapsiblePreview() {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <CollapsibleTrigger asChild>
+        <Button variant="outline" style={styles.fullWidthButton}>
+          <View style={styles.rowBetween}>
+            <Text>{open ? "Hide release notes" : "Show release notes"}</Text>
+            <MaterialIcons
+              name={open ? "expand-less" : "expand-more"}
+              size={18}
+              color="#71717a"
+            />
+          </View>
+        </Button>
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <Card>
+          <CardContent style={styles.stackSm}>
+            <Text>Version 0.4 ships six new primitives for native and web.</Text>
+            <Text variant="muted">
+              Keep this area for optional details, release notes, or inspector
+              copy.
+            </Text>
+          </CardContent>
+        </Card>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
+function CollapsibleExamples() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Block title="Simple disclosure">
+        <Collapsible open={open} onOpenChange={setOpen}>
+          <CollapsibleTrigger asChild>
+            <Button variant="ghost">
+              <Text>{open ? "Collapse details" : "Expand details"}</Text>
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <Text variant="muted">
+              Use a collapsible to progressively reveal secondary context
+              without forcing an extra route or modal.
+            </Text>
+          </CollapsibleContent>
+        </Collapsible>
+      </Block>
+      <Block title="Settings summary">
+        <Collapsible defaultOpen>
+          <CollapsibleTrigger asChild>
+            <Button variant="outline" style={styles.fullWidthButton}>
+              <View style={styles.rowBetween}>
+                <Text>Deployment settings</Text>
+                <MaterialIcons name="tune" size={18} color="#71717a" />
+              </View>
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <View style={styles.stackSm}>
+              <Text>Runtime: Expo / React Native</Text>
+              <Text>Platform: iOS, Android, Web</Text>
+              <Text variant="muted">
+                Keep grouped configuration close to the primary action.
+              </Text>
+            </View>
+          </CollapsibleContent>
+        </Collapsible>
+      </Block>
+    </>
+  );
+}
+
+function DialogPreview() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <View style={styles.stackMd}>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button>
+            <Text>Open publish dialog</Text>
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Publish changes?</DialogTitle>
+            <DialogDescription>
+              Ship the updated component registry and refresh the preview app in
+              one step.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">
+                <Text>Cancel</Text>
+              </Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button>
+                <Text>Publish</Text>
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Text variant="muted">
+        Dialogs keep the action focused while preserving the current screen
+        context.
+      </Text>
+    </View>
+  );
+}
+
+function DialogExamples() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Block title="Confirmation dialog">
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline">
+              <Text>Archive project</Text>
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Archive workspace</DialogTitle>
+              <DialogDescription>
+                Archived projects stay accessible, but editing and deployments
+                are paused.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="ghost">
+                  <Text>Keep active</Text>
+                </Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button variant="destructive">
+                  <Text>Archive</Text>
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </Block>
+      <Block title="Content layout">
+        <Text variant="muted">
+          Combine `DialogHeader`, `DialogFooter`, `DialogTitle`, and
+          `DialogDescription` to keep copy and actions aligned.
+        </Text>
+      </Block>
+    </>
+  );
+}
+
+function PopoverPreview() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <View style={styles.stackMd}>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="outline">
+            <Text>Open quick summary</Text>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <PopoverHeader>
+            <PopoverTitle>Today&apos;s rollout</PopoverTitle>
+            <PopoverDescription>
+              6 new base components are now available in showcase, registry,
+              and platform docs.
+            </PopoverDescription>
+          </PopoverHeader>
+        </PopoverContent>
+      </Popover>
+      <Text variant="muted">
+        A popover is great for compact context and quick actions.
+      </Text>
+    </View>
+  );
+}
+
+function PopoverExamples() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Block title="Compact details" style={open ? styles.overlayBlock : null}>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button variant="secondary">
+              <Text>Inspect package</Text>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <PopoverHeader>
+              <PopoverTitle>@watermelon/registry</PopoverTitle>
+              <PopoverDescription>
+                Shared React Native building blocks with Expo-friendly
+                primitives and mirrored docs previews.
+              </PopoverDescription>
+            </PopoverHeader>
+          </PopoverContent>
+        </Popover>
+      </Block>
+      <Block title="Guidance">
+        <Text variant="muted">
+          Use popovers for low-friction disclosure when the user should stay in
+          flow on the current surface.
+        </Text>
+      </Block>
+    </>
+  );
+}
+
+function RadioGroupPreview() {
+  const [value, setValue] = useState("starter");
+
+  return (
+    <View style={styles.stackMd}>
+      <RadioGroup value={value} onValueChange={setValue}>
+        <RadioGroupItem value="starter">
+          <Text>Starter plan</Text>
+        </RadioGroupItem>
+        <RadioGroupItem value="pro">
+          <Text>Pro plan</Text>
+        </RadioGroupItem>
+        <RadioGroupItem value="enterprise">
+          <Text>Enterprise plan</Text>
+        </RadioGroupItem>
+      </RadioGroup>
+      <Text variant="muted">Selected: {value}</Text>
+    </View>
+  );
+}
+
+function RadioGroupExamples() {
+  const [value, setValue] = useState("starter");
+
+  return (
+    <>
+      <Block title="Plan selector">
+        <RadioGroup value={value} onValueChange={setValue}>
+          <RadioGroupItem value="starter">
+            <View style={styles.stackSm}>
+              <Text>Starter</Text>
+              <Text variant="muted">For side projects and prototypes.</Text>
+            </View>
+          </RadioGroupItem>
+          <RadioGroupItem value="pro">
+            <View style={styles.stackSm}>
+              <Text>Pro</Text>
+              <Text variant="muted">Extra polish for production apps.</Text>
+            </View>
+          </RadioGroupItem>
+        </RadioGroup>
+      </Block>
+      <Block title="Disabled option">
+        <RadioGroup value="ios">
+          <RadioGroupItem value="ios">
+            <Text>iOS</Text>
+          </RadioGroupItem>
+          <RadioGroupItem value="android" disabled>
+            <Text>Android beta</Text>
+          </RadioGroupItem>
+        </RadioGroup>
+      </Block>
+    </>
+  );
+}
+
+function SliderPreview() {
+  const [value, setValue] = useState(42);
+
+  return (
+    <View style={styles.stackMd}>
+      <Slider value={value} onValueChange={setValue} />
+      <Text variant="muted">Progress: {Math.round(value)}%</Text>
+    </View>
+  );
+}
+
+function SliderExamples() {
+  const [value, setValue] = useState(42);
+
+  return (
+    <>
+      <Block title="Continuous">
+        <View style={styles.stackMd}>
+          <Slider value={value} onValueChange={setValue} />
+          <Text variant="muted">
+            Drag the thumb or tap the track to set a value.
+          </Text>
+        </View>
+      </Block>
+      <Block title="Stepped">
+        <View style={styles.stackMd}>
+          <Slider defaultValue={20} min={0} max={80} step={10} />
+          <Text variant="muted">
+            Use steps for discrete ranges like volume or zoom.
+          </Text>
+        </View>
+      </Block>
+    </>
+  );
+}
+
+function ProgressPreview() {
+  const value = 48;
+
   return (
     <View style={styles.stackMd}>
       <Progress value={value} />
@@ -974,25 +1154,24 @@ function ProgressPreview({ value }: { value: number }) {
   );
 }
 
-function ProgressExamples({
-  value,
-  onAdvance,
-  onReset,
-}: {
-  value: number;
-  onAdvance: () => void;
-  onReset: () => void;
-}) {
+function ProgressExamples() {
+  const [value, setValue] = useState(33);
+
   return (
     <>
       <Block title="Upload progress">
         <View style={styles.stackMd}>
           <Progress value={value} />
           <View style={styles.rowWrap}>
-            <Button size="sm" onPress={onAdvance}>
+            <Button
+              size="sm"
+              onPress={() =>
+                setValue((current) => (current >= 100 ? 20 : current + 20))
+              }
+            >
               <Text>Advance</Text>
             </Button>
-            <Button size="sm" variant="outline" onPress={onReset}>
+            <Button size="sm" variant="outline" onPress={() => setValue(0)}>
               <Text>Reset</Text>
             </Button>
           </View>
@@ -1008,16 +1187,12 @@ function ProgressExamples({
   );
 }
 
-function OTPInputPreview({
-  value,
-  onValueChange,
-}: {
-  value: string;
-  onValueChange: (value: string) => void;
-}) {
+function OTPInputPreview() {
+  const [value, setValue] = useState("");
+
   return (
     <View style={styles.stackMd}>
-      <OTPInput value={value} onValueChange={onValueChange} maxLength={6} />
+      <OTPInput value={value} onValueChange={setValue} maxLength={6} />
       <Text variant="muted">
         {value ? `Code: ${value}` : "Enter a 6-digit code."}
       </Text>
@@ -1025,25 +1200,70 @@ function OTPInputPreview({
   );
 }
 
-function OTPInputExamples({
-  value,
-  onValueChange,
-}: {
-  value: string;
-  onValueChange: (value: string) => void;
-}) {
+function OTPInputExamples() {
+  const [value, setValue] = useState("");
+
   return (
     <>
       <Block title="Verification code">
         <View style={styles.stackMd}>
-          <OTPInput value={value} onValueChange={onValueChange} maxLength={6} />
-          <Button size="sm" variant="outline" onPress={() => onValueChange("")}>
+          <OTPInput value={value} onValueChange={setValue} maxLength={6} />
+          <Button size="sm" variant="outline" onPress={() => setValue("")}>
             <Text>Clear</Text>
           </Button>
         </View>
       </Block>
       <Block title="Four-digit variant">
         <OTPInput value="1234" maxLength={4} />
+      </Block>
+    </>
+  );
+}
+
+function TooltipPreview() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <View style={styles.stackMd}>
+      <Tooltip open={open} onOpenChange={setOpen}>
+        <TooltipTrigger asChild>
+          <Button variant="outline">
+            <Text>Press and hold</Text>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <TooltipText>Helpful hints fit nicely inside a tooltip.</TooltipText>
+        </TooltipContent>
+      </Tooltip>
+      <Text variant="muted">
+        Tooltips are ideal for brief, non-blocking guidance.
+      </Text>
+    </View>
+  );
+}
+
+function TooltipExamples() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Block title="Inline help">
+        <Tooltip open={open} onOpenChange={setOpen}>
+          <TooltipTrigger asChild>
+            <Button variant="ghost">
+              <Text>Hold for keyboard shortcut</Text>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <TooltipText>Shortcut: Cmd + K</TooltipText>
+          </TooltipContent>
+        </Tooltip>
+      </Block>
+      <Block title="Best for">
+        <Text variant="muted">
+          Use tooltips for short descriptions, labels, and shortcut hints. Keep
+          the content concise.
+        </Text>
       </Block>
     </>
   );
@@ -1165,4 +1385,105 @@ const styles = StyleSheet.create({
   verticalSeparatorShort: {
     height: 24,
   },
+  overlayBlock: {
+    zIndex: 40,
+    elevation: 40,
+  },
 });
+export default function ComponentScreen() {
+  const { slug } = useLocalSearchParams<{ slug: string }>();
+  const backgroundColor = useThemeColor({}, "background");
+  const primarySurface = useThemeColor(
+    { light: "#082f49", dark: "#0f172a" },
+    "background",
+  );
+  const neutralSurface = useThemeColor(
+    { light: "#e4e4e7", dark: "#27272a" },
+    "background",
+  );
+
+  const resolvedSlug = (slug ?? "button") as ComponentSlug;
+  const meta = COMPONENT_META[resolvedSlug];
+
+  if (!meta) {
+    return (
+      <View style={styles.emptyState}>
+        <Text variant="h3">Component not found</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={[styles.screen, { backgroundColor }]}>
+      <Stack.Screen options={{ title: meta.title, headerShown: true }} />
+      <ScrollView
+        style={[styles.screen, { backgroundColor }]}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.hero}>
+          <Text variant="h1">{meta.title}</Text>
+        </View>
+
+        <View style={styles.stackLg}>
+          <Text variant="large">Preview</Text>
+          {resolvedSlug === "button" && <ButtonPreview />}
+          {resolvedSlug === "spotlight-button" && (
+            <SpotlightButtonPreview
+              primarySurface={primarySurface}
+              neutralSurface={neutralSurface}
+            />
+          )}
+          {resolvedSlug === "input" && <InputPreview />}
+          {resolvedSlug === "textarea" && <TextareaPreview />}
+          {resolvedSlug === "badge" && <BadgePreview />}
+          {resolvedSlug === "avatar" && <AvatarPreview />}
+          {resolvedSlug === "checkbox" && <CheckboxPreview />}
+          {resolvedSlug === "collapsible" && <CollapsiblePreview />}
+          {resolvedSlug === "dialog" && <DialogPreview />}
+          {resolvedSlug === "text" && <TypographyPreview />}
+          {resolvedSlug === "card" && <CardPreview />}
+          {resolvedSlug === "separator" && <SeparatorPreview />}
+          {resolvedSlug === "label" && <LabelPreview />}
+          {resolvedSlug === "popover" && <PopoverPreview />}
+          {resolvedSlug === "progress" && <ProgressPreview />}
+          {resolvedSlug === "radio-group" && <RadioGroupPreview />}
+          {resolvedSlug === "skeleton" && <SkeletonPreview />}
+          {resolvedSlug === "slider" && <SliderPreview />}
+          {resolvedSlug === "switch" && <SwitchPreview />}
+          {resolvedSlug === "otp-input" && <OTPInputPreview />}
+          {resolvedSlug === "tooltip" && <TooltipPreview />}
+        </View>
+
+        <View style={styles.stackXl}>
+          {resolvedSlug === "button" && <ButtonExamples />}
+          {resolvedSlug === "spotlight-button" && (
+            <SpotlightButtonExamples
+              primarySurface={primarySurface}
+              neutralSurface={neutralSurface}
+            />
+          )}
+          {resolvedSlug === "input" && <InputExamples />}
+          {resolvedSlug === "textarea" && <TextareaExamples />}
+          {resolvedSlug === "badge" && <BadgeExamples />}
+          {resolvedSlug === "avatar" && <AvatarExamples />}
+          {resolvedSlug === "checkbox" && <CheckboxExamples />}
+          {resolvedSlug === "collapsible" && <CollapsibleExamples />}
+          {resolvedSlug === "dialog" && <DialogExamples />}
+          {resolvedSlug === "text" && <TypographyExamples />}
+          {resolvedSlug === "card" && <CardExamples />}
+          {resolvedSlug === "separator" && <SeparatorExamples />}
+          {resolvedSlug === "label" && <LabelExamples />}
+          {resolvedSlug === "popover" && <PopoverExamples />}
+          {resolvedSlug === "progress" && <ProgressExamples />}
+          {resolvedSlug === "radio-group" && <RadioGroupExamples />}
+          {resolvedSlug === "skeleton" && <SkeletonExamples />}
+          {resolvedSlug === "slider" && <SliderExamples />}
+          {resolvedSlug === "switch" && <SwitchExamples />}
+          {resolvedSlug === "otp-input" && <OTPInputExamples />}
+          {resolvedSlug === "tooltip" && <TooltipExamples />}
+        </View>
+      </ScrollView>
+    </View>
+  );
+}

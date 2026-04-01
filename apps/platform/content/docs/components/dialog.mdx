@@ -1,0 +1,105 @@
+---
+title: Dialog
+description: A modal surface for focused decisions, confirmations, and short flows that should temporarily take over attention.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add dialog
+qrValue: showcase://components/dialog
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/dialog.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { DialogInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Dialogs are a good fit for confirmations, destructive actions, and short task-focused flows.
+
+  <DocSubsection>
+    <CompPreview
+      code={`<Dialog>
+  <DialogTrigger asChild>
+    <Button>Open dialog</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Publish changes?</DialogTitle>
+      <DialogDescription>
+        Ship the updated registry and refresh the preview app.
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <DialogClose asChild>
+        <Button variant="outline">Cancel</Button>
+      </DialogClose>
+      <DialogClose asChild>
+        <Button>Publish</Button>
+      </DialogClose>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>`}
+    >
+      <DialogInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  <ApiTable
+    rows={[
+      {
+        prop: "defaultOpen",
+        type: "boolean",
+        default: "false",
+        description: "Sets the initial open state for uncontrolled dialogs.",
+      },
+      {
+        prop: "open",
+        type: "boolean",
+        default: "-",
+        description: "Controls the dialog from parent state.",
+      },
+      {
+        prop: "onOpenChange",
+        type: "(open: boolean) => void",
+        default: "-",
+        description: "Called when the dialog opens or closes.",
+      },
+      {
+        prop: "asChild",
+        type: "boolean",
+        default: "false",
+        description: "Allows trigger and close elements to wrap existing buttons.",
+      },
+    ]}
+  />
+</DocSection>

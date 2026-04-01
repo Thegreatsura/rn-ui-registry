@@ -14,8 +14,38 @@ import { Text } from "@/components/ui/text";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { OTPInput } from "@/components/ui/otp-input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Slider } from "@/components/ui/slider";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 function PreviewShell({
   children,
@@ -629,16 +659,261 @@ export function OTPBasicInlinePreview() {
   );
 }
 
+function CollapsibleLivePreview() {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <PreviewShell>
+      <div className="mx-auto flex w-full max-w-lg flex-col gap-4">
+        <Collapsible open={open} onOpenChange={setOpen}>
+          <CollapsibleTrigger asChild>
+            <Button variant="outline" className="w-full justify-between">
+              <span>{open ? "Hide release notes" : "Show release notes"}</span>
+              <span className="text-muted-foreground text-base leading-none">
+                {open ? "−" : "+"}
+              </span>
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-3 rounded-xl border bg-card p-6 text-left">
+            <div className="space-y-2">
+              <p>Version 0.4 ships six new primitives for native and web.</p>
+              <p className="text-muted-foreground text-sm leading-6">
+                Keep this area for optional details, release notes, or inspector
+                copy.
+              </p>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function CollapsibleInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[190px]">
+      <CollapsibleLivePreview />
+    </PreviewShell>
+  );
+}
+
+function DialogLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="flex items-center justify-center">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>Open publish dialog</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Publish changes?</DialogTitle>
+              <DialogDescription>
+                Ship the updated registry and refresh the showcase previews.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button>Publish</Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function DialogInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[180px]">
+      <div className="flex items-center justify-center">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Archive project</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Archive workspace</DialogTitle>
+              <DialogDescription>
+                Archived projects stay accessible, but editing and deployments
+                are paused.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="ghost">Keep active</Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button variant="destructive">Archive</Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </PreviewShell>
+  );
+}
+
+function PopoverLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="flex items-center justify-center">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline">Open quick summary</Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <PopoverHeader>
+              <PopoverTitle>Today&apos;s rollout</PopoverTitle>
+              <PopoverDescription>
+                6 new base components are now available in showcase, registry,
+                and platform docs.
+              </PopoverDescription>
+            </PopoverHeader>
+          </PopoverContent>
+        </Popover>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function PopoverInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[180px]">
+      <div className="flex items-center justify-center">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="secondary">Inspect package</Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <PopoverHeader>
+              <PopoverTitle>@watermelon/registry</PopoverTitle>
+              <PopoverDescription>
+                Shared React Native building blocks with Expo-friendly
+                primitives and mirrored docs previews.
+              </PopoverDescription>
+            </PopoverHeader>
+          </PopoverContent>
+        </Popover>
+      </div>
+    </PreviewShell>
+  );
+}
+
+function RadioGroupLivePreview() {
+  const [value, setValue] = useState("starter");
+
+  return (
+    <PreviewShell>
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+        <RadioGroup value={value} onValueChange={setValue}>
+          <label className="flex items-center gap-3">
+            <RadioGroupItem value="starter" id="starter-plan" />
+            <span>Starter plan</span>
+          </label>
+          <label className="flex items-center gap-3">
+            <RadioGroupItem value="pro" id="pro-plan" />
+            <span>Pro plan</span>
+          </label>
+          <label className="flex items-center gap-3">
+            <RadioGroupItem value="enterprise" id="enterprise-plan" />
+            <span>Enterprise plan</span>
+          </label>
+        </RadioGroup>
+        <p className="text-muted-foreground text-sm">Selected: {value}</p>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function RadioGroupInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[220px]">
+      <RadioGroupLivePreview />
+    </PreviewShell>
+  );
+}
+
+function SliderLivePreview() {
+  const [value, setValue] = useState([42]);
+
+  return (
+    <PreviewShell>
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+        <Slider value={value} onValueChange={setValue} max={100} step={1} />
+        <p className="text-muted-foreground text-sm">Progress: {value[0]}%</p>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function SliderInlinePreview() {
+  const [value, setValue] = useState([20]);
+
+  return (
+    <PreviewShell className="min-h-[180px]">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+        <Slider value={value} onValueChange={setValue} max={80} step={10} />
+        <p className="text-muted-foreground text-sm">Current value: {value[0]}</p>
+      </div>
+    </PreviewShell>
+  );
+}
+
+function TooltipLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="flex items-center justify-center">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="outline">Press and hold</Button>
+          </TooltipTrigger>
+          <TooltipContent>Helpful hints fit nicely inside a tooltip.</TooltipContent>
+        </Tooltip>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function TooltipInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[170px]">
+      <div className="flex items-center justify-center">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost">Hold for keyboard shortcut</Button>
+          </TooltipTrigger>
+          <TooltipContent>Shortcut: Cmd + K</TooltipContent>
+        </Tooltip>
+      </div>
+    </PreviewShell>
+  );
+}
+
 export function ComponentLivePreview({ slug }: { slug: string }) {
   switch (slug) {
     case "button":
       return <ButtonLivePreview />;
+    case "collapsible":
+      return <CollapsibleLivePreview />;
+    case "dialog":
+      return <DialogLivePreview />;
     case "input":
       return <InputLivePreview />;
     case "avatar":
       return <AvatarLivePreview />;
     case "badge":
       return <BadgeLivePreview />;
+    case "popover":
+      return <PopoverLivePreview />;
+    case "radio-group":
+      return <RadioGroupLivePreview />;
+    case "slider":
+      return <SliderLivePreview />;
     case "text":
       return <TextLivePreview />;
     case "card":
@@ -657,6 +932,8 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
       return <SwitchLivePreview />;
     case "checkbox":
       return <CheckboxLivePreview />;
+    case "tooltip":
+      return <TooltipLivePreview />;
     case "progress":
       return <ProgressLivePreview />;
     case "otp-input":

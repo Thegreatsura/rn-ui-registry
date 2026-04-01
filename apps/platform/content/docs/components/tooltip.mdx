@@ -1,0 +1,85 @@
+---
+title: Tooltip
+description: A tiny helper overlay for labels, shortcuts, and microcopy that should stay out of the main layout.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add tooltip
+qrValue: showcase://components/tooltip
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/tooltip.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { TooltipInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Tooltips work best for brief explanations, labels, and shortcut hints.
+
+  <DocSubsection>
+    <CompPreview
+      code={`<Tooltip>
+  <TooltipTrigger asChild>
+    <Button variant="ghost">Need help?</Button>
+  </TooltipTrigger>
+  <TooltipContent>Shortcut: Cmd + K</TooltipContent>
+</Tooltip>`}
+    >
+      <TooltipInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  <ApiTable
+    rows={[
+      {
+        prop: "defaultOpen",
+        type: "boolean",
+        default: "false",
+        description: "Sets the initial open state for uncontrolled tooltips.",
+      },
+      {
+        prop: "open",
+        type: "boolean",
+        default: "-",
+        description: "Controls tooltip visibility from parent state.",
+      },
+      {
+        prop: "onOpenChange",
+        type: "(open: boolean) => void",
+        default: "-",
+        description: "Called whenever the tooltip opens or closes.",
+      },
+      {
+        prop: "asChild",
+        type: "boolean",
+        default: "false",
+        description: "Forwards tooltip interactions into an existing child trigger.",
+      },
+    ]}
+  />
+</DocSection>
