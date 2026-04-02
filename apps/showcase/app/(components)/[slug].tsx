@@ -11,6 +11,24 @@ import {
 
 import { SpotlightButton } from "@/components/animated/spotlight-button";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -36,6 +54,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { OTPInput } from "@/components/ui/otp-input";
@@ -52,9 +80,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Text } from "@/components/ui/text";
 import { Textarea } from "@/components/ui/textarea";
+import { Toggle } from "@/components/ui/toggle";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Tooltip,
   TooltipContent,
@@ -63,12 +95,16 @@ import {
 } from "@/components/ui/tooltip";
 
 const COMPONENT_META = {
+  accordion: { title: "Accordion" },
+  "alert-dialog": { title: "Alert Dialog" },
+  "aspect-ratio": { title: "Aspect Ratio" },
   avatar: { title: "Avatar" },
   badge: { title: "Badge" },
   button: { title: "Button" },
   checkbox: { title: "Checkbox" },
   collapsible: { title: "Collapsible" },
   dialog: { title: "Dialog" },
+  drawer: { title: "Drawer" },
   "spotlight-button": { title: "Spotlight Button" },
   card: { title: "Card" },
   input: { title: "Input" },
@@ -80,9 +116,13 @@ const COMPONENT_META = {
   separator: { title: "Separator" },
   skeleton: { title: "Skeleton" },
   slider: { title: "Slider" },
+  spinner: { title: "Spinner" },
   switch: { title: "Switch" },
+  tabs: { title: "Tabs" },
   text: { title: "Typography" },
   textarea: { title: "Textarea" },
+  toggle: { title: "Toggle" },
+  "toggle-group": { title: "Toggle Group" },
   tooltip: { title: "Tooltip" },
 } as const;
 
@@ -990,6 +1030,90 @@ function DialogExamples() {
   );
 }
 
+function DrawerPreview() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <View style={styles.stackMd}>
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerTrigger asChild>
+          <Button variant="outline">
+            <Text>Open iOS-like drawer</Text>
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Quick actions</DrawerTitle>
+            <DrawerDescription>
+              Stay in context while exposing a few focused actions from the bottom.
+            </DrawerDescription>
+          </DrawerHeader>
+          <View style={styles.stackSm}>
+            <Button variant="secondary">
+              <Text>Share preview</Text>
+            </Button>
+            <Button variant="ghost">
+              <Text>Duplicate draft</Text>
+            </Button>
+          </View>
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button variant="outline">
+                <Text>Done</Text>
+              </Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+      <Text variant="muted">Drawers feel natural for mobile-first action sheets.</Text>
+    </View>
+  );
+}
+
+function DrawerExamples() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Block title="Bottom sheet actions">
+        <Drawer open={open} onOpenChange={setOpen}>
+          <DrawerTrigger asChild>
+            <Button variant="secondary">
+              <Text>Manage project</Text>
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Project actions</DrawerTitle>
+              <DrawerDescription>
+                Choose the next step without leaving the current screen.
+              </DrawerDescription>
+            </DrawerHeader>
+            <View style={styles.stackSm}>
+              <Button variant="outline">
+                <Text>Edit details</Text>
+              </Button>
+              <Button variant="outline">
+                <Text>Invite collaborators</Text>
+              </Button>
+              <Button variant="destructive">
+                <Text>Archive project</Text>
+              </Button>
+            </View>
+            <DrawerFooter>
+              <DrawerClose asChild>
+                <Button variant="ghost">
+                  <Text>Cancel</Text>
+                </Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </Block>
+    </>
+  );
+}
+
 function PopoverPreview() {
   const [open, setOpen] = useState(false);
 
@@ -1143,6 +1267,35 @@ function SliderExamples() {
   );
 }
 
+function SpinnerPreview() {
+  return (
+    <View style={[styles.rowWrap, styles.alignCenter]}>
+      <Spinner />
+      <Text variant="muted">Showing a compact loading indicator.</Text>
+    </View>
+  );
+}
+
+function SpinnerExamples() {
+  return (
+    <>
+      <Block title="Sizes">
+        <View style={[styles.rowWrap, styles.alignCenter]}>
+          <Spinner size="sm" />
+          <Spinner size="default" />
+          <Spinner size="lg" />
+        </View>
+      </Block>
+      <Block title="Muted surface">
+        <View style={styles.spinnerCard}>
+          <Spinner color="#18181b" size="lg" />
+          <Text variant="muted">Syncing registry data…</Text>
+        </View>
+      </Block>
+    </>
+  );
+}
+
 function ProgressPreview() {
   const value = 48;
 
@@ -1269,6 +1422,318 @@ function TooltipExamples() {
   );
 }
 
+function AccordionPreview() {
+  return (
+    <Accordion type="single" defaultValue="item-1">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Getting started</AccordionTrigger>
+        <AccordionContent>
+          <Text variant="muted">
+            Use accordion items to reveal grouped content one section at a time.
+          </Text>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
+
+function AccordionExamples() {
+  return (
+    <>
+      <Block title="Single mode">
+        <Accordion type="single" defaultValue="setup">
+          <AccordionItem value="setup">
+            <AccordionTrigger>Setup</AccordionTrigger>
+            <AccordionContent>
+              <Text variant="muted">
+                Keep setup notes, deployment tips, or FAQs grouped under clear headings.
+              </Text>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="publish">
+            <AccordionTrigger>Publish</AccordionTrigger>
+            <AccordionContent>
+              <Text variant="muted">Review changes, then ship the updated registry.</Text>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </Block>
+      <Block title="Multiple mode">
+        <Accordion type="multiple" defaultValue={["ios"]}>
+          <AccordionItem value="ios">
+            <AccordionTrigger>iOS notes</AccordionTrigger>
+            <AccordionContent>
+              <Text variant="muted">Matches the same API as other disclosure primitives.</Text>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </Block>
+    </>
+  );
+}
+
+function AlertDialogPreview() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <View style={styles.stackMd}>
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogTrigger asChild>
+          <Button variant="destructive">
+            <Text>Open destructive alert</Text>
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete release?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action removes the release notes and cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel asChild>
+              <Button variant="outline">
+                <Text>Cancel</Text>
+              </Button>
+            </AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <Button variant="destructive">
+                <Text>Delete</Text>
+              </Button>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <Text variant="muted">Use an alert dialog for high-consequence decisions.</Text>
+    </View>
+  );
+}
+
+function AlertDialogExamples() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Block title="Destructive confirmation">
+        <AlertDialog open={open} onOpenChange={setOpen}>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline">
+              <Text>Reset analytics</Text>
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Reset analytics?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Existing charts will clear and rebuild from the next event.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel asChild>
+                <Button variant="ghost">
+                  <Text>Keep data</Text>
+                </Button>
+              </AlertDialogCancel>
+              <AlertDialogAction asChild>
+                <Button variant="destructive">
+                  <Text>Reset</Text>
+                </Button>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </Block>
+    </>
+  );
+}
+
+function AspectRatioPreview() {
+  return (
+    <AspectRatio ratio={16 / 9}>
+      <Card style={styles.aspectCard}>
+        <CardContent style={styles.aspectContent}>
+          <Text variant="large">16:9</Text>
+          <Text variant="muted">Hero media or video previews.</Text>
+        </CardContent>
+      </Card>
+    </AspectRatio>
+  );
+}
+
+function AspectRatioExamples() {
+  return (
+    <>
+      <Block title="Video frame">
+        <AspectRatio ratio={16 / 9}>
+          <Card style={styles.aspectCard}>
+            <CardContent style={styles.aspectContent}>
+              <Text variant="large">16:9 preview</Text>
+            </CardContent>
+          </Card>
+        </AspectRatio>
+      </Block>
+      <Block title="Square">
+        <AspectRatio ratio={1}>
+          <Card style={styles.aspectCard}>
+            <CardContent style={styles.aspectContent}>
+              <Text variant="large">1:1 avatar crop</Text>
+            </CardContent>
+          </Card>
+        </AspectRatio>
+      </Block>
+    </>
+  );
+}
+
+function TabsPreview() {
+  const [value, setValue] = useState("overview");
+
+  return (
+    <Tabs value={value} onValueChange={setValue}>
+      <TabsList>
+        <TabsTrigger value="overview">
+          <Text>Overview</Text>
+        </TabsTrigger>
+        <TabsTrigger value="activity">
+          <Text>Activity</Text>
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview">
+        <Text variant="muted">Tab content swaps in place without leaving the screen.</Text>
+      </TabsContent>
+      <TabsContent value="activity">
+        <Text variant="muted">Recent deploys, edits, and release notes appear here.</Text>
+      </TabsContent>
+    </Tabs>
+  );
+}
+
+function TabsExamples() {
+  const [value, setValue] = useState("profile");
+
+  return (
+    <>
+      <Block title="Profile tabs">
+        <Tabs value={value} onValueChange={setValue}>
+          <TabsList>
+            <TabsTrigger value="profile">
+              <Text>Profile</Text>
+            </TabsTrigger>
+            <TabsTrigger value="billing">
+              <Text>Billing</Text>
+            </TabsTrigger>
+            <TabsTrigger value="members">
+              <Text>Members</Text>
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="profile">
+            <Text variant="muted">Account owner, project name, and public details.</Text>
+          </TabsContent>
+          <TabsContent value="billing">
+            <Text variant="muted">Invoices, plan changes, and renewal settings.</Text>
+          </TabsContent>
+          <TabsContent value="members">
+            <Text variant="muted">Collaborators with access to the workspace.</Text>
+          </TabsContent>
+        </Tabs>
+      </Block>
+    </>
+  );
+}
+
+function TogglePreview() {
+  return (
+    <View style={styles.rowWrap}>
+      <Toggle defaultPressed variant="default">
+        <Text>Bold</Text>
+      </Toggle>
+      <Toggle>
+        <Text>Italic</Text>
+      </Toggle>
+    </View>
+  );
+}
+
+function ToggleExamples() {
+  return (
+    <>
+      <Block title="Formatting">
+        <View style={styles.rowWrap}>
+          <Toggle defaultPressed variant="default">
+            <Text>Bold</Text>
+          </Toggle>
+          <Toggle>
+            <Text>Italic</Text>
+          </Toggle>
+          <Toggle>
+            <Text>Underline</Text>
+          </Toggle>
+        </View>
+      </Block>
+      <Block title="Disabled">
+        <Toggle disabled>
+          <Text>Archived</Text>
+        </Toggle>
+      </Block>
+    </>
+  );
+}
+
+function ToggleGroupPreview() {
+  const [value, setValue] = useState<string | string[]>("grid");
+
+  return (
+    <View style={styles.stackMd}>
+      <ToggleGroup type="single" value={value} onValueChange={setValue}>
+        <ToggleGroupItem value="grid">
+          <Text>Grid</Text>
+        </ToggleGroupItem>
+        <ToggleGroupItem value="list">
+          <Text>List</Text>
+        </ToggleGroupItem>
+      </ToggleGroup>
+      <Text variant="muted">Selected: {Array.isArray(value) ? value.join(", ") : value}</Text>
+    </View>
+  );
+}
+
+function ToggleGroupExamples() {
+  const [value, setValue] = useState<string | string[]>(["ios"]);
+
+  return (
+    <>
+      <Block title="Single select">
+        <ToggleGroup type="single" defaultValue="preview">
+          <ToggleGroupItem value="preview">
+            <Text>Preview</Text>
+          </ToggleGroupItem>
+          <ToggleGroupItem value="code">
+            <Text>Code</Text>
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </Block>
+      <Block title="Multi select">
+        <View style={styles.stackMd}>
+          <ToggleGroup type="multiple" value={value} onValueChange={setValue}>
+            <ToggleGroupItem value="ios">
+              <Text>iOS</Text>
+            </ToggleGroupItem>
+            <ToggleGroupItem value="android">
+              <Text>Android</Text>
+            </ToggleGroupItem>
+            <ToggleGroupItem value="web">
+              <Text>Web</Text>
+            </ToggleGroupItem>
+          </ToggleGroup>
+          <Text variant="muted">
+            Enabled: {Array.isArray(value) ? value.join(", ") : value}
+          </Text>
+        </View>
+      </Block>
+    </>
+  );
+}
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -1312,6 +1777,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 12,
+  },
+  alignCenter: {
+    alignItems: "center",
   },
   avatarRow: {
     flexDirection: "row",
@@ -1385,6 +1853,23 @@ const styles = StyleSheet.create({
   verticalSeparatorShort: {
     height: 24,
   },
+  aspectCard: {
+    flex: 1,
+  },
+  aspectContent: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  spinnerCard: {
+    minHeight: 120,
+    borderRadius: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
+    backgroundColor: "#f4f4f5",
+  },
   overlayBlock: {
     zIndex: 40,
     elevation: 40,
@@ -1427,6 +1912,9 @@ export default function ComponentScreen() {
 
         <View style={styles.stackLg}>
           <Text variant="large">Preview</Text>
+          {resolvedSlug === "accordion" && <AccordionPreview />}
+          {resolvedSlug === "alert-dialog" && <AlertDialogPreview />}
+          {resolvedSlug === "aspect-ratio" && <AspectRatioPreview />}
           {resolvedSlug === "button" && <ButtonPreview />}
           {resolvedSlug === "spotlight-button" && (
             <SpotlightButtonPreview
@@ -1441,6 +1929,7 @@ export default function ComponentScreen() {
           {resolvedSlug === "checkbox" && <CheckboxPreview />}
           {resolvedSlug === "collapsible" && <CollapsiblePreview />}
           {resolvedSlug === "dialog" && <DialogPreview />}
+          {resolvedSlug === "drawer" && <DrawerPreview />}
           {resolvedSlug === "text" && <TypographyPreview />}
           {resolvedSlug === "card" && <CardPreview />}
           {resolvedSlug === "separator" && <SeparatorPreview />}
@@ -1450,12 +1939,19 @@ export default function ComponentScreen() {
           {resolvedSlug === "radio-group" && <RadioGroupPreview />}
           {resolvedSlug === "skeleton" && <SkeletonPreview />}
           {resolvedSlug === "slider" && <SliderPreview />}
+          {resolvedSlug === "spinner" && <SpinnerPreview />}
           {resolvedSlug === "switch" && <SwitchPreview />}
+          {resolvedSlug === "tabs" && <TabsPreview />}
           {resolvedSlug === "otp-input" && <OTPInputPreview />}
+          {resolvedSlug === "toggle" && <TogglePreview />}
+          {resolvedSlug === "toggle-group" && <ToggleGroupPreview />}
           {resolvedSlug === "tooltip" && <TooltipPreview />}
         </View>
 
         <View style={styles.stackXl}>
+          {resolvedSlug === "accordion" && <AccordionExamples />}
+          {resolvedSlug === "alert-dialog" && <AlertDialogExamples />}
+          {resolvedSlug === "aspect-ratio" && <AspectRatioExamples />}
           {resolvedSlug === "button" && <ButtonExamples />}
           {resolvedSlug === "spotlight-button" && (
             <SpotlightButtonExamples
@@ -1470,6 +1966,7 @@ export default function ComponentScreen() {
           {resolvedSlug === "checkbox" && <CheckboxExamples />}
           {resolvedSlug === "collapsible" && <CollapsibleExamples />}
           {resolvedSlug === "dialog" && <DialogExamples />}
+          {resolvedSlug === "drawer" && <DrawerExamples />}
           {resolvedSlug === "text" && <TypographyExamples />}
           {resolvedSlug === "card" && <CardExamples />}
           {resolvedSlug === "separator" && <SeparatorExamples />}
@@ -1479,8 +1976,12 @@ export default function ComponentScreen() {
           {resolvedSlug === "radio-group" && <RadioGroupExamples />}
           {resolvedSlug === "skeleton" && <SkeletonExamples />}
           {resolvedSlug === "slider" && <SliderExamples />}
+          {resolvedSlug === "spinner" && <SpinnerExamples />}
           {resolvedSlug === "switch" && <SwitchExamples />}
+          {resolvedSlug === "tabs" && <TabsExamples />}
           {resolvedSlug === "otp-input" && <OTPInputExamples />}
+          {resolvedSlug === "toggle" && <ToggleExamples />}
+          {resolvedSlug === "toggle-group" && <ToggleGroupExamples />}
           {resolvedSlug === "tooltip" && <TooltipExamples />}
         </View>
       </ScrollView>

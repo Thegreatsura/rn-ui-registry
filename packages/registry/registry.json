@@ -108,6 +108,70 @@
                 }
             }
         },
+        "accordion": {
+            "name": "accordion",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/accordion.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "collapsible"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "alert-dialog": {
+            "name": "alert-dialog",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/alert-dialog.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "dialog"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "aspect-ratio": {
+            "name": "aspect-ratio",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/aspect-ratio.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
         "card": {
             "name": "card",
             "type": "components:ui",
@@ -228,6 +292,26 @@
                 }
             }
         },
+        "tabs": {
+            "name": "tabs",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/tabs.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
         "checkbox": {
             "name": "checkbox",
             "type": "components:ui",
@@ -240,6 +324,48 @@
             ],
             "dependencies": [],
             "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "toggle": {
+            "name": "toggle",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/toggle.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "toggle-group": {
+            "name": "toggle-group",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/toggle-group.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "toggle"
+            ],
             "tailwind": {
                 "config": {
                     "theme": {
@@ -282,6 +408,26 @@
             "registryDependencies": [
                 "text"
             ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "drawer": {
+            "name": "drawer",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/drawer.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
             "tailwind": {
                 "config": {
                     "theme": {
@@ -378,6 +524,26 @@
             "files": [
                 {
                     "path": "components/ui/slider.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "spinner": {
+            "name": "spinner",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/spinner.tsx",
                     "content": "",
                     "type": "registry:ui"
                 }

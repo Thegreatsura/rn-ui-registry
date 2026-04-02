@@ -15,6 +15,24 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -29,6 +47,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { Progress } from "@/components/ui/progress";
 import { OTPInput } from "@/components/ui/otp-input";
 import {
@@ -41,6 +69,10 @@ import {
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
+import { Spinner } from "@/components/ui/spinner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Toggle } from "@/components/ui/toggle";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Tooltip,
   TooltipContent,
@@ -697,6 +729,41 @@ export function CollapsibleInlinePreview() {
   );
 }
 
+function AccordionLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="mx-auto flex w-full max-w-lg flex-col gap-4">
+        <Accordion type="single" defaultValue="item-1">
+          <AccordionItem value="item-1">
+            <AccordionTrigger asChild>
+              <Button variant="outline" className="w-full justify-between">
+                <span>Getting started</span>
+                <span className="text-muted-foreground text-base leading-none">
+                  +
+                </span>
+              </Button>
+            </AccordionTrigger>
+            <AccordionContent className="pt-3">
+              <p className="text-muted-foreground text-sm leading-7">
+                Use accordion items to reveal grouped content one section at a
+                time.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </PreviewShell>
+  )
+}
+
+export function AccordionInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[190px]">
+      <AccordionLivePreview />
+    </PreviewShell>
+  )
+}
+
 function DialogLivePreview() {
   return (
     <PreviewShell>
@@ -725,6 +792,104 @@ function DialogLivePreview() {
       </div>
     </PreviewShell>
   );
+}
+
+function AlertDialogLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="flex flex-col items-center gap-4">
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive">Open destructive alert</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete release?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action removes the release notes and cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel asChild>
+                <Button variant="outline">Cancel</Button>
+              </AlertDialogCancel>
+              <AlertDialogAction asChild>
+                <Button variant="destructive">Delete</Button>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+        <p className="text-muted-foreground text-sm">
+          Use an alert dialog for high-consequence decisions.
+        </p>
+      </div>
+    </PreviewShell>
+  )
+}
+
+export function AlertDialogInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[190px]">
+      <div className="flex items-center justify-center">
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline">Reset analytics</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Reset analytics?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Existing charts will clear and rebuild from the next event.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel asChild>
+                <Button variant="ghost">Keep data</Button>
+              </AlertDialogCancel>
+              <AlertDialogAction asChild>
+                <Button variant="destructive">Reset</Button>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+    </PreviewShell>
+  )
+}
+
+function AspectRatioLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="mx-auto w-full max-w-md">
+        <AspectRatio ratio={16 / 9}>
+          <Card className="h-full rounded-[18px]">
+            <CardContent className="flex h-full flex-col items-center justify-center gap-2">
+              <p className="text-lg font-semibold">16:9</p>
+              <p className="text-muted-foreground text-sm">
+                Hero media or video previews.
+              </p>
+            </CardContent>
+          </Card>
+        </AspectRatio>
+      </div>
+    </PreviewShell>
+  )
+}
+
+export function AspectRatioInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[200px]">
+      <div className="mx-auto w-full max-w-md">
+        <AspectRatio ratio={1}>
+          <Card className="h-full rounded-[18px]">
+            <CardContent className="flex h-full items-center justify-center">
+              <p className="text-lg font-semibold">1:1 avatar crop</p>
+            </CardContent>
+          </Card>
+        </AspectRatio>
+      </div>
+    </PreviewShell>
+  )
 }
 
 export function DialogInlinePreview() {
@@ -756,6 +921,70 @@ export function DialogInlinePreview() {
       </div>
     </PreviewShell>
   );
+}
+
+function DrawerLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="flex items-center justify-center">
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button variant="outline">Open iOS-like drawer</Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Quick actions</DrawerTitle>
+              <DrawerDescription>
+                Stay in context while exposing a few focused actions from the
+                bottom.
+              </DrawerDescription>
+            </DrawerHeader>
+            <div className="flex flex-col gap-2">
+              <Button variant="secondary">Share preview</Button>
+              <Button variant="ghost">Duplicate draft</Button>
+            </div>
+            <DrawerFooter>
+              <DrawerClose asChild>
+                <Button variant="outline">Done</Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </div>
+    </PreviewShell>
+  )
+}
+
+export function DrawerInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[190px]">
+      <div className="flex items-center justify-center">
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button variant="secondary">Manage project</Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Project actions</DrawerTitle>
+              <DrawerDescription>
+                Choose the next step without leaving the current screen.
+              </DrawerDescription>
+            </DrawerHeader>
+            <div className="flex flex-col gap-2">
+              <Button variant="outline">Edit details</Button>
+              <Button variant="outline">Invite collaborators</Button>
+              <Button variant="destructive">Archive project</Button>
+            </div>
+            <DrawerFooter>
+              <DrawerClose asChild>
+                <Button variant="ghost">Cancel</Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </div>
+    </PreviewShell>
+  )
 }
 
 function PopoverLivePreview() {
@@ -864,6 +1093,159 @@ export function SliderInlinePreview() {
   );
 }
 
+function SpinnerLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <Spinner />
+        <p className="text-muted-foreground text-sm">
+          Showing a compact loading indicator.
+        </p>
+      </div>
+    </PreviewShell>
+  )
+}
+
+export function SpinnerInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[170px]">
+      <div className="flex flex-col items-center justify-center gap-5">
+        <div className="flex items-center gap-5">
+          <Spinner size="sm" />
+          <Spinner size="default" />
+          <Spinner size="lg" />
+        </div>
+        <div className="bg-muted flex w-full max-w-sm items-center justify-center gap-3 rounded-[18px] p-6">
+          <Spinner className="border-t-foreground border-foreground/25" />
+          <p className="text-muted-foreground text-sm">Syncing registry data…</p>
+        </div>
+      </div>
+    </PreviewShell>
+  )
+}
+
+function TabsLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="mx-auto w-full max-w-md">
+        <Tabs defaultValue="overview">
+          <TabsList>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="activity">Activity</TabsTrigger>
+          </TabsList>
+          <TabsContent value="overview">
+            <p className="text-muted-foreground text-sm leading-7">
+              Tab content swaps in place without leaving the screen.
+            </p>
+          </TabsContent>
+          <TabsContent value="activity">
+            <p className="text-muted-foreground text-sm leading-7">
+              Recent deploys, edits, and release notes appear here.
+            </p>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </PreviewShell>
+  )
+}
+
+export function TabsInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[210px]">
+      <div className="mx-auto w-full max-w-md">
+        <Tabs defaultValue="profile">
+          <TabsList>
+            <TabsTrigger value="profile">Profile</TabsTrigger>
+            <TabsTrigger value="billing">Billing</TabsTrigger>
+            <TabsTrigger value="members">Members</TabsTrigger>
+          </TabsList>
+          <TabsContent value="profile">
+            <p className="text-muted-foreground text-sm leading-7">
+              Account owner, project name, and public details.
+            </p>
+          </TabsContent>
+          <TabsContent value="billing">
+            <p className="text-muted-foreground text-sm leading-7">
+              Invoices, plan changes, and renewal settings.
+            </p>
+          </TabsContent>
+          <TabsContent value="members">
+            <p className="text-muted-foreground text-sm leading-7">
+              Collaborators with access to the workspace.
+            </p>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </PreviewShell>
+  )
+}
+
+function ToggleLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <Toggle defaultPressed variant="default">
+          Bold
+        </Toggle>
+        <Toggle>Italic</Toggle>
+      </div>
+    </PreviewShell>
+  )
+}
+
+export function ToggleInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[170px]">
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <Toggle defaultPressed variant="default">
+          Bold
+        </Toggle>
+        <Toggle>Italic</Toggle>
+        <Toggle>Underline</Toggle>
+      </div>
+    </PreviewShell>
+  )
+}
+
+function ToggleGroupLivePreview() {
+  const [value, setValue] = useState("grid")
+
+  return (
+    <PreviewShell>
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+        <ToggleGroup type="single" value={value} onValueChange={setValue}>
+          <ToggleGroupItem value="grid">Grid</ToggleGroupItem>
+          <ToggleGroupItem value="list">List</ToggleGroupItem>
+        </ToggleGroup>
+        <p className="text-muted-foreground text-sm">Selected: {value}</p>
+      </div>
+    </PreviewShell>
+  )
+}
+
+export function ToggleGroupInlinePreview() {
+  const [value, setValue] = useState(["ios"])
+
+  return (
+    <PreviewShell className="min-h-[190px]">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+        <ToggleGroup
+          type="multiple"
+          value={value}
+          onValueChange={(nextValue) => setValue(nextValue as string[])}
+        >
+          <ToggleGroupItem value="ios">iOS</ToggleGroupItem>
+          <ToggleGroupItem value="android">Android</ToggleGroupItem>
+          <ToggleGroupItem value="web">Web</ToggleGroupItem>
+        </ToggleGroup>
+        <p className="text-muted-foreground text-sm">
+          Enabled: {value.join(", ")}
+        </p>
+      </div>
+    </PreviewShell>
+  )
+}
+
 function TooltipLivePreview() {
   return (
     <PreviewShell>
@@ -898,10 +1280,18 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
   switch (slug) {
     case "button":
       return <ButtonLivePreview />;
+    case "accordion":
+      return <AccordionLivePreview />;
+    case "alert-dialog":
+      return <AlertDialogLivePreview />;
+    case "aspect-ratio":
+      return <AspectRatioLivePreview />;
     case "collapsible":
       return <CollapsibleLivePreview />;
     case "dialog":
       return <DialogLivePreview />;
+    case "drawer":
+      return <DrawerLivePreview />;
     case "input":
       return <InputLivePreview />;
     case "avatar":
@@ -914,8 +1304,16 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
       return <RadioGroupLivePreview />;
     case "slider":
       return <SliderLivePreview />;
+    case "spinner":
+      return <SpinnerLivePreview />;
+    case "tabs":
+      return <TabsLivePreview />;
     case "text":
       return <TextLivePreview />;
+    case "toggle":
+      return <ToggleLivePreview />;
+    case "toggle-group":
+      return <ToggleGroupLivePreview />;
     case "card":
       return <CardInlinePreview />;
     case "label":

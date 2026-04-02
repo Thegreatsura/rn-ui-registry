@@ -1,4 +1,4 @@
 {
   "title": "Components",
-  "pages": ["button", "text", "input", "badge", "avatar", "card", "collapsible", "dialog", "label", "popover", "radio-group", "separator", "slider", "textarea", "skeleton", "switch", "checkbox", "progress", "otp-input", "tooltip", "spotlight-button"]
+  "pages": ["button", "text", "input", "badge", "avatar", "card", "accordion", "alert-dialog", "aspect-ratio", "collapsible", "dialog", "drawer", "label", "popover", "radio-group", "separator", "slider", "spinner", "tabs", "textarea", "skeleton", "switch", "checkbox", "progress", "otp-input", "toggle", "toggle-group", "tooltip", "spotlight-button"]
 }

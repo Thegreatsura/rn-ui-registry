@@ -1,0 +1,100 @@
+---
+title: Alert Dialog
+description: A stronger confirmation surface for destructive or high-consequence actions that need an explicit choice.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add alert-dialog
+qrValue: showcase://components/alert-dialog
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/alert-dialog.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { AlertDialogInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Use an alert dialog for high-consequence decisions.
+
+  <DocSubsection>
+    <CompPreview
+      code={`<AlertDialog>
+  <AlertDialogTrigger asChild>
+    <Button variant="outline">Reset analytics</Button>
+  </AlertDialogTrigger>
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Reset analytics?</AlertDialogTitle>
+      <AlertDialogDescription>
+        Existing charts will clear and rebuild from the next event.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel asChild>
+        <Button variant="ghost">Keep data</Button>
+      </AlertDialogCancel>
+      <AlertDialogAction asChild>
+        <Button variant="destructive">Reset</Button>
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>`}
+    >
+      <AlertDialogInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  <ApiTable
+    rows={[
+      {
+        prop: "open / defaultOpen",
+        type: "boolean",
+        default: "false",
+        description: "Controls the open state for the alert dialog.",
+      },
+      {
+        prop: "onOpenChange",
+        type: "(open: boolean) => void",
+        default: "-",
+        description: "Called when the alert dialog opens or closes.",
+      },
+      {
+        prop: "asChild",
+        type: "boolean",
+        default: "false",
+        description: "Lets trigger and action elements wrap existing buttons.",
+      },
+    ]}
+  />
+</DocSection>

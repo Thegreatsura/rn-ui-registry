@@ -1,0 +1,74 @@
+---
+title: Toggle Group
+description: A grouped set of toggles for single or multiple selections with the same compact visual language.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add toggle-group
+qrValue: showcase://components/toggle-group
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/toggle-group.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { ToggleGroupInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Use toggle groups when a set of view or platform options should share the same visual affordance.
+
+  <DocSubsection>
+    <CompPreview
+      code={`<ToggleGroup type="multiple" defaultValue={["ios"]}>
+  <ToggleGroupItem value="ios">iOS</ToggleGroupItem>
+  <ToggleGroupItem value="android">Android</ToggleGroupItem>
+  <ToggleGroupItem value="web">Web</ToggleGroupItem>
+</ToggleGroup>`}
+    >
+      <ToggleGroupInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  <ApiTable
+    rows={[
+      {
+        prop: "type",
+        type: `"single" | "multiple"`,
+        default: `"single"`,
+        description: "Sets whether one or many items can stay selected.",
+      },
+      {
+        prop: "value / defaultValue",
+        type: "string | string[]",
+        default: "-",
+        description: "Controls the selected item or items.",
+      },
+      {
+        prop: "onValueChange",
+        type: "(value: string | string[]) => void",
+        default: "-",
+        description: "Called when the selected set changes.",
+      },
+    ]}
+  />
+</DocSection>

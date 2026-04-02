@@ -1,0 +1,79 @@
+---
+title: Tabs
+description: A segmented navigation pattern for switching related content in place without leaving the current screen.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add tabs
+qrValue: showcase://components/tabs
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/tabs.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { TabsInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Tab content swaps in place without leaving the screen.
+
+  <DocSubsection>
+    <CompPreview
+      code={`<Tabs defaultValue="profile">
+  <TabsList>
+    <TabsTrigger value="profile">Profile</TabsTrigger>
+    <TabsTrigger value="billing">Billing</TabsTrigger>
+    <TabsTrigger value="members">Members</TabsTrigger>
+  </TabsList>
+  <TabsContent value="profile">
+    Account owner, project name, and public details.
+  </TabsContent>
+</Tabs>`}
+    >
+      <TabsInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  <ApiTable
+    rows={[
+      {
+        prop: "value / defaultValue",
+        type: "string",
+        default: "-",
+        description: "Controls which tab is currently active.",
+      },
+      {
+        prop: "onValueChange",
+        type: "(value: string) => void",
+        default: "-",
+        description: "Called when the active tab changes.",
+      },
+      {
+        prop: "value",
+        type: "string",
+        default: "-",
+        description: "Links each trigger and content panel to the same tab id.",
+      },
+    ]}
+  />
+</DocSection>

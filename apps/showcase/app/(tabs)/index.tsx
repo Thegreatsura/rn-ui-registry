@@ -4,6 +4,17 @@ import { Text } from "@/components/ui/text";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 
 const CATEGORIES = [
+  { id: "accordion", name: "Accordion", icon: "list.bullet.indent" as const },
+  {
+    id: "alert-dialog",
+    name: "Alert Dialog",
+    icon: "exclamationmark.triangle" as const,
+  },
+  {
+    id: "aspect-ratio",
+    name: "Aspect Ratio",
+    icon: "rectangle.compress.vertical" as const,
+  },
   { id: "button", name: "Button", icon: "square.and.pencil" as const },
   { id: "checkbox", name: "Checkbox", icon: "checkmark.square" as const },
   { id: "collapsible", name: "Collapsible", icon: "chevron.down" as const },
@@ -11,6 +22,11 @@ const CATEGORIES = [
     id: "dialog",
     name: "Dialog",
     icon: "rectangle.portrait.on.rectangle.portrait" as const,
+  },
+  {
+    id: "drawer",
+    name: "Drawer",
+    icon: "rectangle.bottomthird.inset.filled" as const,
   },
   {
     id: "popover",
@@ -24,9 +40,21 @@ const CATEGORIES = [
   },
   { id: "slider", name: "Slider", icon: "slider.horizontal.3" as const },
   {
+    id: "spinner",
+    name: "Spinner",
+    icon: "arrow.triangle.2.circlepath" as const,
+  },
+  {
     id: "spotlight-button",
     name: "Spotlight Button",
     icon: "sparkles" as const,
+  },
+  { id: "tabs", name: "Tabs", icon: "square.split.2x1" as const },
+  { id: "toggle", name: "Toggle", icon: "circle.lefthalf.filled" as const },
+  {
+    id: "toggle-group",
+    name: "Toggle Group",
+    icon: "rectangle.3.group" as const,
   },
   { id: "input", name: "Input", icon: "keyboard" as const },
   { id: "otp-input", name: "OTP Input", icon: "number.square" as const },

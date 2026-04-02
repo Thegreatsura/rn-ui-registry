@@ -1,0 +1,72 @@
+---
+title: Toggle
+description: A pressable on/off control for formatting actions, filters, and lightweight option states.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add toggle
+qrValue: showcase://components/toggle
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/toggle.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { ToggleInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { Toggle } from "@/components/ui/toggle";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Use toggle for binary formatting controls and option chips that should stay compact.
+
+  <DocSubsection>
+    <CompPreview
+      code={`<Toggle defaultPressed variant="default">
+  Bold
+</Toggle>`}
+    >
+      <ToggleInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  <ApiTable
+    rows={[
+      {
+        prop: "pressed / defaultPressed",
+        type: "boolean",
+        default: "false",
+        description: "Controls whether the toggle is on.",
+      },
+      {
+        prop: "onPressedChange",
+        type: "(pressed: boolean) => void",
+        default: "-",
+        description: "Called when the pressed state changes.",
+      },
+      {
+        prop: "variant",
+        type: `"default" | "outline"`,
+        default: `"outline"`,
+        description: "Adjusts the visual treatment for active and inactive states.",
+      },
+    ]}
+  />
+</DocSection>

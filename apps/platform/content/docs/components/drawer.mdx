@@ -1,0 +1,91 @@
+---
+title: Drawer
+description: An iOS-like bottom sheet for mobile-first action menus, contextual tools, and focused follow-up steps.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add drawer
+qrValue: showcase://components/drawer
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/drawer.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { DrawerInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Use a drawer when actions should rise from the bottom in a mobile-first way instead of interrupting with a centered modal.
+
+  <DocSubsection>
+    <CompPreview
+      code={`<Drawer>
+  <DrawerTrigger asChild>
+    <Button variant="secondary">Manage project</Button>
+  </DrawerTrigger>
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Project actions</DrawerTitle>
+      <DrawerDescription>
+        Choose the next step without leaving the current screen.
+      </DrawerDescription>
+    </DrawerHeader>
+  </DrawerContent>
+</Drawer>`}
+    >
+      <DrawerInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  <ApiTable
+    rows={[
+      {
+        prop: "open / defaultOpen",
+        type: "boolean",
+        default: "false",
+        description: "Controls the drawer visibility state.",
+      },
+      {
+        prop: "onOpenChange",
+        type: "(open: boolean) => void",
+        default: "-",
+        description: "Called when the drawer opens or closes.",
+      },
+      {
+        prop: "asChild",
+        type: "boolean",
+        default: "false",
+        description: "Lets trigger and close elements wrap existing buttons.",
+      },
+    ]}
+  />
+</DocSection>
