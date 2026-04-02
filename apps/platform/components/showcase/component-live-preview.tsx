@@ -735,14 +735,7 @@ function AccordionLivePreview() {
       <div className="mx-auto flex w-full max-w-lg flex-col gap-4">
         <Accordion type="single" defaultValue="item-1">
           <AccordionItem value="item-1">
-            <AccordionTrigger asChild>
-              <Button variant="outline" className="w-full justify-between">
-                <span>Getting started</span>
-                <span className="text-muted-foreground text-base leading-none">
-                  +
-                </span>
-              </Button>
-            </AccordionTrigger>
+            <AccordionTrigger>Getting started</AccordionTrigger>
             <AccordionContent className="pt-3">
               <p className="text-muted-foreground text-sm leading-7">
                 Use accordion items to reveal grouped content one section at a
