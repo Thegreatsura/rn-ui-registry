@@ -3,6 +3,14 @@
 import { useState, useEffect, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SpotlightButtonDemo } from "@/components/showcase/spotlight-button-demo";
@@ -33,10 +41,26 @@ import {
 } from "@/components/ui/alert-dialog";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandShortcut,
+} from "@/components/ui/command";
 import {
   Dialog,
   DialogClose,
@@ -57,6 +81,24 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+} from "@/components/ui/input-group";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { Progress } from "@/components/ui/progress";
 import { OTPInput } from "@/components/ui/otp-input";
 import {
@@ -68,6 +110,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { Spinner } from "@/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -159,6 +211,50 @@ export function ButtonTextInlinePreview() {
   );
 }
 
+function BreadcrumbLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="flex justify-center">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Components</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function BreadcrumbInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[160px]">
+      <div className="flex justify-center">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="#">Workspace</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="#">Docs</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Registry</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+    </PreviewShell>
+  );
+}
+
 function InputLivePreview() {
   const [name, setName] = useState("");
 
@@ -234,6 +330,75 @@ export function InputSecureInlinePreview() {
           onChangeText={setValue}
           placeholder="Password"
         />
+      </div>
+    </PreviewShell>
+  );
+}
+
+function InputGroupLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+        <InputGroup>
+          <InputGroupAddon>
+            <InputGroupText>https://</InputGroupText>
+          </InputGroupAddon>
+          <InputGroupInput placeholder="watermelon.dev" />
+        </InputGroup>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function InputGroupInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[180px]">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+        <InputGroup>
+          <InputGroupAddon>
+            <InputGroupText>https://</InputGroupText>
+          </InputGroupAddon>
+          <InputGroupInput placeholder="workspace-url" />
+          <InputGroupAddon>
+            <InputGroupText>.com</InputGroupText>
+          </InputGroupAddon>
+        </InputGroup>
+        <InputGroup>
+          <InputGroupInput placeholder="Invite a teammate" />
+          <InputGroupAddon>
+            <InputGroupButton>Send</InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+    </PreviewShell>
+  );
+}
+
+function KbdLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="flex items-center justify-center">
+        <KbdGroup>
+          <Kbd>Cmd</Kbd>
+          <Kbd>K</Kbd>
+        </KbdGroup>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function KbdInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[160px]">
+      <div className="flex flex-col items-center justify-center gap-4">
+        <KbdGroup>
+          <Kbd>Shift</Kbd>
+          <Kbd>Enter</Kbd>
+        </KbdGroup>
+        <KbdGroup>
+          <Kbd>Cmd</Kbd>
+          <Kbd>P</Kbd>
+        </KbdGroup>
       </div>
     </PreviewShell>
   );
@@ -729,6 +894,48 @@ export function CollapsibleInlinePreview() {
   );
 }
 
+function CommandLivePreview() {
+  const [selected, setSelected] = useState("Publish changes");
+  const [query, setQuery] = useState("");
+
+  return (
+    <PreviewShell>
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+        <Command value={query} onValueChange={setQuery}>
+          <CommandInput placeholder="Search commands..." />
+          <CommandList>
+            <CommandGroup heading="Actions">
+              <CommandItem
+                value="publish changes"
+                onSelect={() => setSelected("Publish changes")}
+              >
+                Publish changes
+                <CommandShortcut>Cmd+P</CommandShortcut>
+              </CommandItem>
+              <CommandItem
+                value="open previews"
+                onSelect={() => setSelected("Open previews")}
+              >
+                Open previews
+              </CommandItem>
+            </CommandGroup>
+            <CommandEmpty>No matching commands.</CommandEmpty>
+          </CommandList>
+        </Command>
+        <p className="text-muted-foreground text-sm">Selected: {selected}</p>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function CommandInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[240px]">
+      <CommandLivePreview />
+    </PreviewShell>
+  );
+}
+
 function AccordionLivePreview() {
   return (
     <PreviewShell>
@@ -980,6 +1187,193 @@ export function DrawerInlinePreview() {
   )
 }
 
+function CarouselLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="mx-auto flex w-full max-w-lg flex-col gap-4">
+        <Carousel>
+          <CarouselContent>
+            {[
+              {
+                title: "Launch faster",
+                body: "Ship polished mobile surfaces with shared registry primitives and mirrored docs.",
+              },
+              {
+                title: "Preview in context",
+                body: "Swipe across onboarding, marketing, or product cards without leaving the screen.",
+              },
+              {
+                title: "Reuse everywhere",
+                body: "Keep the same API across Expo demos, registry exports, and the platform site.",
+              },
+            ].map((slide) => (
+              <CarouselItem key={slide.title}>
+                <Card>
+                  <CardHeader>
+                    <Text className="text-lg font-semibold">{slide.title}</Text>
+                  </CardHeader>
+                  <CardContent>
+                    <Text className="text-muted-foreground text-sm">
+                      {slide.body}
+                    </Text>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="flex items-center justify-between">
+            <CarouselPrevious />
+            <Text className="text-muted-foreground text-sm">
+              Swipe or click through
+            </Text>
+            <CarouselNext />
+          </div>
+        </Carousel>
+      </div>
+    </PreviewShell>
+  )
+}
+
+export function CarouselInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[240px]">
+      <div className="mx-auto flex w-full max-w-lg flex-col gap-4">
+        <Carousel>
+          <CarouselContent>
+            {["Starter template", "Shared tokens", "Touch-friendly"].map((title) => (
+              <CarouselItem key={title}>
+                <Card>
+                  <CardContent className="space-y-2 p-6">
+                    <Text className="text-base font-semibold">{title}</Text>
+                    <Text className="text-muted-foreground text-sm">
+                      A shadcn-style card slide that feels at home on mobile and web.
+                    </Text>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="flex items-center justify-between">
+            <CarouselPrevious />
+            <Text className="text-muted-foreground text-sm">
+              Feature spotlight
+            </Text>
+            <CarouselNext />
+          </div>
+        </Carousel>
+      </div>
+    </PreviewShell>
+  )
+}
+
+function DropdownMenuLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="flex items-center justify-center">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuItem>
+                Profile
+                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Billing
+                <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Settings
+                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Team</DropdownMenuLabel>
+              <DropdownMenuItem>
+                Invite users
+                <DropdownMenuShortcut>{">"}</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                New Team
+                <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem>GitHub</DropdownMenuItem>
+              <DropdownMenuItem>Support</DropdownMenuItem>
+              <DropdownMenuItem disabled>API</DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              Log out
+              <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function DropdownMenuInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[230px]">
+      <div className="flex items-center justify-center">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="secondary">Open</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuItem>
+                Profile
+                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Billing
+                <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Settings
+                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Team</DropdownMenuLabel>
+              <DropdownMenuItem>
+                Invite users
+                <DropdownMenuShortcut>{">"}</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                New Team
+                <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem>GitHub</DropdownMenuItem>
+              <DropdownMenuItem>Support</DropdownMenuItem>
+              <DropdownMenuItem disabled>API</DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              Log out
+              <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </PreviewShell>
+  );
+}
+
 function PopoverLivePreview() {
   return (
     <PreviewShell>
@@ -1081,6 +1475,58 @@ export function SliderInlinePreview() {
       <div className="mx-auto flex w-full max-w-md flex-col gap-4">
         <Slider value={value} onValueChange={setValue} max={80} step={10} />
         <p className="text-muted-foreground text-sm">Current value: {value[0]}</p>
+      </div>
+    </PreviewShell>
+  );
+}
+
+function SheetLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="flex items-center justify-center">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline">Open side sheet</Button>
+          </SheetTrigger>
+          <SheetContent side="right">
+            <SheetHeader>
+              <SheetTitle>Project settings</SheetTitle>
+              <SheetDescription>
+                Adjust a few focused options without leaving the screen.
+              </SheetDescription>
+            </SheetHeader>
+            <Input placeholder="Project name" />
+            <SheetFooter>
+              <SheetClose asChild>
+                <Button variant="ghost">Close</Button>
+              </SheetClose>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function SheetInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[190px]">
+      <div className="flex items-center justify-center">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="secondary">Open workspace panel</Button>
+          </SheetTrigger>
+          <SheetContent side="left">
+            <SheetHeader>
+              <SheetTitle>Workspace panel</SheetTitle>
+              <SheetDescription>
+                Good for navigation, filters, or settings.
+              </SheetDescription>
+            </SheetHeader>
+            <Button variant="outline">General</Button>
+            <Button variant="outline">Members</Button>
+          </SheetContent>
+        </Sheet>
       </div>
     </PreviewShell>
   );
@@ -1273,20 +1719,32 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
   switch (slug) {
     case "button":
       return <ButtonLivePreview />;
+    case "breadcrumb":
+      return <BreadcrumbLivePreview />;
     case "accordion":
       return <AccordionLivePreview />;
     case "alert-dialog":
       return <AlertDialogLivePreview />;
     case "aspect-ratio":
       return <AspectRatioLivePreview />;
+    case "carousel":
+      return <CarouselLivePreview />;
     case "collapsible":
       return <CollapsibleLivePreview />;
+    case "command":
+      return <CommandLivePreview />;
     case "dialog":
       return <DialogLivePreview />;
     case "drawer":
       return <DrawerLivePreview />;
+    case "dropdown-menu":
+      return <DropdownMenuLivePreview />;
     case "input":
       return <InputLivePreview />;
+    case "input-group":
+      return <InputGroupLivePreview />;
+    case "kbd":
+      return <KbdLivePreview />;
     case "avatar":
       return <AvatarLivePreview />;
     case "badge":
@@ -1297,6 +1755,8 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
       return <RadioGroupLivePreview />;
     case "slider":
       return <SliderLivePreview />;
+    case "sheet":
+      return <SheetLivePreview />;
     case "spinner":
       return <SpinnerLivePreview />;
     case "tabs":

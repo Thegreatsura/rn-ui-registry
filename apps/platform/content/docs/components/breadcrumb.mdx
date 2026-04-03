@@ -1,0 +1,50 @@
+---
+title: Breadcrumb
+description: A compact path indicator for nested screens, docs sections, and drill-in navigation.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add breadcrumb
+qrValue: showcase://components/breadcrumb
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/breadcrumb.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { BreadcrumbInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+<DocSection>
+  Use breadcrumbs to show where the current screen lives inside a larger flow.
+  <DocSubsection>
+    <CompPreview code={`<Breadcrumb><BreadcrumbList>...</BreadcrumbList></Breadcrumb>`}>
+      <BreadcrumbInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+<DocSection>
+  <ApiTable rows={[{ prop: "children", type: "ReactNode", default: "-", description: "Compose links, separators, and the current page." }]} />
+</DocSection>
