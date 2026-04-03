@@ -1,0 +1,49 @@
+---
+title: Input Group
+description: A grouped input layout for URLs, inline actions, and fields with structured leading or trailing content.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add input-group
+qrValue: showcase://components/input-group
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/input-group.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { InputGroupInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+} from "@/components/ui/input-group";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+<DocSection>
+  Use input groups when an input needs supporting structure like prefixes, suffixes, or inline actions.
+  <DocSubsection>
+    <CompPreview code={`<InputGroup><InputGroupAddon>https://</InputGroupAddon><InputGroupInput /></InputGroup>`}>
+      <InputGroupInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+<DocSection>
+  <ApiTable rows={[{ prop: "children", type: "ReactNode", default: "-", description: "Compose addons, controls, and action buttons inside one grouped field." }]} />
+</DocSection>

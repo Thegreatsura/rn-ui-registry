@@ -31,7 +31,22 @@ import {
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import {
   Card,
   CardContent,
@@ -44,6 +59,15 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandShortcut,
+} from "@/components/ui/command";
 import {
   Dialog,
   DialogClose,
@@ -64,7 +88,25 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+} from "@/components/ui/input-group";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { Label } from "@/components/ui/label";
 import { OTPInput } from "@/components/ui/otp-input";
 import {
@@ -79,6 +121,16 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
@@ -100,11 +152,17 @@ const COMPONENT_META = {
   "aspect-ratio": { title: "Aspect Ratio" },
   avatar: { title: "Avatar" },
   badge: { title: "Badge" },
+  breadcrumb: { title: "Breadcrumb" },
+  carousel: { title: "Carousel" },
   button: { title: "Button" },
   checkbox: { title: "Checkbox" },
   collapsible: { title: "Collapsible" },
+  command: { title: "Command" },
   dialog: { title: "Dialog" },
   drawer: { title: "Drawer" },
+  "dropdown-menu": { title: "Dropdown Menu" },
+  "input-group": { title: "Input Group" },
+  kbd: { title: "Kbd" },
   "spotlight-button": { title: "Spotlight Button" },
   card: { title: "Card" },
   input: { title: "Input" },
@@ -114,6 +172,7 @@ const COMPONENT_META = {
   progress: { title: "Progress" },
   "radio-group": { title: "Radio Group" },
   separator: { title: "Separator" },
+  sheet: { title: "Sheet" },
   skeleton: { title: "Skeleton" },
   slider: { title: "Slider" },
   spinner: { title: "Spinner" },
@@ -1585,6 +1644,127 @@ function AspectRatioExamples() {
   );
 }
 
+const CAROUSEL_SLIDES = [
+  {
+    title: "Launch faster",
+    body: "Ship polished mobile surfaces with shared registry primitives and mirrored docs.",
+  },
+  {
+    title: "Preview in context",
+    body: "Swipe across onboarding, marketing, or product cards without leaving the screen.",
+  },
+  {
+    title: "Reuse everywhere",
+    body: "Keep the same API across Expo demos, registry exports, and the platform site.",
+  },
+];
+
+function CarouselPreview() {
+  const [index, setIndex] = useState(0);
+
+  return (
+    <View style={styles.stackMd}>
+      <Carousel index={index} onIndexChange={setIndex}>
+        <CarouselContent>
+          {CAROUSEL_SLIDES.map((slide) => (
+            <CarouselItem key={slide.title}>
+              <Card>
+                <CardHeader>
+                  <Text variant="large">{slide.title}</Text>
+                </CardHeader>
+                <CardContent>
+                  <Text variant="muted">{slide.body}</Text>
+                </CardContent>
+              </Card>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <View style={styles.rowBetween}>
+          <CarouselPrevious />
+          <Text variant="muted">
+            Slide {index + 1} of {CAROUSEL_SLIDES.length}
+          </Text>
+          <CarouselNext />
+        </View>
+      </Carousel>
+      <Text variant="muted">
+        Swipe horizontally or use the controls to move between slides.
+      </Text>
+    </View>
+  );
+}
+
+function CarouselExamples() {
+  const [featureIndex, setFeatureIndex] = useState(0);
+  const [releaseIndex, setReleaseIndex] = useState(0);
+
+  return (
+    <>
+      <Block title="Feature spotlight">
+        <Carousel index={featureIndex} onIndexChange={setFeatureIndex}>
+          <CarouselContent>
+            {[
+              {
+                title: "Starter template",
+                body: "A compact hero carousel for announcing new releases or onboarding steps.",
+              },
+              {
+                title: "Shared tokens",
+                body: "Keep spacing, copy, and actions aligned across native demos and web previews.",
+              },
+              {
+                title: "Touch-friendly",
+                body: "External arrows and paging feel more natural on mobile than tiny inset controls.",
+              },
+            ].map((slide) => (
+              <CarouselItem key={slide.title}>
+                <Card>
+                  <CardHeader>
+                    <Text variant="large">{slide.title}</Text>
+                  </CardHeader>
+                  <CardContent>
+                    <Text variant="muted">{slide.body}</Text>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <View style={styles.rowBetween}>
+            <CarouselPrevious />
+            <Text variant="muted">{featureIndex + 1} / 3</Text>
+            <CarouselNext />
+          </View>
+        </Carousel>
+      </Block>
+      <Block title="Release notes rail">
+        <Carousel index={releaseIndex} onIndexChange={setReleaseIndex} loop>
+          <CarouselContent>
+            {[
+              "New dropdown, drawer, and sheet primitives.",
+              "Web previews mirror the mobile showcase more closely.",
+              "Registry exports stay aligned with the demo app.",
+            ].map((message, messageIndex) => (
+              <CarouselItem key={message}>
+                <Card>
+                  <CardContent style={styles.stackSm}>
+                    <Text>Update {messageIndex + 1}</Text>
+                    <Text>{message}</Text>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <View style={styles.rowBetween}>
+            <CarouselPrevious />
+            <Text variant="muted">Looping preview</Text>
+            <CarouselNext />
+          </View>
+        </Carousel>
+      </Block>
+    </>
+  );
+}
+
 function TabsPreview() {
   const [value, setValue] = useState("overview");
 
@@ -1734,6 +1914,356 @@ function ToggleGroupExamples() {
   );
 }
 
+function BreadcrumbPreview() {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink>Dashboard</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>Components</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
+}
+
+function BreadcrumbExamples() {
+  return (
+    <>
+      <Block title="Nested path">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink>Workspace</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink>Docs</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Registry</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </Block>
+    </>
+  );
+}
+
+function CommandPreview() {
+  const [selected, setSelected] = useState("Publish changes");
+
+  return (
+    <View style={styles.stackMd}>
+      <Command>
+        <CommandInput />
+        <CommandList>
+          <CommandGroup>
+            <CommandItem value="publish changes" onSelect={() => setSelected("Publish changes")}>
+              <Text>Publish changes</Text>
+              <CommandShortcut>Cmd+P</CommandShortcut>
+            </CommandItem>
+            <CommandItem value="open previews" onSelect={() => setSelected("Open previews")}>
+              <Text>Open previews</Text>
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </Command>
+      <Text variant="muted">Selected: {selected}</Text>
+    </View>
+  );
+}
+
+function CommandExamples() {
+  return (
+    <>
+      <Block title="Searchable list">
+        <Command>
+          <CommandInput placeholder="Search commands..." />
+          <CommandList>
+            <CommandGroup>
+              <CommandItem value="new project">
+                <Text>New project</Text>
+              </CommandItem>
+              <CommandItem value="invite teammate">
+                <Text>Invite teammate</Text>
+              </CommandItem>
+              <CommandItem value="view changelog">
+                <Text>View changelog</Text>
+              </CommandItem>
+            </CommandGroup>
+          </CommandList>
+          <CommandEmpty>No matching commands.</CommandEmpty>
+        </Command>
+      </Block>
+    </>
+  );
+}
+
+function DropdownMenuPreview() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <View style={styles.stackMd}>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline">
+            <Text>Open</Text>
+          </Button>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent>
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuItem>
+              <Text>Profile</Text>
+              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Text>Billing</Text>
+              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Text>Settings</Text>
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Team</DropdownMenuLabel>
+            <DropdownMenuItem>
+              <Text>Invite users</Text>
+              <DropdownMenuShortcut>{">"}</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Text>New Team</Text>
+              <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Links</DropdownMenuLabel>
+            <DropdownMenuItem>
+              <Text>GitHub</Text>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Text>Support</Text>
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled>
+              <Text>API</Text>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <Text>Log out</Text>
+            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <Text variant="muted">
+        Keep dropdown rows simple and single-line for the closest shadcn feel.
+      </Text>
+    </View>
+  );
+}
+
+function DropdownMenuExamples() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Block title="Quick actions" style={open ? styles.overlayBlock : null}>
+        <DropdownMenu open={open} onOpenChange={setOpen}>
+          <DropdownMenuTrigger asChild>
+            <Button variant="secondary">
+              <Text>Open</Text>
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuItem>
+                <Text>Profile</Text>
+                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Text>Billing</Text>
+                <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Text>Settings</Text>
+                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Team</DropdownMenuLabel>
+              <DropdownMenuItem>
+                <Text>Invite users</Text>
+                <DropdownMenuShortcut>{">"}</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Text>New Team</Text>
+                <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Links</DropdownMenuLabel>
+              <DropdownMenuItem>
+                <Text>GitHub</Text>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Text>Support</Text>
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled>
+                <Text>API</Text>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <Text>Log out</Text>
+              <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </Block>
+    </>
+  );
+}
+
+function InputGroupPreview() {
+  return (
+    <InputGroup>
+      <InputGroupAddon>
+        <InputGroupText>https://</InputGroupText>
+      </InputGroupAddon>
+      <InputGroupInput placeholder="watermelon.dev" />
+    </InputGroup>
+  );
+}
+
+function InputGroupExamples() {
+  return (
+    <>
+      <Block title="Domain field">
+        <InputGroup>
+          <InputGroupAddon>
+            <InputGroupText>https://</InputGroupText>
+          </InputGroupAddon>
+          <InputGroupInput placeholder="workspace-url" />
+          <InputGroupAddon>
+            <InputGroupText>.com</InputGroupText>
+          </InputGroupAddon>
+        </InputGroup>
+      </Block>
+      <Block title="With action">
+        <InputGroup>
+          <InputGroupInput placeholder="Invite a teammate" />
+          <InputGroupAddon>
+            <InputGroupButton>
+              <Text>Send</Text>
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </Block>
+    </>
+  );
+}
+
+function KbdPreview() {
+  return (
+    <KbdGroup>
+      <Kbd>Cmd</Kbd>
+      <Kbd>K</Kbd>
+    </KbdGroup>
+  );
+}
+
+function KbdExamples() {
+  return (
+    <>
+      <Block title="Shortcuts">
+        <View style={styles.stackMd}>
+          <KbdGroup>
+            <Kbd>Shift</Kbd>
+            <Kbd>Enter</Kbd>
+          </KbdGroup>
+          <KbdGroup>
+            <Kbd>Cmd</Kbd>
+            <Kbd>P</Kbd>
+          </KbdGroup>
+        </View>
+      </Block>
+    </>
+  );
+}
+
+function SheetPreview() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <View style={styles.stackMd}>
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>
+          <Button variant="outline">
+            <Text>Open side sheet</Text>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="right">
+          <SheetHeader>
+            <SheetTitle>Project settings</SheetTitle>
+            <SheetDescription>Adjust a few focused options without leaving the screen.</SheetDescription>
+          </SheetHeader>
+          <Input placeholder="Project name" />
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button variant="ghost">
+                <Text>Close</Text>
+              </Button>
+            </SheetClose>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+    </View>
+  );
+}
+
+function SheetExamples() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Block title="Left panel">
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger asChild>
+            <Button variant="secondary">
+              <Text>Open workspace panel</Text>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left">
+            <SheetHeader>
+              <SheetTitle>Workspace panel</SheetTitle>
+              <SheetDescription>Good for navigation, filters, or settings.</SheetDescription>
+            </SheetHeader>
+            <Button variant="outline">
+              <Text>General</Text>
+            </Button>
+            <Button variant="outline">
+              <Text>Members</Text>
+            </Button>
+          </SheetContent>
+        </Sheet>
+      </Block>
+    </>
+  );
+}
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -1870,6 +2400,10 @@ const styles = StyleSheet.create({
     gap: 12,
     backgroundColor: "#f4f4f5",
   },
+  menuItemBody: {
+    flex: 1,
+    gap: 2,
+  },
   overlayBlock: {
     zIndex: 40,
     elevation: 40,
@@ -1915,6 +2449,8 @@ export default function ComponentScreen() {
           {resolvedSlug === "accordion" && <AccordionPreview />}
           {resolvedSlug === "alert-dialog" && <AlertDialogPreview />}
           {resolvedSlug === "aspect-ratio" && <AspectRatioPreview />}
+          {resolvedSlug === "carousel" && <CarouselPreview />}
+          {resolvedSlug === "breadcrumb" && <BreadcrumbPreview />}
           {resolvedSlug === "button" && <ButtonPreview />}
           {resolvedSlug === "spotlight-button" && (
             <SpotlightButtonPreview
@@ -1928,8 +2464,10 @@ export default function ComponentScreen() {
           {resolvedSlug === "avatar" && <AvatarPreview />}
           {resolvedSlug === "checkbox" && <CheckboxPreview />}
           {resolvedSlug === "collapsible" && <CollapsiblePreview />}
+          {resolvedSlug === "command" && <CommandPreview />}
           {resolvedSlug === "dialog" && <DialogPreview />}
           {resolvedSlug === "drawer" && <DrawerPreview />}
+          {resolvedSlug === "dropdown-menu" && <DropdownMenuPreview />}
           {resolvedSlug === "text" && <TypographyPreview />}
           {resolvedSlug === "card" && <CardPreview />}
           {resolvedSlug === "separator" && <SeparatorPreview />}
@@ -1937,7 +2475,10 @@ export default function ComponentScreen() {
           {resolvedSlug === "popover" && <PopoverPreview />}
           {resolvedSlug === "progress" && <ProgressPreview />}
           {resolvedSlug === "radio-group" && <RadioGroupPreview />}
+          {resolvedSlug === "input-group" && <InputGroupPreview />}
+          {resolvedSlug === "kbd" && <KbdPreview />}
           {resolvedSlug === "skeleton" && <SkeletonPreview />}
+          {resolvedSlug === "sheet" && <SheetPreview />}
           {resolvedSlug === "slider" && <SliderPreview />}
           {resolvedSlug === "spinner" && <SpinnerPreview />}
           {resolvedSlug === "switch" && <SwitchPreview />}
@@ -1952,6 +2493,8 @@ export default function ComponentScreen() {
           {resolvedSlug === "accordion" && <AccordionExamples />}
           {resolvedSlug === "alert-dialog" && <AlertDialogExamples />}
           {resolvedSlug === "aspect-ratio" && <AspectRatioExamples />}
+          {resolvedSlug === "carousel" && <CarouselExamples />}
+          {resolvedSlug === "breadcrumb" && <BreadcrumbExamples />}
           {resolvedSlug === "button" && <ButtonExamples />}
           {resolvedSlug === "spotlight-button" && (
             <SpotlightButtonExamples
@@ -1965,8 +2508,10 @@ export default function ComponentScreen() {
           {resolvedSlug === "avatar" && <AvatarExamples />}
           {resolvedSlug === "checkbox" && <CheckboxExamples />}
           {resolvedSlug === "collapsible" && <CollapsibleExamples />}
+          {resolvedSlug === "command" && <CommandExamples />}
           {resolvedSlug === "dialog" && <DialogExamples />}
           {resolvedSlug === "drawer" && <DrawerExamples />}
+          {resolvedSlug === "dropdown-menu" && <DropdownMenuExamples />}
           {resolvedSlug === "text" && <TypographyExamples />}
           {resolvedSlug === "card" && <CardExamples />}
           {resolvedSlug === "separator" && <SeparatorExamples />}
@@ -1974,7 +2519,10 @@ export default function ComponentScreen() {
           {resolvedSlug === "popover" && <PopoverExamples />}
           {resolvedSlug === "progress" && <ProgressExamples />}
           {resolvedSlug === "radio-group" && <RadioGroupExamples />}
+          {resolvedSlug === "input-group" && <InputGroupExamples />}
+          {resolvedSlug === "kbd" && <KbdExamples />}
           {resolvedSlug === "skeleton" && <SkeletonExamples />}
+          {resolvedSlug === "sheet" && <SheetExamples />}
           {resolvedSlug === "slider" && <SliderExamples />}
           {resolvedSlug === "spinner" && <SpinnerExamples />}
           {resolvedSlug === "switch" && <SwitchExamples />}

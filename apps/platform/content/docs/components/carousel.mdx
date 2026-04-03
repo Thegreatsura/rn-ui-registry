@@ -1,0 +1,53 @@
+---
+title: Carousel
+description: A shadcn-style card carousel with swipeable slides and external next or previous controls.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add carousel
+qrValue: showcase://components/carousel
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/carousel.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { CarouselInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+<DocSection>
+  Carousels work well for swipeable feature cards, onboarding steps, and compact content rails that still need clear external controls.
+  <DocSubsection>
+    <CompPreview code={`<Carousel><CarouselContent>...</CarouselContent><CarouselPrevious /><CarouselNext /></Carousel>`}>
+      <CarouselInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## API Reference
+<DocSection>
+  <ApiTable rows={[
+    { prop: "defaultIndex / index", type: "number", default: "0", description: "Sets the active slide in uncontrolled or controlled mode." },
+    { prop: "loop", type: "boolean", default: "false", description: "When true, next and previous controls wrap around the slide list." },
+    { prop: "onIndexChange", type: "(index: number) => void", default: "-", description: "Called whenever the active slide changes." }
+  ]} />
+</DocSection>
