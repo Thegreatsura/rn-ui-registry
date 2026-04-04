@@ -1,6 +1,12 @@
 "use client";
 
-import { useState, useEffect, type ReactNode } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -21,7 +27,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Text } from "@/components/ui/text";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ChevronRight } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -59,7 +74,6 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandShortcut,
 } from "@/components/ui/command";
 import {
   Dialog,
@@ -82,15 +96,37 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardDescription,
+  HoverCardHeader,
+  HoverCardTitle,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   InputGroup,
   InputGroupAddon,
@@ -99,6 +135,15 @@ import {
   InputGroupText,
 } from "@/components/ui/input-group";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Progress } from "@/components/ui/progress";
 import { OTPInput } from "@/components/ui/otp-input";
 import {
@@ -895,34 +940,79 @@ export function CollapsibleInlinePreview() {
 }
 
 function CommandLivePreview() {
-  const [selected, setSelected] = useState("Publish changes");
-  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const [commandKey, setCommandKey] = useState(0);
+  const [lastRun, setLastRun] = useState("Publish changes");
 
   return (
     <PreviewShell>
       <div className="mx-auto flex w-full max-w-md flex-col gap-4">
-        <Command value={query} onValueChange={setQuery}>
-          <CommandInput placeholder="Search commands..." />
-          <CommandList>
-            <CommandGroup heading="Actions">
-              <CommandItem
-                value="publish changes"
-                onSelect={() => setSelected("Publish changes")}
-              >
-                Publish changes
-                <CommandShortcut>Cmd+P</CommandShortcut>
-              </CommandItem>
-              <CommandItem
-                value="open previews"
-                onSelect={() => setSelected("Open previews")}
-              >
-                Open previews
-              </CommandItem>
-            </CommandGroup>
-            <CommandEmpty>No matching commands.</CommandEmpty>
-          </CommandList>
-        </Command>
-        <p className="text-muted-foreground text-sm">Selected: {selected}</p>
+        <Dialog
+          open={open}
+          onOpenChange={(next) => {
+            setOpen(next);
+            if (next) setCommandKey((k) => k + 1);
+          }}
+        >
+          <DialogTrigger asChild>
+            <Button type="button">Quick actions</Button>
+          </DialogTrigger>
+          <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-md">
+            <DialogHeader className="border-border border-b px-4 py-3 text-left">
+              <DialogTitle>Quick actions</DialogTitle>
+              <DialogDescription>
+                Dialog on web, bottom sheet on native—search, then tap an action.
+              </DialogDescription>
+            </DialogHeader>
+            <Command
+              key={commandKey}
+              className="bg-background rounded-none border-0 shadow-none"
+            >
+              <CommandInput placeholder="Search actions…" />
+              <CommandList>
+                <CommandGroup heading="Actions">
+                  <CommandItem
+                    value="publish changes"
+                    onSelect={() => {
+                      setLastRun("Publish changes");
+                      setOpen(false);
+                    }}
+                  >
+                    Publish changes
+                    <ChevronRight
+                      aria-hidden
+                      className="text-muted-foreground ml-auto size-4 shrink-0"
+                    />
+                  </CommandItem>
+                  <CommandItem
+                    value="open previews"
+                    onSelect={() => {
+                      setLastRun("Open previews");
+                      setOpen(false);
+                    }}
+                  >
+                    Open previews
+                    <ChevronRight
+                      aria-hidden
+                      className="text-muted-foreground ml-auto size-4 shrink-0"
+                    />
+                  </CommandItem>
+                </CommandGroup>
+                <CommandEmpty>No matching actions.</CommandEmpty>
+              </CommandList>
+            </Command>
+            <DialogFooter className="border-border border-t px-4 py-3 sm:justify-start">
+              <DialogClose asChild>
+                <Button type="button" variant="outline">
+                  Cancel
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        <p className="text-muted-foreground text-center text-sm">
+          Last run: {lastRun}
+        </p>
       </div>
     </PreviewShell>
   );
@@ -1267,6 +1357,9 @@ export function CarouselInlinePreview() {
 }
 
 function DropdownMenuLivePreview() {
+  const [notifications, setNotifications] = useState(true);
+  const [position, setPosition] = useState("bottom");
+
   return (
     <PreviewShell>
       <div className="flex items-center justify-center">
@@ -1274,7 +1367,7 @@ function DropdownMenuLivePreview() {
           <DropdownMenuTrigger asChild>
             <Button variant="outline">Open</Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="end" sideOffset={8}>
             <DropdownMenuGroup>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuItem>
@@ -1303,11 +1396,28 @@ function DropdownMenuLivePreview() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+            <DropdownMenuLabel>Preferences</DropdownMenuLabel>
+            <DropdownMenuCheckboxItem
+              checked={notifications}
+              onCheckedChange={setNotifications}
+            >
+              Push notifications
+            </DropdownMenuCheckboxItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>Panel dock</DropdownMenuLabel>
+            <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
+              <DropdownMenuRadioItem value="top">Top</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="bottom">Bottom</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="right">Right</DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>GitHub</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuItem disabled>API</DropdownMenuItem>
             </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive">Remove workspace</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               Log out
@@ -1321,14 +1431,17 @@ function DropdownMenuLivePreview() {
 }
 
 export function DropdownMenuInlinePreview() {
+  const [showStatus, setShowStatus] = useState(false);
+  const [density, setDensity] = useState("comfortable");
+
   return (
-    <PreviewShell className="min-h-[230px]">
+    <PreviewShell className="min-h-[280px]">
       <div className="flex items-center justify-center">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary">Open</Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="start" sideOffset={6}>
             <DropdownMenuGroup>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuItem>
@@ -1345,23 +1458,25 @@ export function DropdownMenuInlinePreview() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>Team</DropdownMenuLabel>
-              <DropdownMenuItem>
-                Invite users
-                <DropdownMenuShortcut>{">"}</DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                New Team
-                <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            <DropdownMenuLabel>View</DropdownMenuLabel>
+            <DropdownMenuCheckboxItem
+              checked={showStatus}
+              onCheckedChange={setShowStatus}
+            >
+              Show status bar
+            </DropdownMenuCheckboxItem>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>GitHub</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuItem disabled>API</DropdownMenuItem>
-            </DropdownMenuGroup>
+            <DropdownMenuLabel>Density</DropdownMenuLabel>
+            <DropdownMenuRadioGroup value={density} onValueChange={setDensity}>
+              <DropdownMenuRadioItem value="compact">Compact</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="comfortable">
+                Comfortable
+              </DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
+              Destructive (stays open)
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               Log out
@@ -1370,6 +1485,92 @@ export function DropdownMenuInlinePreview() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+    </PreviewShell>
+  );
+}
+
+export function AlertInlinePreview() {
+  const [kind, setKind] = useState<null | "default" | "destructive">(null);
+
+  useEffect(() => {
+    if (!kind) {
+      return undefined;
+    }
+    const id = window.setTimeout(() => setKind(null), 4200);
+    return () => window.clearTimeout(id);
+  }, [kind]);
+
+  useEffect(() => {
+    if (!kind) {
+      return undefined;
+    }
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setKind(null);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [kind]);
+
+  return (
+    <PreviewShell className="min-h-[140px]">
+      <div className="flex w-full flex-wrap gap-3">
+        <Button type="button" onClick={() => setKind("default")}>
+          Show status alert
+        </Button>
+        <Button
+          type="button"
+          variant="destructive"
+          onClick={() => setKind("destructive")}
+        >
+          Show error alert
+        </Button>
+      </div>
+      {kind ? (
+        <>
+          <button
+            type="button"
+            aria-label="Dismiss alert"
+            className="fixed inset-0 z-[100] cursor-default bg-zinc-950/45"
+            onClick={() => setKind(null)}
+          />
+          <div className="pointer-events-none fixed inset-x-0 top-0 z-[101] flex justify-center px-4 pt-[max(1.25rem,calc(env(safe-area-inset-top)+3.5rem))]">
+            <div className="pointer-events-auto w-full max-w-md">
+              {kind === "default" ? (
+                <Alert>
+                  <AlertTitle>Heads up</AlertTitle>
+                  <AlertDescription>
+                    Alerts surface status without blocking the rest of the
+                    screen.
+                  </AlertDescription>
+                </Alert>
+              ) : (
+                <Alert variant="destructive">
+                  <AlertTitle>Payment failed</AlertTitle>
+                  <AlertDescription>
+                    Update your billing method and try the charge again.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          </div>
+        </>
+      ) : null}
+    </PreviewShell>
+  );
+}
+
+export function ScrollAreaInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[200px]">
+      <ScrollArea maxHeight={160} className="w-full max-w-sm">
+        {Array.from({ length: 14 }, (_, i) => (
+          <p key={i} className="text-muted-foreground text-sm">
+            Line {i + 1} — scroll inside the bordered region.
+          </p>
+        ))}
+      </ScrollArea>
     </PreviewShell>
   );
 }
@@ -1386,8 +1587,8 @@ function PopoverLivePreview() {
             <PopoverHeader>
               <PopoverTitle>Today&apos;s rollout</PopoverTitle>
               <PopoverDescription>
-                6 new base components are now available in showcase, registry,
-                and platform docs.
+                Layout primitives keep spacing predictable across native and web
+                previews.
               </PopoverDescription>
             </PopoverHeader>
           </PopoverContent>
@@ -1685,6 +1886,232 @@ export function ToggleGroupInlinePreview() {
   )
 }
 
+type PaginationSlot = number | "ellipsis";
+
+function buildPaginationSlots(page: number, total: number): PaginationSlot[] {
+  if (total <= 5) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  if (page <= 3) {
+    return [1, 2, 3, "ellipsis", total];
+  }
+  if (page >= total - 2) {
+    return [1, "ellipsis", total - 2, total - 1, total];
+  }
+  return [1, "ellipsis", page - 1, page, page + 1, "ellipsis", total];
+}
+
+function PaginationLivePreview() {
+  const totalPages = 8;
+  const [page, setPage] = useState(6);
+  const slots = useMemo(
+    () => buildPaginationSlots(page, totalPages),
+    [page, totalPages],
+  );
+
+  return (
+    <PreviewShell>
+      <div className="mx-auto flex w-full max-w-lg flex-col items-center gap-3">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                disabled={page <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+              />
+            </PaginationItem>
+            {slots.map((slot, index) => (
+              <PaginationItem
+                key={slot === "ellipsis" ? `ellipsis-${index}` : `page-${slot}`}
+              >
+                {slot === "ellipsis" ? (
+                  <PaginationEllipsis />
+                ) : (
+                  <PaginationLink
+                    active={page === slot}
+                    onClick={() => setPage(slot)}
+                  >
+                    {slot}
+                  </PaginationLink>
+                )}
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationNext
+                disabled={page >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+        <p className="text-muted-foreground w-full text-center text-sm">
+          Current page: {page}
+        </p>
+      </div>
+    </PreviewShell>
+  );
+}
+
+function HoverCardLivePreview() {
+  return (
+    <PreviewShell className="min-h-[200px]">
+      <div className="flex items-center justify-center pt-6">
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <Button variant="outline">@watermelon</Button>
+          </HoverCardTrigger>
+          <HoverCardContent>
+            <HoverCardHeader>
+              <HoverCardTitle>Watermelon UI</HoverCardTitle>
+              <HoverCardDescription>
+                shadcn-style building blocks for React Native and Expo.
+              </HoverCardDescription>
+            </HoverCardHeader>
+          </HoverCardContent>
+        </HoverCard>
+      </div>
+    </PreviewShell>
+  )
+}
+
+function TableLivePreview() {
+  return (
+    <PreviewShell>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Product</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Owner</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>Registry CLI</TableCell>
+            <TableCell>Shipped</TableCell>
+            <TableCell>Core</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Showcase</TableCell>
+            <TableCell>Beta</TableCell>
+            <TableCell>Mobile</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Platform</TableCell>
+            <TableCell>Live</TableCell>
+            <TableCell>Web</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </PreviewShell>
+  )
+}
+
+function validateLoginFields(
+  email: string,
+  password: string,
+): Record<string, string | undefined> {
+  const next: Record<string, string | undefined> = {};
+  const trimmed = email.trim();
+  if (!trimmed) {
+    next.email = "Enter your email.";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+    next.email = "Enter a valid email address.";
+  }
+  if (!password) {
+    next.password = "Enter your password.";
+  } else if (password.length < 8) {
+    next.password = "Use at least 8 characters.";
+  }
+  return next;
+}
+
+function FormLivePreview() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
+  const [signedIn, setSignedIn] = useState(false);
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSignedIn(false);
+    const next = validateLoginFields(email, password);
+    setErrors(next);
+    const hasErr = Object.keys(next).some((k) => Boolean(next[k]));
+    if (!hasErr) {
+      setSignedIn(true);
+    }
+  };
+
+  return (
+    <PreviewShell>
+      <Form
+        errors={errors}
+        className="mx-auto w-full max-w-sm"
+        onSubmit={submit}
+      >
+        <div className="mb-1 space-y-1">
+          <p className="text-lg font-semibold">Sign in</p>
+          <p className="text-muted-foreground text-sm">
+            Use your workspace email and password.
+          </p>
+        </div>
+        <FormField name="email">
+          <FormItem>
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <Input
+                type="email"
+                size="lg"
+                autoComplete="email"
+                invalid={Boolean(errors.email)}
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setErrors((prev) => ({ ...prev, email: undefined }));
+                }}
+              />
+            </FormControl>
+            <FormDescription>
+              We&apos;ll never share your email with third parties.
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <FormField name="password">
+          <FormItem>
+            <FormLabel>Password</FormLabel>
+            <FormControl>
+              <Input
+                size="lg"
+                autoComplete="current-password"
+                invalid={Boolean(errors.password)}
+                placeholder="••••••••"
+                secureTextEntry
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrors((prev) => ({ ...prev, password: undefined }));
+                }}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <Button className="w-full" size="lg" type="submit">
+          Sign in
+        </Button>
+        {signedIn ? (
+          <p className="text-muted-foreground text-center text-sm">
+            Signed in successfully (demo).
+          </p>
+        ) : null}
+      </Form>
+    </PreviewShell>
+  );
+}
+
 function TooltipLivePreview() {
   return (
     <PreviewShell>
@@ -1715,6 +2142,13 @@ export function TooltipInlinePreview() {
   );
 }
 
+export {
+  FormLivePreview as FormInlinePreview,
+  HoverCardLivePreview as HoverCardInlinePreview,
+  PaginationLivePreview as PaginationInlinePreview,
+  TableLivePreview as TableInlinePreview,
+};
+
 export function ComponentLivePreview({ slug }: { slug: string }) {
   switch (slug) {
     case "button":
@@ -1723,6 +2157,8 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
       return <BreadcrumbLivePreview />;
     case "accordion":
       return <AccordionLivePreview />;
+    case "alert":
+      return <AlertInlinePreview />;
     case "alert-dialog":
       return <AlertDialogLivePreview />;
     case "aspect-ratio":
@@ -1737,6 +2173,10 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
       return <DialogLivePreview />;
     case "drawer":
       return <DrawerLivePreview />;
+    case "form":
+      return <FormLivePreview />;
+    case "hover-card":
+      return <HoverCardLivePreview />;
     case "dropdown-menu":
       return <DropdownMenuLivePreview />;
     case "input":
@@ -1751,6 +2191,8 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
       return <BadgeLivePreview />;
     case "popover":
       return <PopoverLivePreview />;
+    case "pagination":
+      return <PaginationLivePreview />;
     case "radio-group":
       return <RadioGroupLivePreview />;
     case "slider":
@@ -1773,6 +2215,8 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
       return <LabelInlinePreview />;
     case "separator":
       return <SeparatorInlinePreview />;
+    case "scroll-area":
+      return <ScrollAreaInlinePreview />;
     case "textarea":
       return <TextareaInlinePreview />;
     case "spotlight-button":
@@ -1781,6 +2225,8 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
       return <SkeletonLivePreview />;
     case "switch":
       return <SwitchLivePreview />;
+    case "table":
+      return <TableLivePreview />;
     case "checkbox":
       return <CheckboxLivePreview />;
     case "tooltip":

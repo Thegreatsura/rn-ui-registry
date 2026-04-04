@@ -1,0 +1,61 @@
+---
+title: Pagination
+description: Page controls with previous, next, numeric links, and ellipsis—matching shadcn pagination composition.
+kind: component
+category: Components
+image: /logo.png
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { PaginationInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Compose items inside `PaginationContent`. Use `PaginationLink` with
+  `active` for the current page.
+
+### Basic
+
+<DocSubsection>
+  <CompPreview
+    code={`<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious onPress={() => {}} />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink active>1</PaginationLink>
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>`}
+  >
+    <PaginationInlinePreview />
+  </CompPreview>
+</DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  `PaginationLink` accepts `active` and `disabled`. On web, links use
+  `onClick`; on native, `onPress` from `Pressable`.
+</DocSection>

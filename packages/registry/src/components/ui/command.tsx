@@ -8,6 +8,8 @@ import { useRegistryTheme } from '../../lib/theme';
 type CommandContextValue = {
     query: string;
     setQuery: (value: string) => void;
+    visibleMatchCount: number;
+    setItemMatch: (id: string, matched: boolean | null) => void;
 };
 
 const CommandContext = React.createContext<CommandContextValue | null>(null);
@@ -22,11 +24,44 @@ function useCommandContext() {
     return context;
 }
 
-function Command({ children, ...props }: ViewProps) {
-    const [query, setQuery] = React.useState('');
+type CommandProps = ViewProps & {
+    value?: string;
+    defaultValue?: string;
+    onValueChange?: (value: string) => void;
+};
+
+function Command({ value, defaultValue = '', onValueChange, children, ...props }: CommandProps) {
+    const [internalQuery, setInternalQuery] = React.useState(defaultValue);
+    const isControlled = value !== undefined;
+    const query = isControlled ? value : internalQuery;
+    const setQuery = React.useCallback(
+        (next: string) => {
+            if (!isControlled) {
+                setInternalQuery(next);
+            }
+            onValueChange?.(next);
+        },
+        [isControlled, onValueChange],
+    );
+
+    const matchesRef = React.useRef(new Map<string, boolean>());
+    const [visibleMatchCount, setVisibleMatchCount] = React.useState(0);
+
+    const setItemMatch = React.useCallback((id: string, matched: boolean | null) => {
+        if (matched === null) {
+            matchesRef.current.delete(id);
+        } else {
+            matchesRef.current.set(id, matched);
+        }
+        let count = 0;
+        for (const v of matchesRef.current.values()) {
+            if (v) count += 1;
+        }
+        setVisibleMatchCount(count);
+    }, []);
 
     return (
-        <CommandContext.Provider value={{ query, setQuery }}>
+        <CommandContext.Provider value={{ query, setQuery, visibleMatchCount, setItemMatch }}>
             <View style={styles.command} {...props}>
                 {children}
             </View>
@@ -51,6 +86,10 @@ function CommandList({ style, ...props }: ViewProps) {
 }
 
 function CommandEmpty(props: React.ComponentProps<typeof Text>) {
+    const { query, visibleMatchCount } = useCommandContext();
+    if (!query.trim() || visibleMatchCount > 0) {
+        return null;
+    }
     return <Text variant="muted" {...props} />;
 }
 
@@ -71,10 +110,16 @@ type CommandItemProps = PressableProps & {
 };
 
 function CommandItem({ value, keywords, onPress, onSelect, children, style, ...props }: CommandItemProps) {
-    const { query } = useCommandContext();
+    const { query, setItemMatch } = useCommandContext();
     const theme = useRegistryTheme();
+    const id = React.useId();
     const haystack = [value, ...(keywords ?? [])].join(' ').toLowerCase();
     const visible = haystack.includes(query.trim().toLowerCase());
+
+    React.useEffect(() => {
+        setItemMatch(id, visible);
+        return () => setItemMatch(id, null);
+    }, [id, setItemMatch, visible]);
 
     if (!visible) {
         return null;
@@ -118,10 +163,10 @@ const styles = StyleSheet.create({
         marginVertical: 4,
     },
     item: {
-        minHeight: 36,
-        borderRadius: 8,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
+        minHeight: 48,
+        borderRadius: 10,
+        paddingHorizontal: 14,
+        paddingVertical: 10,
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10,

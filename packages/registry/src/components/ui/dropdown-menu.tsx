@@ -1,16 +1,20 @@
 import * as React from 'react';
 import {
     Modal,
+    Platform,
     Pressable,
     StyleSheet,
+    Text,
     View,
+    useWindowDimensions,
     type LayoutChangeEvent,
     type PressableProps,
     type TextProps,
     type ViewProps,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Text, TextStyleContext } from './text';
+import { Text as UiText, TextStyleContext } from './text';
 import { useRegistryTheme } from '../../lib/theme';
 
 type DropdownMenuContextValue = {
@@ -38,6 +42,17 @@ function useDropdownMenuContext() {
     }
 
     return context;
+}
+
+type MenuRadioContextValue = {
+    value?: string;
+    onValueChange?: (value: string) => void;
+};
+
+const MenuRadioContext = React.createContext<MenuRadioContextValue | null>(null);
+
+function useMenuRadioContext() {
+    return React.useContext(MenuRadioContext);
 }
 
 function DropdownMenu({
@@ -123,9 +138,12 @@ function DropdownMenuTrigger({
 
     const handleLayout = React.useCallback(
         (event: LayoutChangeEvent) => {
-            const { width, height } = event.nativeEvent.layout;
             requestAnimationFrame(syncTriggerLayout);
-            setTriggerLayout((current) => ({ ...current, width, height }));
+            setTriggerLayout((current) => ({
+                ...current,
+                width: event.nativeEvent.layout.width,
+                height: event.nativeEvent.layout.height,
+            }));
         },
         [setTriggerLayout, syncTriggerLayout],
     );
@@ -149,42 +167,88 @@ function DropdownMenuTrigger({
     );
 }
 
-function DropdownMenuContent({ children, style, ...props }: ViewProps) {
+type ContentAlign = 'start' | 'end' | 'center';
+
+type DropdownMenuContentProps = ViewProps & {
+    /** Horizontal alignment of the menu relative to the trigger (shadcn-style). */
+    align?: ContentAlign;
+    /** Gap between trigger and menu, in px. */
+    sideOffset?: number;
+    minWidth?: number;
+    maxWidth?: number;
+};
+
+function DropdownMenuContent({
+    children,
+    style,
+    align = 'start',
+    sideOffset = 10,
+    minWidth: minWidthProp,
+    maxWidth: maxWidthProp,
+    ...props
+}: DropdownMenuContentProps) {
     const theme = useRegistryTheme();
+    const insets = useSafeAreaInsets();
+    const { width: screenWidth, height: screenHeight } = useWindowDimensions();
     const { open, triggerLayout, setOpen } = useDropdownMenuContext();
-    const [contentLayout, setContentLayout] = React.useState({ width: 212, height: 0 });
+    const [contentHeight, setContentHeight] = React.useState(0);
+
+    React.useEffect(() => {
+        if (!open) {
+            setContentHeight(0);
+        }
+    }, [open]);
 
     if (!open) {
         return null;
     }
 
-    const screenWidth = 390;
-    const screenHeight = 844;
-    const margin = 16;
-    const gap = 10;
-    const preferredWidth = Math.max(triggerLayout.width + 48, 212);
-    const contentWidth = Math.min(Math.max(contentLayout.width, preferredWidth), 228);
-    const alignRightLeft = triggerLayout.x + triggerLayout.width - contentWidth;
-    const left = Math.min(
-        Math.max(
-            triggerLayout.x + contentWidth > screenWidth - margin
-                ? alignRightLeft
-                : triggerLayout.x,
-            margin,
-        ),
-        screenWidth - contentWidth - margin,
-    );
+    const edge = 16;
+    const safeLeft = edge + insets.left;
+    const safeRight = edge + insets.right;
+    const safeTop = edge + insets.top;
+    const safeBottom = edge + insets.bottom;
+    const usableWidth = Math.max(0, screenWidth - safeLeft - safeRight);
+    const maxW = maxWidthProp ?? usableWidth;
+    const triggerW = triggerLayout.width || 0;
+    const defaultMin = Math.min(Math.max(triggerW > 0 ? triggerW + 12 : 0, 204), maxW);
+    const requestedMin =
+        minWidthProp ?? (triggerW > 0 ? defaultMin : Math.min(260, maxW));
+    const contentWidth = Math.min(maxW, Math.max(requestedMin, 0));
+
+    const gap = sideOffset;
+
+    let left = triggerLayout.x;
+    if (align === 'end') {
+        left = triggerLayout.x + triggerLayout.width - contentWidth;
+    } else if (align === 'center') {
+        left = triggerLayout.x + triggerLayout.width / 2 - contentWidth / 2;
+    }
+
+    const minLeft = safeLeft;
+    const maxLeft = screenWidth - safeRight - contentWidth;
+    left = Math.min(Math.max(left, minLeft), Math.max(maxLeft, minLeft));
+
     const belowTop = triggerLayout.y + triggerLayout.height + gap;
-    const aboveTop = triggerLayout.y - contentLayout.height - gap;
+    const aboveTop = triggerLayout.y - contentHeight - gap;
     const top =
-        contentLayout.height > 0 &&
-        belowTop + contentLayout.height > screenHeight - margin &&
-        aboveTop >= margin
+        contentHeight > 0 &&
+        belowTop + contentHeight > screenHeight - safeBottom &&
+        aboveTop >= safeTop
             ? aboveTop
-            : Math.min(Math.max(belowTop, margin), screenHeight - contentLayout.height - margin);
+            : Math.min(
+                  Math.max(belowTop, safeTop),
+                  Math.max(safeTop, screenHeight - safeBottom - contentHeight),
+              );
 
     return (
-        <Modal transparent visible animationType="fade" onRequestClose={() => setOpen(false)}>
+        <Modal
+            transparent
+            visible
+            animationType="fade"
+            statusBarTranslucent
+            onRequestClose={() => setOpen(false)}
+        >
             <View style={styles.modalRoot} pointerEvents="box-none">
                 <Pressable style={StyleSheet.absoluteFill} onPress={() => setOpen(false)} />
                 <View
@@ -194,14 +258,15 @@ function DropdownMenuContent({ children, style, ...props }: ViewProps) {
                             top,
                             left,
                             width: contentWidth,
+                            maxWidth: contentWidth,
                             backgroundColor: theme.background,
                             borderColor: theme.border,
                         },
                         style,
                     ]}
                     onLayout={(event) => {
-                        const { width, height } = event.nativeEvent.layout;
-                        setContentLayout({ width, height });
+                        const { height } = event.nativeEvent.layout;
+                        setContentHeight(height);
                     }}
                     {...props}
                 >
@@ -220,7 +285,7 @@ function DropdownMenuLabel(props: TextProps) {
     const theme = useRegistryTheme();
 
     return (
-        <Text
+        <UiText
             variant="muted"
             style={[styles.label, { color: theme.mutedForeground }, props.style]}
             {...props}
@@ -228,15 +293,30 @@ function DropdownMenuLabel(props: TextProps) {
     );
 }
 
+type ItemVariant = 'default' | 'destructive';
+
+type DropdownMenuItemProps = PressableProps & {
+    children?: React.ReactNode;
+    /** Adds leading inset for icon rows (shadcn `inset`). */
+    inset?: boolean;
+    variant?: ItemVariant;
+    /** When false, the menu stays open after press (default: true). */
+    closeOnPress?: boolean;
+};
+
 function DropdownMenuItem({
     children,
     onPress,
     style,
     disabled,
+    inset,
+    variant = 'default',
+    closeOnPress = true,
     ...props
-}: PressableProps & { children?: React.ReactNode }) {
+}: DropdownMenuItemProps) {
     const theme = useRegistryTheme();
     const { setOpen } = useDropdownMenuContext();
+    const destructive = variant === 'destructive';
 
     return (
         <Pressable
@@ -246,29 +326,192 @@ function DropdownMenuItem({
                     return;
                 }
                 onPress?.(event);
-                setOpen(false);
+                if (closeOnPress) {
+                    setOpen(false);
+                }
             }}
             style={({ pressed }) => [
                 styles.item,
+                inset && styles.itemInset,
                 {
-                    backgroundColor: pressed ? theme.secondary : theme.background,
+                    backgroundColor: pressed
+                        ? destructive
+                            ? 'rgba(239, 68, 68, 0.12)'
+                            : theme.secondary
+                        : theme.background,
                     borderColor: 'transparent',
                     opacity: disabled ? 0.45 : 1,
                 },
-                style as any,
+                style as object,
             ]}
             {...props}
         >
             <TextStyleContext.Provider
                 value={{
-                    color: theme.foreground,
+                    color: destructive ? '#dc2626' : theme.foreground,
                     fontSize: 15,
                     fontWeight: '400',
                     lineHeight: 20,
+                    flex: 1,
                 }}
             >
-                {typeof children === 'string' ? <Text>{children}</Text> : children}
+                <View style={styles.itemInner}>
+                    {typeof children === 'string' ? <UiText>{children}</UiText> : children}
+                </View>
             </TextStyleContext.Provider>
+        </Pressable>
+    );
+}
+
+type DropdownMenuCheckboxItemProps = PressableProps & {
+    checked?: boolean;
+    onCheckedChange?: (checked: boolean) => void;
+    children?: React.ReactNode;
+};
+
+function DropdownMenuCheckboxItem({
+    children,
+    checked = false,
+    onCheckedChange,
+    disabled,
+    style,
+    onPress,
+    ...props
+}: DropdownMenuCheckboxItemProps) {
+    const theme = useRegistryTheme();
+
+    return (
+        <Pressable
+            disabled={disabled}
+            onPress={(event) => {
+                if (disabled) return;
+                onPress?.(event);
+                onCheckedChange?.(!checked);
+            }}
+            style={({ pressed }) => [
+                styles.item,
+                styles.checkboxItem,
+                {
+                    backgroundColor: pressed ? theme.secondary : theme.background,
+                    opacity: disabled ? 0.45 : 1,
+                },
+                style as object,
+            ]}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: Boolean(checked), disabled: Boolean(disabled) }}
+            {...props}
+        >
+            <View style={styles.checkboxItemInner}>
+                <TextStyleContext.Provider
+                    value={{
+                        color: theme.foreground,
+                        fontSize: 15,
+                        fontWeight: '400',
+                        lineHeight: 20,
+                        flex: 1,
+                    }}
+                >
+                    {typeof children === 'string' ? <UiText>{children}</UiText> : children}
+                </TextStyleContext.Provider>
+                <View style={styles.checkboxIndicatorSlot}>
+                    {checked ? (
+                        <Text style={[styles.checkMark, { color: theme.primary }]}>✓</Text>
+                    ) : null}
+                </View>
+            </View>
+        </Pressable>
+    );
+}
+
+type DropdownMenuRadioGroupProps = ViewProps & {
+    value?: string;
+    onValueChange?: (value: string) => void;
+};
+
+function DropdownMenuRadioGroup({
+    value,
+    onValueChange,
+    children,
+    style,
+    ...props
+}: DropdownMenuRadioGroupProps) {
+    const stable = React.useMemo(
+        () => ({ value, onValueChange }),
+        [value, onValueChange],
+    );
+
+    return (
+        <MenuRadioContext.Provider value={stable}>
+            <View style={style} {...props}>
+                {children}
+            </View>
+        </MenuRadioContext.Provider>
+    );
+}
+
+type DropdownMenuRadioItemProps = PressableProps & {
+    value: string;
+    children?: React.ReactNode;
+};
+
+function DropdownMenuRadioItem({
+    value: itemValue,
+    children,
+    disabled,
+    style,
+    onPress,
+    ...props
+}: DropdownMenuRadioItemProps) {
+    const theme = useRegistryTheme();
+    const radio = useMenuRadioContext();
+    const selected = radio?.value === itemValue;
+
+    return (
+        <Pressable
+            disabled={disabled}
+            onPress={(event) => {
+                if (disabled) return;
+                onPress?.(event);
+                radio?.onValueChange?.(itemValue);
+            }}
+            style={({ pressed }) => [
+                styles.item,
+                styles.checkboxItem,
+                {
+                    backgroundColor: pressed ? theme.secondary : theme.background,
+                    opacity: disabled ? 0.45 : 1,
+                },
+                style as object,
+            ]}
+            accessibilityRole="radio"
+            accessibilityState={{ selected: Boolean(selected), disabled: Boolean(disabled) }}
+            {...props}
+        >
+            <View style={styles.checkboxItemInner}>
+                <TextStyleContext.Provider
+                    value={{
+                        color: theme.foreground,
+                        fontSize: 15,
+                        fontWeight: '400',
+                        lineHeight: 20,
+                        flex: 1,
+                    }}
+                >
+                    {typeof children === 'string' ? <UiText>{children}</UiText> : children}
+                </TextStyleContext.Provider>
+                <View style={styles.checkboxIndicatorSlot}>
+                    {selected ? (
+                        <View style={[styles.radioDot, { backgroundColor: theme.primary }]} />
+                    ) : (
+                        <View
+                            style={[
+                                styles.radioRing,
+                                { borderColor: theme.border },
+                            ]}
+                        />
+                    )}
+                </View>
+            </View>
         </Pressable>
     );
 }
@@ -278,11 +521,20 @@ function DropdownMenuSeparator({ style, ...props }: ViewProps) {
     return <View style={[styles.separator, { backgroundColor: theme.border }, style]} {...props} />;
 }
 
-function DropdownMenuShortcut(props: React.ComponentProps<typeof Text>) {
+type DropdownMenuShortcutProps = React.ComponentProps<typeof UiText> & {
+    /** When true, trailing glyphs (e.g. chevrons) still render on iOS/Android. Keyboard hints stay web-only by default. */
+    showOnNative?: boolean;
+};
+
+function DropdownMenuShortcut({ showOnNative = false, ...props }: DropdownMenuShortcutProps) {
     const theme = useRegistryTheme();
 
+    if (Platform.OS !== 'web' && !showOnNative) {
+        return null;
+    }
+
     return (
-        <Text
+        <UiText
             variant="muted"
             style={[styles.shortcut, { color: theme.mutedForeground }, props.style]}
             {...props}
@@ -302,56 +554,105 @@ const styles = StyleSheet.create({
         zIndex: 100,
         borderRadius: 12,
         borderWidth: 1,
-        padding: 3,
-        gap: 1,
+        padding: 8,
+        gap: 2,
         overflow: 'hidden',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.08,
-        shadowRadius: 14,
-        elevation: 6,
+        shadowOpacity: 0.1,
+        shadowRadius: 16,
+        elevation: 8,
     },
     group: {
         gap: 0,
     },
     item: {
-        minHeight: 32,
-        borderRadius: 6,
+        minHeight: 44,
+        borderRadius: 8,
         borderWidth: 1,
-        paddingHorizontal: 8,
-        paddingVertical: 5,
+        paddingHorizontal: 14,
+        paddingVertical: 10,
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 6,
+        alignSelf: 'stretch',
+    },
+    itemInset: {
+        paddingLeft: 32,
+    },
+    itemInner: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        minWidth: 0,
+    },
+    checkboxItem: {
+        paddingRight: 42,
+    },
+    checkboxItemInner: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        minWidth: 0,
+    },
+    checkboxIndicatorSlot: {
+        position: 'absolute',
+        right: 12,
+        top: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 24,
+    },
+    checkMark: {
+        fontSize: 15,
+        fontWeight: '700',
+    },
+    radioRing: {
+        width: 16,
+        height: 16,
+        borderRadius: 8,
+        borderWidth: 2,
+    },
+    radioDot: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
     },
     label: {
-        fontSize: 13,
-        fontWeight: '500',
+        fontSize: 12,
+        fontWeight: '600',
         letterSpacing: 0,
         lineHeight: 16,
-        paddingHorizontal: 8,
-        paddingTop: 5,
+        paddingHorizontal: 10,
+        paddingTop: 8,
         paddingBottom: 4,
     },
     separator: {
         height: StyleSheet.hairlineWidth,
-        marginVertical: 3,
-        marginHorizontal: -3,
+        marginVertical: 6,
+        marginHorizontal: -8,
     },
     shortcut: {
         marginLeft: 'auto',
-        fontSize: 13,
-        fontWeight: '400',
-        lineHeight: 18,
+        marginRight: 0,
+        paddingLeft: 12,
+        fontSize: 12,
+        fontWeight: '500',
+        lineHeight: 16,
+        flexShrink: 0,
     },
 });
 
 export {
     DropdownMenu,
+    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
     DropdownMenuSeparator,
     DropdownMenuShortcut,
     DropdownMenuTrigger,

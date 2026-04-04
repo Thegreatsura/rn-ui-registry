@@ -1,0 +1,46 @@
+---
+title: Alert
+description: Inline status callout with default and destructive variants, matching shadcn-style composition.
+kind: component
+category: Components
+image: /logo.png
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { AlertInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Compose `AlertTitle` and `AlertDescription` inside `Alert`. Use `variant="destructive"` for errors.
+
+### Basic
+
+<DocSubsection>
+  <CompPreview
+    code={`<Alert>
+  <AlertTitle>Heads up</AlertTitle>
+  <AlertDescription>Short supporting copy.</AlertDescription>
+</Alert>`}
+  >
+    <AlertInlinePreview />
+  </CompPreview>
+</DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  `Alert` accepts a `variant` prop (`default` | `destructive`). Title and
+  description inherit semantic colors from the variant on native and web.
+</DocSection>

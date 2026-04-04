@@ -1,0 +1,60 @@
+---
+title: Form
+description: Composable field layout with optional error map—aligned with shadcn Form ergonomics without requiring react-hook-form.
+kind: component
+category: Components
+image: /logo.png
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { FormInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Pass an `errors` object keyed by field name. `FormMessage` reads the message
+  for the surrounding `FormField` (or a `name` override).
+
+### Basic
+
+<DocSubsection>
+  <CompPreview
+    code={`<Form errors={{ email: "Invalid email" }}>
+  <FormField name="email">
+    <FormItem>
+      <FormLabel>Email</FormLabel>
+      <FormControl><Input /></FormControl>
+      <FormMessage />
+    </FormItem>
+  </FormField>
+</Form>`}
+  >
+    <FormInlinePreview />
+  </CompPreview>
+</DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  `Form` accepts standard container props plus `errors`. Wire validation in your
+  app and update `errors` when values change.
+</DocSection>

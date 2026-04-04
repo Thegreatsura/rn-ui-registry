@@ -60,6 +60,13 @@ const COMPONENTS = [
     badgeVariant: "outline" as const,
   },
   {
+    slug: "alert",
+    title: "Alert",
+    description: "Inline status callout with title, description, and variants.",
+    category: "Feedback",
+    badgeVariant: "destructive" as const,
+  },
+  {
     slug: "badge",
     title: "Badge",
     description: "Compact label chip for status and categories.",
@@ -88,6 +95,13 @@ const COMPONENTS = [
     badgeVariant: "secondary" as const,
   },
   {
+    slug: "scroll-area",
+    title: "Scroll Area",
+    description: "Bordered region with max height and smooth vertical scroll.",
+    category: "Layout",
+    badgeVariant: "secondary" as const,
+  },
+  {
     slug: "skeleton",
     title: "Skeleton",
     description: "Loading placeholder with a soft pulse animation.",
@@ -107,6 +121,34 @@ const COMPONENTS = [
     description: "Compact field label for forms and settings.",
     category: "Forms",
     badgeVariant: "outline" as const,
+  },
+  {
+    slug: "form",
+    title: "Form",
+    description: "Field layout with label, control, description, and error map.",
+    category: "Forms",
+    badgeVariant: "outline" as const,
+  },
+  {
+    slug: "pagination",
+    title: "Pagination",
+    description: "Previous, next, page links, and ellipsis for navigation.",
+    category: "Navigation",
+    badgeVariant: "secondary" as const,
+  },
+  {
+    slug: "hover-card",
+    title: "Hover Card",
+    description: "Rich preview anchored to a trigger—tap on native, hover on web.",
+    category: "Overlays",
+    badgeVariant: "secondary" as const,
+  },
+  {
+    slug: "table",
+    title: "Table",
+    description: "Scrollable header and body rows for dense data.",
+    category: "Layout",
+    badgeVariant: "secondary" as const,
   },
 ];
 

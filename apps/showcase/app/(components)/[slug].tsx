@@ -1,13 +1,17 @@
+import { useHeaderHeight } from "@react-navigation/elements";
 import { Stack, useLocalSearchParams } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Modal,
+  Pressable,
   ScrollView,
   StyleSheet,
   View,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SpotlightButton } from "@/components/animated/spotlight-button";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -17,6 +21,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -66,7 +71,6 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandShortcut,
 } from "@/components/ui/command";
 import {
   Dialog,
@@ -89,15 +93,35 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardDescription,
+  HoverCardHeader,
+  HoverCardTitle,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import {
   InputGroup,
@@ -117,7 +141,17 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
@@ -134,6 +168,14 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Text } from "@/components/ui/text";
 import { Textarea } from "@/components/ui/textarea";
@@ -148,6 +190,7 @@ import {
 
 const COMPONENT_META = {
   accordion: { title: "Accordion" },
+  alert: { title: "Alert" },
   "alert-dialog": { title: "Alert Dialog" },
   "aspect-ratio": { title: "Aspect Ratio" },
   avatar: { title: "Avatar" },
@@ -161,6 +204,8 @@ const COMPONENT_META = {
   dialog: { title: "Dialog" },
   drawer: { title: "Drawer" },
   "dropdown-menu": { title: "Dropdown Menu" },
+  form: { title: "Form" },
+  "hover-card": { title: "Hover Card" },
   "input-group": { title: "Input Group" },
   kbd: { title: "Kbd" },
   "spotlight-button": { title: "Spotlight Button" },
@@ -168,15 +213,18 @@ const COMPONENT_META = {
   input: { title: "Input" },
   label: { title: "Label" },
   "otp-input": { title: "OTP Input" },
+  pagination: { title: "Pagination" },
   popover: { title: "Popover" },
   progress: { title: "Progress" },
   "radio-group": { title: "Radio Group" },
   separator: { title: "Separator" },
+  "scroll-area": { title: "Scroll Area" },
   sheet: { title: "Sheet" },
   skeleton: { title: "Skeleton" },
   slider: { title: "Slider" },
   spinner: { title: "Spinner" },
   switch: { title: "Switch" },
+  table: { title: "Table" },
   tabs: { title: "Tabs" },
   text: { title: "Typography" },
   textarea: { title: "Textarea" },
@@ -779,6 +827,34 @@ function SeparatorExamples() {
   );
 }
 
+function ScrollAreaPreview() {
+  return (
+    <ScrollArea maxHeight={160}>
+      {Array.from({ length: 14 }, (_, i) => (
+        <Text key={i}>
+          Line {i + 1} — scroll inside the bordered region.
+        </Text>
+      ))}
+    </ScrollArea>
+  );
+}
+
+function ScrollAreaExamples() {
+  return (
+    <>
+      <Block title="Dense list">
+        <ScrollArea maxHeight={200}>
+          {Array.from({ length: 24 }, (_, i) => (
+            <Text key={i} variant="muted">
+              Registry entry {String(i + 1).padStart(2, "0")}
+            </Text>
+          ))}
+        </ScrollArea>
+      </Block>
+    </>
+  );
+}
+
 function LabelPreview() {
   return (
     <View style={styles.stackLg}>
@@ -1188,8 +1264,8 @@ function PopoverPreview() {
           <PopoverHeader>
             <PopoverTitle>Today&apos;s rollout</PopoverTitle>
             <PopoverDescription>
-              6 new base components are now available in showcase, registry,
-              and platform docs.
+              Layout primitives keep spacing predictable across native and web
+              previews.
             </PopoverDescription>
           </PopoverHeader>
         </PopoverContent>
@@ -1606,6 +1682,127 @@ function AlertDialogExamples() {
   );
 }
 
+type AlertToastLauncherProps = {
+  variant?: "default" | "destructive";
+  title: string;
+  description: string;
+  triggerLabel: string;
+  triggerVariant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+};
+
+function AlertToastLauncher({
+  variant = "default",
+  title,
+  description,
+  triggerLabel,
+  triggerVariant = "default",
+}: AlertToastLauncherProps) {
+  const insets = useSafeAreaInsets();
+  const headerHeight = useHeaderHeight();
+  const [visible, setVisible] = useState(false);
+
+  const headerOffset = headerHeight > 0 ? headerHeight : 56;
+
+  useEffect(() => {
+    if (!visible) {
+      return undefined;
+    }
+    const id = setTimeout(() => setVisible(false), 4200);
+    return () => clearTimeout(id);
+  }, [visible]);
+
+  return (
+    <>
+      <Button variant={triggerVariant} onPress={() => setVisible(true)}>
+        <Text>{triggerLabel}</Text>
+      </Button>
+      <Modal
+        visible={visible}
+        transparent
+        animationType="fade"
+        statusBarTranslucent
+        onRequestClose={() => setVisible(false)}
+      >
+        <View style={alertToastStyles.modalRoot}>
+          <Pressable
+            accessibilityLabel="Dismiss alert"
+            accessibilityRole="button"
+            style={[StyleSheet.absoluteFillObject, alertToastStyles.backdrop]}
+            onPress={() => setVisible(false)}
+          />
+          <View
+            pointerEvents="box-none"
+            style={[
+              StyleSheet.absoluteFillObject,
+              {
+                paddingTop: insets.top + headerOffset + 14,
+                paddingHorizontal: 16,
+                paddingBottom: insets.bottom + 16,
+                justifyContent: "flex-start",
+              },
+            ]}
+          >
+            <Alert
+              variant={variant}
+              style={[
+                alertToastStyles.toastElevated,
+                variant === "destructive"
+                  ? alertToastStyles.toastElevatedDestructive
+                  : null,
+              ]}
+            >
+              <AlertTitle>{title}</AlertTitle>
+              <AlertDescription>{description}</AlertDescription>
+            </Alert>
+          </View>
+        </View>
+      </Modal>
+    </>
+  );
+}
+
+function AlertPreview() {
+  return (
+    <View style={styles.alertPreviewRow}>
+      <AlertToastLauncher
+        triggerLabel="Show status alert"
+        title="Heads up"
+        description="Alerts surface status without blocking the rest of the screen."
+      />
+      <AlertToastLauncher
+        variant="destructive"
+        triggerVariant="destructive"
+        triggerLabel="Show error alert"
+        title="Payment failed"
+        description="Update your billing method and try the charge again."
+      />
+    </View>
+  );
+}
+
+function AlertExamples() {
+  return (
+    <>
+      <Block title="Default">
+        <AlertToastLauncher
+          triggerLabel="Show default alert"
+          title="New version"
+          description="Install the latest registry CLI for improved install times."
+        />
+      </Block>
+      <Block title="Destructive">
+        <AlertToastLauncher
+          variant="destructive"
+          triggerVariant="destructive"
+          triggerLabel="Show destructive alert"
+          title="Could not save"
+          description="Check your connection and retry. No data was written."
+        />
+      </Block>
+    </>
+  );
+}
+
 function AspectRatioPreview() {
   return (
     <AspectRatio ratio={16 / 9}>
@@ -1955,49 +2152,129 @@ function BreadcrumbExamples() {
 }
 
 function CommandPreview() {
-  const [selected, setSelected] = useState("Publish changes");
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [lastAction, setLastAction] = useState<string | null>(null);
+  const chevronColor = useThemeColor({}, "icon");
+
+  useEffect(() => {
+    if (!open) setQuery("");
+  }, [open]);
 
   return (
     <View style={styles.stackMd}>
-      <Command>
-        <CommandInput />
-        <CommandList>
-          <CommandGroup>
-            <CommandItem value="publish changes" onSelect={() => setSelected("Publish changes")}>
-              <Text>Publish changes</Text>
-              <CommandShortcut>Cmd+P</CommandShortcut>
-            </CommandItem>
-            <CommandItem value="open previews" onSelect={() => setSelected("Open previews")}>
-              <Text>Open previews</Text>
-            </CommandItem>
-          </CommandGroup>
-        </CommandList>
-      </Command>
-      <Text variant="muted">Selected: {selected}</Text>
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>
+          <Button variant="default">
+            <Text>Quick actions</Text>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="bottom" style={styles.commandSheetContent}>
+          <SheetHeader>
+            <SheetTitle>Quick actions</SheetTitle>
+            <SheetDescription>Search or pick a task—same pattern as a mobile action sheet.</SheetDescription>
+          </SheetHeader>
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            style={styles.commandSheetScroll}
+          >
+            <Command value={query} onValueChange={setQuery}>
+              <CommandInput placeholder="Search actions…" />
+              <CommandList>
+                <CommandGroup>
+                  <CommandItem
+                    value="publish changes"
+                    onSelect={() => {
+                      setLastAction("Published changes");
+                      setOpen(false);
+                    }}
+                  >
+                    <Text>Publish changes</Text>
+                    <MaterialIcons
+                      name="chevron-right"
+                      size={22}
+                      color={chevronColor}
+                      style={styles.commandItemTrailingIcon}
+                    />
+                  </CommandItem>
+                  <CommandItem
+                    value="open previews"
+                    onSelect={() => {
+                      setLastAction("Opened previews");
+                      setOpen(false);
+                    }}
+                  >
+                    <Text>Open previews</Text>
+                    <MaterialIcons
+                      name="chevron-right"
+                      size={22}
+                      color={chevronColor}
+                      style={styles.commandItemTrailingIcon}
+                    />
+                  </CommandItem>
+                </CommandGroup>
+                <CommandEmpty>No matching actions.</CommandEmpty>
+              </CommandList>
+            </Command>
+          </ScrollView>
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button variant="outline">
+                <Text>Cancel</Text>
+              </Button>
+            </SheetClose>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+      <Text variant="muted">
+        {lastAction ? `Last run: ${lastAction}` : "Opens a searchable list in a bottom sheet."}
+      </Text>
     </View>
   );
 }
 
 function CommandExamples() {
+  const [query, setQuery] = useState("");
+  const chevronColor = useThemeColor({}, "icon");
+
   return (
     <>
-      <Block title="Searchable list">
-        <Command>
-          <CommandInput placeholder="Search commands..." />
+      <Block title="Inline search (embedded)">
+        <Command value={query} onValueChange={setQuery}>
+          <CommandInput placeholder="Filter workspace actions…" />
           <CommandList>
             <CommandGroup>
               <CommandItem value="new project">
                 <Text>New project</Text>
+                <MaterialIcons
+                  name="chevron-right"
+                  size={22}
+                  color={chevronColor}
+                  style={styles.commandItemTrailingIcon}
+                />
               </CommandItem>
               <CommandItem value="invite teammate">
                 <Text>Invite teammate</Text>
+                <MaterialIcons
+                  name="chevron-right"
+                  size={22}
+                  color={chevronColor}
+                  style={styles.commandItemTrailingIcon}
+                />
               </CommandItem>
               <CommandItem value="view changelog">
                 <Text>View changelog</Text>
+                <MaterialIcons
+                  name="chevron-right"
+                  size={22}
+                  color={chevronColor}
+                  style={styles.commandItemTrailingIcon}
+                />
               </CommandItem>
             </CommandGroup>
+            <CommandEmpty>No matching actions.</CommandEmpty>
           </CommandList>
-          <CommandEmpty>No matching commands.</CommandEmpty>
         </Command>
       </Block>
     </>
@@ -2006,6 +2283,8 @@ function CommandExamples() {
 
 function DropdownMenuPreview() {
   const [open, setOpen] = useState(false);
+  const [notifications, setNotifications] = useState(true);
+  const [position, setPosition] = useState("bottom");
 
   return (
     <View style={styles.stackMd}>
@@ -2016,7 +2295,7 @@ function DropdownMenuPreview() {
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end" sideOffset={8}>
           <DropdownMenuGroup>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuItem>
@@ -2037,13 +2316,34 @@ function DropdownMenuPreview() {
             <DropdownMenuLabel>Team</DropdownMenuLabel>
             <DropdownMenuItem>
               <Text>Invite users</Text>
-              <DropdownMenuShortcut>{">"}</DropdownMenuShortcut>
+              <DropdownMenuShortcut showOnNative>›</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Text>New Team</Text>
               <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
             </DropdownMenuItem>
           </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel>Preferences</DropdownMenuLabel>
+          <DropdownMenuCheckboxItem
+            checked={notifications}
+            onCheckedChange={setNotifications}
+          >
+            <Text>Push notifications</Text>
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel>Panel dock</DropdownMenuLabel>
+          <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
+            <DropdownMenuRadioItem value="top">
+              <Text>Top</Text>
+            </DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="bottom">
+              <Text>Bottom</Text>
+            </DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="right">
+              <Text>Right</Text>
+            </DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuLabel>Links</DropdownMenuLabel>
@@ -2058,6 +2358,10 @@ function DropdownMenuPreview() {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
+          <DropdownMenuItem variant="destructive">
+            <Text>Remove workspace</Text>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem>
             <Text>Log out</Text>
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
@@ -2065,7 +2369,13 @@ function DropdownMenuPreview() {
         </DropdownMenuContent>
       </DropdownMenu>
       <Text variant="muted">
-        Keep dropdown rows simple and single-line for the closest shadcn feel.
+        Menus respect safe-area insets, cap width to the usable screen, and use
+        larger touch targets. Keyboard shortcuts render on web only; pass{" "}
+        <Text variant="muted" style={{ fontWeight: "600" }}>
+          showOnNative
+        </Text>{" "}
+        on <Text variant="muted" style={{ fontWeight: "600" }}>DropdownMenuShortcut</Text> for
+        trailing chevrons on native.
       </Text>
     </View>
   );
@@ -2073,6 +2383,8 @@ function DropdownMenuPreview() {
 
 function DropdownMenuExamples() {
   const [open, setOpen] = useState(false);
+  const [showStatus, setShowStatus] = useState(false);
+  const [density, setDensity] = useState("comfortable");
 
   return (
     <>
@@ -2084,7 +2396,7 @@ function DropdownMenuExamples() {
             </Button>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent>
+          <DropdownMenuContent align="start">
             <DropdownMenuGroup>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuItem>
@@ -2101,30 +2413,27 @@ function DropdownMenuExamples() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>Team</DropdownMenuLabel>
-              <DropdownMenuItem>
-                <Text>Invite users</Text>
-                <DropdownMenuShortcut>{">"}</DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Text>New Team</Text>
-                <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            <DropdownMenuLabel>View</DropdownMenuLabel>
+            <DropdownMenuCheckboxItem
+              checked={showStatus}
+              onCheckedChange={setShowStatus}
+            >
+              <Text>Show status bar</Text>
+            </DropdownMenuCheckboxItem>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>Links</DropdownMenuLabel>
-              <DropdownMenuItem>
-                <Text>GitHub</Text>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Text>Support</Text>
-              </DropdownMenuItem>
-              <DropdownMenuItem disabled>
-                <Text>API</Text>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            <DropdownMenuLabel>Density</DropdownMenuLabel>
+            <DropdownMenuRadioGroup value={density} onValueChange={setDensity}>
+              <DropdownMenuRadioItem value="compact">
+                <Text>Compact</Text>
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="comfortable">
+                <Text>Comfortable</Text>
+              </DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive" closeOnPress={false}>
+              <Text>Destructive (stays open)</Text>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Text>Log out</Text>
@@ -2132,6 +2441,486 @@ function DropdownMenuExamples() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+      </Block>
+    </>
+  );
+}
+
+type PaginationPageSlot = number | "ellipsis";
+
+function buildPaginationSlots(page: number, total: number): PaginationPageSlot[] {
+  if (total <= 5) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  if (page <= 3) {
+    return [1, 2, 3, "ellipsis", total];
+  }
+  if (page >= total - 2) {
+    return [1, "ellipsis", total - 2, total - 1, total];
+  }
+  return [1, "ellipsis", page - 1, page, page + 1, "ellipsis", total];
+}
+
+function PaginationPreview() {
+  const totalPages = 8;
+  const [page, setPage] = useState(6);
+  const slots = React.useMemo(
+    () => buildPaginationSlots(page, totalPages),
+    [page, totalPages],
+  );
+
+  return (
+    <View style={styles.stackMd}>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              disabled={page <= 1}
+              onPress={() => setPage((p) => Math.max(1, p - 1))}
+            />
+          </PaginationItem>
+          {slots.map((slot, index) => (
+            <PaginationItem
+              key={slot === "ellipsis" ? `ellipsis-${index}` : `page-${slot}`}
+            >
+              {slot === "ellipsis" ? (
+                <PaginationEllipsis />
+              ) : (
+                <PaginationLink
+                  active={page === slot}
+                  onPress={() => setPage(slot)}
+                >
+                  {String(slot)}
+                </PaginationLink>
+              )}
+            </PaginationItem>
+          ))}
+          <PaginationItem>
+            <PaginationNext
+              disabled={page >= totalPages}
+              onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+      <Text variant="muted" style={styles.paginationStatus}>
+        Current page: {page}
+      </Text>
+    </View>
+  );
+}
+
+function PaginationExamples() {
+  const [page, setPage] = useState(2);
+
+  return (
+    <Block title="Compact">
+      <View style={styles.paginationCompactBody}>
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                disabled={page <= 1}
+                onPress={() => setPage((p) => Math.max(1, p - 1))}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink active={page === 1} onPress={() => setPage(1)}>
+                1
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink active={page === 2} onPress={() => setPage(2)}>
+                2
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext
+                disabled={page >= 2}
+                onPress={() => setPage((p) => Math.min(2, p + 1))}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </View>
+    </Block>
+  );
+}
+
+function HoverCardPreview() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <HoverCard open={open} onOpenChange={setOpen}>
+      <HoverCardTrigger asChild>
+        <Button variant="outline">
+          <Text>@watermelon</Text>
+        </Button>
+      </HoverCardTrigger>
+      <HoverCardContent>
+        <HoverCardHeader>
+          <HoverCardTitle>Watermelon UI</HoverCardTitle>
+          <HoverCardDescription>
+            shadcn-style building blocks for React Native and Expo.
+          </HoverCardDescription>
+        </HoverCardHeader>
+      </HoverCardContent>
+    </HoverCard>
+  );
+}
+
+function HoverCardExamples() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Block title="Profile peek" style={open ? styles.overlayBlock : null}>
+      <HoverCard open={open} onOpenChange={setOpen}>
+        <HoverCardTrigger asChild>
+          <Button variant="secondary">
+            <Text>Hover card trigger</Text>
+          </Button>
+        </HoverCardTrigger>
+        <HoverCardContent>
+          <HoverCardHeader>
+            <HoverCardTitle>Team member</HoverCardTitle>
+            <HoverCardDescription>
+              Tap the trigger again to dismiss. On web, use pointer hover in
+              docs.
+            </HoverCardDescription>
+          </HoverCardHeader>
+        </HoverCardContent>
+      </HoverCard>
+    </Block>
+  );
+}
+
+function TablePreview() {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Product</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Owner</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          <TableCell>Registry CLI</TableCell>
+          <TableCell>Shipped</TableCell>
+          <TableCell>Core</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Showcase</TableCell>
+          <TableCell>Beta</TableCell>
+          <TableCell>Mobile</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Platform</TableCell>
+          <TableCell>Live</TableCell>
+          <TableCell>Web</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  );
+}
+
+function TableExamples() {
+  return (
+    <Block title="Invoices">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Invoice</TableHead>
+            <TableHead style={{ textAlign: "right" }}>Amount</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>WM-1024</TableCell>
+            <TableCell style={{ textAlign: "right" }}>$120.00</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>WM-1025</TableCell>
+            <TableCell style={{ textAlign: "right" }}>$48.00</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </Block>
+  );
+}
+
+function validateLoginFields(
+  email: string,
+  password: string,
+): Record<string, string | undefined> {
+  const next: Record<string, string | undefined> = {};
+  const trimmed = email.trim();
+  if (!trimmed) {
+    next.email = "Enter your email.";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+    next.email = "Enter a valid email address.";
+  }
+  if (!password) {
+    next.password = "Enter your password.";
+  } else if (password.length < 8) {
+    next.password = "Use at least 8 characters.";
+  }
+  return next;
+}
+
+function FormPreview() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
+  const [signedIn, setSignedIn] = useState(false);
+
+  const submit = () => {
+    setSignedIn(false);
+    const next = validateLoginFields(email, password);
+    setErrors(next);
+    const hasErr = Object.keys(next).some((k) => Boolean(next[k]));
+    if (!hasErr) {
+      setSignedIn(true);
+    }
+  };
+
+  return (
+    <Form errors={errors} style={styles.stackMd}>
+      <View style={styles.formLoginHeader}>
+        <Text variant="large">Sign in</Text>
+        <Text variant="muted">Use your workspace email and password.</Text>
+      </View>
+      <FormField name="email">
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input
+              size="lg"
+              invalid={Boolean(errors.email)}
+              value={email}
+              onChangeText={(value) => {
+                setEmail(value);
+                setErrors((e) => ({ ...e, email: undefined }));
+              }}
+              placeholder="you@example.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="email"
+              textContentType="emailAddress"
+            />
+          </FormControl>
+          <FormDescription>
+            We&apos;ll never share your email with third parties.
+          </FormDescription>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+      <FormField name="password">
+        <FormItem>
+          <FormLabel>Password</FormLabel>
+          <FormControl>
+            <Input
+              size="lg"
+              invalid={Boolean(errors.password)}
+              value={password}
+              onChangeText={(value) => {
+                setPassword(value);
+                setErrors((e) => ({ ...e, password: undefined }));
+              }}
+              placeholder="••••••••"
+              secureTextEntry
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="password"
+              textContentType="password"
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+      <Button
+        size="lg"
+        style={styles.formLoginSubmit}
+        onPress={submit}
+      >
+        <Text>Sign in</Text>
+      </Button>
+      {signedIn ? (
+        <Text variant="muted" style={styles.formLoginSuccess}>
+          Signed in successfully (demo).
+        </Text>
+      ) : null}
+    </Form>
+  );
+}
+
+function FormExamples() {
+  const [serverErrors, setServerErrors] = useState<
+    Record<string, string | undefined>
+  >({
+    email: "No account uses this email address.",
+    password: "Incorrect password.",
+  });
+  const [emailA, setEmailA] = useState("");
+  const [passwordA, setPasswordA] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [emailB, setEmailB] = useState("");
+  const [passwordB, setPasswordB] = useState("");
+  const [errorsB, setErrorsB] = useState<Record<string, string | undefined>>({});
+  const [signedInB, setSignedInB] = useState(false);
+
+  const submitB = () => {
+    setSignedInB(false);
+    const next = validateLoginFields(emailB, passwordB);
+    setErrorsB(next);
+    const hasErr = Object.keys(next).some((k) => Boolean(next[k]));
+    if (!hasErr) {
+      setSignedInB(true);
+    }
+  };
+
+  return (
+    <>
+      <Block title="Server-style errors">
+        <Form errors={serverErrors} style={styles.stackMd}>
+          <Text variant="muted">
+            Typical failed sign-in: both fields can carry messages from your API.
+            Editing a field clears that field&apos;s error.
+          </Text>
+          <FormField name="email">
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  size="lg"
+                  invalid={Boolean(serverErrors.email)}
+                  value={emailA}
+                  onChangeText={(value) => {
+                    setEmailA(value);
+                    setServerErrors((e) => ({ ...e, email: undefined }));
+                  }}
+                  placeholder="you@example.com"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField name="password">
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  size="lg"
+                  invalid={Boolean(serverErrors.password)}
+                  value={passwordA}
+                  onChangeText={(value) => {
+                    setPasswordA(value);
+                    setServerErrors((e) => ({ ...e, password: undefined }));
+                  }}
+                  placeholder="••••••••"
+                  secureTextEntry
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <Button
+            variant="outline"
+            style={styles.formLoginSubmit}
+            onPress={() =>
+              setServerErrors({
+                email: "No account uses this email address.",
+                password: "Incorrect password.",
+              })
+            }
+          >
+            <Text>Replay demo errors</Text>
+          </Button>
+        </Form>
+      </Block>
+      <Block title="Show password">
+        <Form errors={errorsB} style={styles.stackMd}>
+          <Text variant="muted">
+            Use <Text style={{ fontWeight: "600" }}>rightSlot</Text> on{" "}
+            <Text style={{ fontWeight: "600" }}>Input</Text> for a reveal toggle.
+          </Text>
+          <FormField name="email">
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  size="lg"
+                  invalid={Boolean(errorsB.email)}
+                  value={emailB}
+                  onChangeText={(value) => {
+                    setEmailB(value);
+                    setErrorsB((e) => ({ ...e, email: undefined }));
+                  }}
+                  placeholder="you@example.com"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField name="password">
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  size="lg"
+                  invalid={Boolean(errorsB.password)}
+                  value={passwordB}
+                  onChangeText={(value) => {
+                    setPasswordB(value);
+                    setErrorsB((e) => ({ ...e, password: undefined }));
+                  }}
+                  placeholder="••••••••"
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  rightSlot={
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel={
+                        showPassword ? "Hide password" : "Show password"
+                      }
+                      hitSlop={8}
+                      onPress={() => setShowPassword((s) => !s)}
+                      style={styles.formShowPasswordHit}
+                    >
+                      <Text variant="muted">{showPassword ? "Hide" : "Show"}</Text>
+                    </Pressable>
+                  }
+                />
+              </FormControl>
+              <FormDescription>At least 8 characters.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <Button
+            size="lg"
+            style={styles.formLoginSubmit}
+            onPress={submitB}
+          >
+            <Text>Sign in</Text>
+          </Button>
+          {signedInB ? (
+            <Text variant="muted" style={styles.formLoginSuccess}>
+              Signed in successfully (demo).
+            </Text>
+          ) : null}
+        </Form>
       </Block>
     </>
   );
@@ -2264,6 +3053,27 @@ function SheetExamples() {
   );
 }
 
+const alertToastStyles = StyleSheet.create({
+  modalRoot: {
+    flex: 1,
+  },
+  backdrop: {
+    backgroundColor: "rgba(9, 9, 11, 0.45)",
+  },
+  toastElevated: {
+    borderRadius: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.14,
+    shadowRadius: 18,
+    elevation: 12,
+  },
+  toastElevatedDestructive: {
+    shadowColor: "#7f1d1d",
+    shadowOpacity: 0.22,
+  },
+});
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -2292,6 +3102,49 @@ const styles = StyleSheet.create({
   },
   stackMd: {
     gap: 14,
+  },
+  alertPreviewRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 12,
+    alignItems: "center",
+  },
+  formLoginHeader: {
+    gap: 6,
+    marginBottom: 4,
+    alignSelf: "stretch",
+  },
+  formLoginSubmit: {
+    alignSelf: "stretch",
+    width: "100%",
+  },
+  formLoginSuccess: {
+    textAlign: "center",
+  },
+  formShowPasswordHit: {
+    justifyContent: "center",
+    minHeight: 44,
+    paddingHorizontal: 4,
+  },
+  paginationStatus: {
+    textAlign: "center",
+    alignSelf: "stretch",
+    marginTop: 4,
+  },
+  paginationCompactBody: {
+    alignItems: "center",
+    paddingTop: 4,
+    marginTop: -8,
+  },
+  commandSheetContent: {
+    width: "100%",
+    maxHeight: "78%",
+  },
+  commandSheetScroll: {
+    maxHeight: 320,
+  },
+  commandItemTrailingIcon: {
+    marginLeft: "auto",
   },
   stackLg: {
     gap: 18,
@@ -2448,6 +3301,7 @@ export default function ComponentScreen() {
           <Text variant="large">Preview</Text>
           {resolvedSlug === "accordion" && <AccordionPreview />}
           {resolvedSlug === "alert-dialog" && <AlertDialogPreview />}
+          {resolvedSlug === "alert" && <AlertPreview />}
           {resolvedSlug === "aspect-ratio" && <AspectRatioPreview />}
           {resolvedSlug === "carousel" && <CarouselPreview />}
           {resolvedSlug === "breadcrumb" && <BreadcrumbPreview />}
@@ -2467,12 +3321,16 @@ export default function ComponentScreen() {
           {resolvedSlug === "command" && <CommandPreview />}
           {resolvedSlug === "dialog" && <DialogPreview />}
           {resolvedSlug === "drawer" && <DrawerPreview />}
+          {resolvedSlug === "form" && <FormPreview />}
+          {resolvedSlug === "hover-card" && <HoverCardPreview />}
           {resolvedSlug === "dropdown-menu" && <DropdownMenuPreview />}
           {resolvedSlug === "text" && <TypographyPreview />}
           {resolvedSlug === "card" && <CardPreview />}
           {resolvedSlug === "separator" && <SeparatorPreview />}
+          {resolvedSlug === "scroll-area" && <ScrollAreaPreview />}
           {resolvedSlug === "label" && <LabelPreview />}
           {resolvedSlug === "popover" && <PopoverPreview />}
+          {resolvedSlug === "pagination" && <PaginationPreview />}
           {resolvedSlug === "progress" && <ProgressPreview />}
           {resolvedSlug === "radio-group" && <RadioGroupPreview />}
           {resolvedSlug === "input-group" && <InputGroupPreview />}
@@ -2482,6 +3340,7 @@ export default function ComponentScreen() {
           {resolvedSlug === "slider" && <SliderPreview />}
           {resolvedSlug === "spinner" && <SpinnerPreview />}
           {resolvedSlug === "switch" && <SwitchPreview />}
+          {resolvedSlug === "table" && <TablePreview />}
           {resolvedSlug === "tabs" && <TabsPreview />}
           {resolvedSlug === "otp-input" && <OTPInputPreview />}
           {resolvedSlug === "toggle" && <TogglePreview />}
@@ -2492,6 +3351,7 @@ export default function ComponentScreen() {
         <View style={styles.stackXl}>
           {resolvedSlug === "accordion" && <AccordionExamples />}
           {resolvedSlug === "alert-dialog" && <AlertDialogExamples />}
+          {resolvedSlug === "alert" && <AlertExamples />}
           {resolvedSlug === "aspect-ratio" && <AspectRatioExamples />}
           {resolvedSlug === "carousel" && <CarouselExamples />}
           {resolvedSlug === "breadcrumb" && <BreadcrumbExamples />}
@@ -2511,12 +3371,16 @@ export default function ComponentScreen() {
           {resolvedSlug === "command" && <CommandExamples />}
           {resolvedSlug === "dialog" && <DialogExamples />}
           {resolvedSlug === "drawer" && <DrawerExamples />}
+          {resolvedSlug === "form" && <FormExamples />}
+          {resolvedSlug === "hover-card" && <HoverCardExamples />}
           {resolvedSlug === "dropdown-menu" && <DropdownMenuExamples />}
           {resolvedSlug === "text" && <TypographyExamples />}
           {resolvedSlug === "card" && <CardExamples />}
           {resolvedSlug === "separator" && <SeparatorExamples />}
+          {resolvedSlug === "scroll-area" && <ScrollAreaExamples />}
           {resolvedSlug === "label" && <LabelExamples />}
           {resolvedSlug === "popover" && <PopoverExamples />}
+          {resolvedSlug === "pagination" && <PaginationExamples />}
           {resolvedSlug === "progress" && <ProgressExamples />}
           {resolvedSlug === "radio-group" && <RadioGroupExamples />}
           {resolvedSlug === "input-group" && <InputGroupExamples />}
@@ -2526,6 +3390,7 @@ export default function ComponentScreen() {
           {resolvedSlug === "slider" && <SliderExamples />}
           {resolvedSlug === "spinner" && <SpinnerExamples />}
           {resolvedSlug === "switch" && <SwitchExamples />}
+          {resolvedSlug === "table" && <TableExamples />}
           {resolvedSlug === "tabs" && <TabsExamples />}
           {resolvedSlug === "otp-input" && <OTPInputExamples />}
           {resolvedSlug === "toggle" && <ToggleExamples />}

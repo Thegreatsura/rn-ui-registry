@@ -10,6 +10,7 @@ const CATEGORIES = [
     name: "Alert Dialog",
     icon: "exclamationmark.triangle" as const,
   },
+  { id: "alert", name: "Alert", icon: "bell.badge.fill" as const },
   {
     id: "aspect-ratio",
     name: "Aspect Ratio",
@@ -36,12 +37,23 @@ const CATEGORIES = [
     name: "Dropdown Menu",
     icon: "ellipsis.circle" as const,
   },
+  { id: "form", name: "Form", icon: "doc.plaintext" as const },
+  {
+    id: "hover-card",
+    name: "Hover Card",
+    icon: "rectangle.and.hand.point.up.left" as const,
+  },
   { id: "input-group", name: "Input Group", icon: "link" as const },
   { id: "kbd", name: "Kbd", icon: "command" as const },
   {
     id: "popover",
     name: "Popover",
     icon: "bubble.left.and.bubble.right" as const,
+  },
+  {
+    id: "pagination",
+    name: "Pagination",
+    icon: "chevron.left.chevron.right" as const,
   },
   {
     id: "radio-group",
@@ -60,6 +72,7 @@ const CATEGORIES = [
     icon: "sparkles" as const,
   },
   { id: "tabs", name: "Tabs", icon: "square.split.2x1" as const },
+  { id: "table", name: "Table", icon: "tablecells" as const },
   { id: "toggle", name: "Toggle", icon: "circle.lefthalf.filled" as const },
   {
     id: "toggle-group",
@@ -74,6 +87,7 @@ const CATEGORIES = [
   { id: "avatar", name: "Avatar", icon: "person.circle" as const },
   { id: "card", name: "Card", icon: "rectangle.stack.fill" as const },
   { id: "separator", name: "Separator", icon: "rectangle.split.3x1" as const },
+  { id: "scroll-area", name: "Scroll Area", icon: "arrow.up.and.down" as const },
   { id: "sheet", name: "Sheet", icon: "sidebar.right" as const },
   { id: "skeleton", name: "Skeleton", icon: "square.grid.2x2" as const },
   { id: "switch", name: "Switch", icon: "switch.2" as const },
