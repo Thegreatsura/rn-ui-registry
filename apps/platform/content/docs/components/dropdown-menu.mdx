@@ -25,8 +25,11 @@ import { DropdownMenuInlinePreview } from "@/components/showcase/component-live-
   <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
     {`import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";`}
@@ -35,7 +38,10 @@ import { DropdownMenuInlinePreview } from "@/components/showcase/component-live-
 
 ## Usage
 <DocSection>
-  Dropdown menus work well for overflow actions that should stay anchored to a trigger.
+  Dropdown menus stay anchored to the trigger. On native, content uses
+  `useWindowDimensions` for placement, supports `align` and `sideOffset` on
+  `DropdownMenuContent`, and includes checkbox, radio, and destructive items
+  similar to shadcn.
   <DocSubsection>
     <CompPreview code={`<DropdownMenu><DropdownMenuTrigger asChild>...</DropdownMenuTrigger></DropdownMenu>`}>
       <DropdownMenuInlinePreview />

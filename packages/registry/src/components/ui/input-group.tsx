@@ -4,11 +4,23 @@ import { StyleSheet, View, type ViewProps } from 'react-native';
 import { Button, type ButtonProps } from './button';
 import { Input } from './input';
 import { Text } from './text';
-import { Textarea } from './textarea';
+import { Textarea, type TextareaProps } from './textarea';
 import { useRegistryTheme } from '../../lib/theme';
 
-function InputGroup({ style, ...props }: ViewProps) {
+const EDGE_INSET = 10;
+
+type InputGroupSlotContextValue = { index: number; total: number };
+
+const InputGroupSlotContext = React.createContext<InputGroupSlotContextValue | null>(null);
+
+function useInputGroupSlot() {
+    return React.useContext(InputGroupSlotContext) ?? { index: 0, total: 1 };
+}
+
+function InputGroup({ style, children, ...props }: ViewProps) {
     const theme = useRegistryTheme();
+    const items = React.Children.toArray(children).filter(Boolean);
+    const total = items.length;
 
     return (
         <View
@@ -18,12 +30,24 @@ function InputGroup({ style, ...props }: ViewProps) {
                 style,
             ]}
             {...props}
-        />
+        >
+            {items.map((child, index) => (
+                <InputGroupSlotContext.Provider key={index} value={{ index, total }}>
+                    {child}
+                </InputGroupSlotContext.Provider>
+            ))}
+        </View>
     );
 }
 
 function InputGroupAddon({ style, ...props }: ViewProps) {
-    return <View style={[styles.addon, style]} {...props} />;
+    const { index, total } = useInputGroupSlot();
+    const addonInset = {
+        paddingLeft: index === 0 ? EDGE_INSET : 0,
+        paddingRight: index === total - 1 ? EDGE_INSET : 0,
+    };
+
+    return <View style={[styles.addon, addonInset, style]} {...props} />;
 }
 
 function InputGroupButton(props: ButtonProps) {
@@ -35,14 +59,33 @@ function InputGroupText(props: React.ComponentProps<typeof Text>) {
 }
 
 function InputGroupInput(props: React.ComponentProps<typeof Input>) {
-    return <Input variant="ghost" {...props} />;
+    const { index, total } = useInputGroupSlot();
+    const controlInset = {
+        paddingLeft: 0,
+        paddingRight: index === total - 1 ? EDGE_INSET : 0,
+    };
+
+    return (
+        <View style={[styles.controlWrap, controlInset]}>
+            <Input variant="ghost" {...props} />
+        </View>
+    );
 }
 
-function InputGroupTextarea({ containerStyle, style, ...props }: React.ComponentProps<typeof Textarea>) {
+function InputGroupTextarea({ containerStyle, style, ...props }: TextareaProps) {
+    const { index, total } = useInputGroupSlot();
+
     return (
         <Textarea
             variant="ghost"
-            containerStyle={[styles.controlWrap, containerStyle]}
+            containerStyle={[
+                styles.controlWrap,
+                {
+                    paddingLeft: 0,
+                    paddingRight: index === total - 1 ? EDGE_INSET : 0,
+                },
+                containerStyle,
+            ]}
             style={[styles.textarea, style]}
             {...props}
         />
@@ -58,7 +101,6 @@ const styles = StyleSheet.create({
         gap: 8,
         borderRadius: 8,
         borderWidth: 1,
-        paddingHorizontal: 10,
     },
     addon: {
         flexDirection: 'row',
@@ -67,9 +109,6 @@ const styles = StyleSheet.create({
     },
     controlWrap: {
         flex: 1,
-    },
-    control: {
-        paddingHorizontal: 0,
     },
     textarea: {
         minHeight: 96,

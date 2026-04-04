@@ -1,0 +1,46 @@
+---
+title: Scroll Area
+description: Bordered, max-height scroll region for long lists and panels—aligned with shadcn scroll-area ergonomics.
+kind: component
+category: Components
+image: /logo.png
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { ScrollAreaInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { ScrollArea } from "@/components/ui/scroll-area";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Set `maxHeight` to cap the viewport; content scrolls inside the chrome.
+
+### Basic
+
+<DocSubsection>
+  <CompPreview
+    code={`<ScrollArea maxHeight={200}>
+  <Text>Line 1</Text>
+  <Text>Line 2</Text>
+</ScrollArea>`}
+  >
+    <ScrollAreaInlinePreview />
+  </CompPreview>
+</DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  `ScrollArea` wraps a vertical `ScrollView` on native and a scrollable div
+  stack on the platform preview. Pass standard scroll props through on native.
+</DocSection>

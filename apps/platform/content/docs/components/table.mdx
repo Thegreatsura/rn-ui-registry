@@ -1,0 +1,64 @@
+---
+title: Table
+description: Scrollable data grid with header, body, and cell primitives—shadcn-style structure for React Native rows.
+kind: component
+category: Components
+image: /logo.png
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { TableInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Native wraps the grid in a horizontal `ScrollView` when columns overflow.
+  Each row is a flex row; use `TableHead` / `TableCell` for text cells.
+
+### Basic
+
+<DocSubsection>
+  <CompPreview
+    code={`<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Status</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Alpha</TableCell>
+      <TableCell>Live</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>`}
+  >
+    <TableInlinePreview />
+  </CompPreview>
+</DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  Optional `TableFooter` is available on native for summary rows. On web, the
+  table uses semantic `table`, `thead`, and `tbody` elements.
+</DocSection>

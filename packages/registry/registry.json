@@ -172,6 +172,28 @@
                 }
             }
         },
+        "alert": {
+            "name": "alert",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/alert.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "text"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
         "aspect-ratio": {
             "name": "aspect-ratio",
             "type": "components:ui",
@@ -282,6 +304,26 @@
             "files": [
                 {
                     "path": "components/ui/separator.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "scroll-area": {
+            "name": "scroll-area",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/scroll-area.tsx",
                     "content": "",
                     "type": "registry:ui"
                 }
@@ -701,6 +743,95 @@
             ],
             "dependencies": [],
             "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "form": {
+            "name": "form",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/form.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "label",
+                "text"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "hover-card": {
+            "name": "hover-card",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/hover-card.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "text"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "pagination": {
+            "name": "pagination",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/pagination.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "text"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "table": {
+            "name": "table",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/table.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "text"
+            ],
             "tailwind": {
                 "config": {
                     "theme": {

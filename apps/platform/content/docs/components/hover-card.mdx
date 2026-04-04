@@ -1,0 +1,61 @@
+---
+title: Hover Card
+description: Rich preview card anchored to a trigger—Radix hover on web, tap toggle on native for parity with the showcase.
+kind: component
+category: Components
+image: /logo.png
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { HoverCardInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardDescription,
+  HoverCardHeader,
+  HoverCardTitle,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  On native, tap the trigger to open and tap again to close. On the platform
+  preview, pointer hover uses Radix Hover Card.
+
+### Basic
+
+<DocSubsection>
+  <CompPreview
+    code={`<HoverCard>
+  <HoverCardTrigger asChild>
+    <Button variant="outline">@watermelon</Button>
+  </HoverCardTrigger>
+  <HoverCardContent>
+    <HoverCardHeader>
+      <HoverCardTitle>Title</HoverCardTitle>
+      <HoverCardDescription>Supporting copy.</HoverCardDescription>
+    </HoverCardHeader>
+  </HoverCardContent>
+</HoverCard>`}
+  >
+    <HoverCardInlinePreview />
+  </CompPreview>
+</DocSubsection>
+</DocSection>
+
+## API Reference
+
+<DocSection>
+  `HoverCardContent` supports `align` and `sideOffset` on web (Radix). Native
+  content is absolutely positioned under the trigger, similar to `Popover`.
+</DocSection>
