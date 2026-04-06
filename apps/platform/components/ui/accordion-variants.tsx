@@ -44,7 +44,25 @@ export const ACCORDION_VARIANT_FAQ_DEFAULT: AccordionVariantFaqItem[] = [
   },
 ]
 
-type VariantBaseProps = React.ComponentProps<typeof Accordion> & {
+type AccordionRootProps = React.ComponentProps<typeof Accordion>
+
+/** Radix Accordion uses a discriminated union on `type`; this satisfies the checker for our defaults. */
+function accordionVariantRootProps(
+  type: "single" | "multiple",
+  defaultValue: string | string[],
+  rest: Record<string, unknown>,
+): AccordionRootProps {
+  return {
+    type,
+    defaultValue,
+    collapsible: true,
+    ...rest,
+  } as AccordionRootProps
+}
+
+type VariantBaseProps = Partial<
+  Omit<React.ComponentProps<typeof Accordion>, "children">
+> & {
   items?: AccordionVariantFaqItem[]
 }
 
@@ -77,7 +95,9 @@ export function AccordionVariantList({
 }: VariantBaseProps) {
   const dv = resolveDefaultValue(type, items, defaultValue)
   return (
-    <Accordion type={type} defaultValue={dv} collapsible {...rest}>
+    <Accordion
+      {...accordionVariantRootProps(type, dv, { ...rest } as Record<string, unknown>)}
+    >
       {items.map((item) => (
         <AccordionItem key={item.value} value={item.value} className="border-b px-1">
           <AccordionTrigger>{item.title}</AccordionTrigger>
@@ -99,7 +119,9 @@ export function AccordionVariantCards({
 }: VariantBaseProps) {
   const dv = resolveDefaultValue(type, items, defaultValue)
   return (
-    <Accordion type={type} defaultValue={dv} collapsible {...rest}>
+    <Accordion
+      {...accordionVariantRootProps(type, dv, { ...rest } as Record<string, unknown>)}
+    >
       {items.map((item) => (
         <AccordionItem
           key={item.value}
@@ -126,7 +148,9 @@ export function AccordionVariantGrouped({
   const dv = resolveDefaultValue(type, items, defaultValue)
   return (
     <div className="border-border bg-background overflow-hidden rounded-xl border">
-      <Accordion type={type} defaultValue={dv} collapsible {...rest}>
+      <Accordion
+        {...accordionVariantRootProps(type, dv, { ...rest } as Record<string, unknown>)}
+      >
         {items.map((item, index) => (
           <AccordionItem
             key={item.value}
@@ -156,7 +180,9 @@ export function AccordionVariantPlusMinus({
 }: VariantBaseProps) {
   const dv = resolveDefaultValue(type, items, defaultValue)
   return (
-    <Accordion type={type} defaultValue={dv} collapsible {...rest}>
+    <Accordion
+      {...accordionVariantRootProps(type, dv, { ...rest } as Record<string, unknown>)}
+    >
       {items.map((item) => (
         <AccordionItem key={item.value} value={item.value} className="border-b px-1">
           <AccordionTrigger asChild>
@@ -187,7 +213,9 @@ export function AccordionVariantAccent({
 }: VariantBaseProps) {
   const dv = resolveDefaultValue(type, items, defaultValue)
   return (
-    <Accordion type={type} defaultValue={dv} collapsible {...rest}>
+    <Accordion
+      {...accordionVariantRootProps(type, dv, { ...rest } as Record<string, unknown>)}
+    >
       {items.map((item) => (
         <AccordionItem key={item.value} value={item.value} className="border-b px-1">
           <AccordionTrigger asChild>
@@ -223,7 +251,9 @@ export function AccordionVariantLeadIcons({
 }: VariantBaseProps) {
   const dv = resolveDefaultValue(type, items, defaultValue)
   return (
-    <Accordion type={type} defaultValue={dv} collapsible {...rest}>
+    <Accordion
+      {...accordionVariantRootProps(type, dv, { ...rest } as Record<string, unknown>)}
+    >
       {items.map((item, index) => {
         const Icon = LEAD_ICONS[index % LEAD_ICONS.length]
         return (
@@ -280,7 +310,9 @@ export const ACCORDION_VARIANT_SUBTITLED_DEFAULT: AccordionVariantSubtitledItem[
   },
 ]
 
-type SubtitledProps = React.ComponentProps<typeof Accordion> & {
+type SubtitledProps = Partial<
+  Omit<React.ComponentProps<typeof Accordion>, "children">
+> & {
   items?: AccordionVariantSubtitledItem[]
 }
 
@@ -294,7 +326,9 @@ export function AccordionVariantSubtitled({
   const dv = resolveDefaultValue(type, items, defaultValue)
   return (
     <div className="border-border bg-background overflow-hidden rounded-xl border">
-      <Accordion type={type} defaultValue={dv} collapsible {...rest}>
+      <Accordion
+        {...accordionVariantRootProps(type, dv, { ...rest } as Record<string, unknown>)}
+      >
         {items.map((item, index) => {
           const Icon = LEAD_ICONS[index % LEAD_ICONS.length]
           return (
@@ -363,7 +397,9 @@ export const ACCORDION_VARIANT_PROFILE_DEFAULT: AccordionVariantProfileItem[] = 
   },
 ]
 
-type ProfileProps = React.ComponentProps<typeof Accordion> & {
+type ProfileProps = Partial<
+  Omit<React.ComponentProps<typeof Accordion>, "children">
+> & {
   items?: AccordionVariantProfileItem[]
 }
 
@@ -376,7 +412,9 @@ export function AccordionVariantProfile({
 }: ProfileProps) {
   const dv = resolveDefaultValue(type, items, defaultValue)
   return (
-    <Accordion type={type} defaultValue={dv} collapsible {...rest}>
+    <Accordion
+      {...accordionVariantRootProps(type, dv, { ...rest } as Record<string, unknown>)}
+    >
       {items.map((item) => {
         const initials = item.name
           .split(" ")
