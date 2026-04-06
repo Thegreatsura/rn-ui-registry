@@ -150,6 +150,41 @@ const COMPONENTS = [
     category: "Layout",
     badgeVariant: "secondary" as const,
   },
+  {
+    slug: "list",
+    title: "List",
+    description: "Settings-style rows with leading, title, description, and trailing slots.",
+    category: "Layout",
+    badgeVariant: "default" as const,
+  },
+  {
+    slug: "segmented-control",
+    title: "Segmented Control",
+    description: "Single-choice segments with large touch targets for filters and modes.",
+    category: "Forms",
+    badgeVariant: "outline" as const,
+  },
+  {
+    slug: "fab",
+    title: "FAB",
+    description: "Floating action button with elevation for one primary screen action.",
+    category: "Buttons",
+    badgeVariant: "default" as const,
+  },
+  {
+    slug: "search-bar",
+    title: "Search Bar",
+    description: "Full-width search field with optional clear and accessory slots.",
+    category: "Forms",
+    badgeVariant: "outline" as const,
+  },
+  {
+    slug: "chip",
+    title: "Chip",
+    description: "Selectable or dismissible pill for filters, tags, and compact choices.",
+    category: "Feedback",
+    badgeVariant: "secondary" as const,
+  },
 ];
 
 export default function ExploreScreen() {

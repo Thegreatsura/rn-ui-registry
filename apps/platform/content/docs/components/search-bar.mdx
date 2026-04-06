@@ -1,0 +1,36 @@
+---
+title: Search Bar
+description: Full-width search field with optional leading slot, clear affordance, and room for trailing accessories.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add search-bar
+qrValue: showcase://components/search-bar
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/search-bar.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { SearchBar } from "@/components/ui/search-bar";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Control text with `value` / `onChangeText`. Pass `onClear` to show a clear control when the query is non-empty. Use `leftSlot` for a search icon and `rightSlot` when you need an extra action when there is nothing to clear.
+  <DocSubsection>
+    <ApiTable rows={[{ prop: "onClear", type: "() => void", default: "-", description: "When set, shows a clear affordance when value is non-empty." }, { prop: "leftSlot", type: "ReactNode", default: "-", description: "Leading accessory (e.g. search icon)." }, { prop: "rightSlot", type: "ReactNode", default: "-", description: "Trailing accessory when clear is not shown." }]} />
+  </DocSubsection>
+</DocSection>

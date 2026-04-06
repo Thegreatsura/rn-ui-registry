@@ -204,7 +204,11 @@ const styles = StyleSheet.create({
     },
 });
 
-export { Accordion, AccordionContent, AccordionItem, AccordionTrigger };
+function useAccordionItemOpen(): boolean {
+    return useAccordionItemContext().open;
+}
+
+export { Accordion, AccordionContent, AccordionItem, AccordionTrigger, useAccordionItemOpen };
 export type {
     AccordionContentProps,
     AccordionItemProps,

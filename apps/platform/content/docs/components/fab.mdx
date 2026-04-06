@@ -1,0 +1,40 @@
+---
+title: FAB
+description: Floating action button with elevation, plus an optional speed-dial FabMenu for multiple labeled actions.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add fab
+qrValue: showcase://components/fab
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/fab.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { Fab, FabMenu, type FabMenuAction } from "@/components/ui/fab";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Provide an icon (or glyph) as `children` and set `accessibilityLabel`. Sizes include `sm`, `default`, and `lg`. Use `variant="secondary"` for a softer surface.
+  <DocSubsection>
+    <ApiTable rows={[{ prop: "size", type: "\"sm\" | \"default\" | \"lg\"", default: "\"default\"", description: "Diameter of the FAB." }, { prop: "variant", type: "\"default\" | \"secondary\"", default: "\"default\"", description: "Primary vs secondary fill." }]} />
+  </DocSubsection>
+  For a speed dial, use **`FabMenu`**: pass `actions` (`id`, `label`, optional `onPress` and `icon`) and optionally **`renderMain`** so the main button switches between open and closed icons. The menu uses an in-area dimmed backdrop; give the preview container enough height (about `220px`) so actions stack above the main FAB.
+  <DocSubsection>
+    <ApiTable rows={[{ prop: "actions", type: "FabMenuAction[]", default: "—", description: "Stacked secondary actions with labels." }, { prop: "renderMain", type: "(open: boolean) => ReactNode", default: "+ / ×", description: "Main FAB content for open vs closed." }, { prop: "accessibilityLabel", type: "string", default: "\"Open actions menu\"", description: "Main FAB when closed." }]} />
+  </DocSubsection>
+</DocSection>

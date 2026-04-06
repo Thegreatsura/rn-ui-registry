@@ -1,7 +1,7 @@
 import { useHeaderHeight } from "@react-navigation/elements";
 import { Stack, useLocalSearchParams } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Modal,
   Pressable,
@@ -15,12 +15,24 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SpotlightButton } from "@/components/animated/spotlight-button";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useRegistryTheme } from "@/components/ui/theme";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  AccordionVariantAccent,
+  AccordionVariantCards,
+  AccordionVariantGrouped,
+  AccordionVariantLeadIcons,
+  AccordionVariantList,
+  AccordionVariantNested,
+  AccordionVariantPlusMinus,
+  AccordionVariantProfile,
+  AccordionVariantSubtitled,
+} from "@/components/ui/accordion-variants";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AlertDialog,
@@ -72,6 +84,19 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { Chip } from "@/components/ui/chip";
+import { Fab, FabMenu, type FabMenuAction } from "@/components/ui/fab";
+import {
+  List,
+  ListItem,
+  ListItemContent,
+  ListItemDescription,
+  ListItemIcon,
+  ListItemTitle,
+  ListItemTrailing,
+} from "@/components/ui/list";
+import { SearchBar } from "@/components/ui/search-bar";
+import { SegmentedControl } from "@/components/ui/segmented-control";
 import {
   Dialog,
   DialogClose,
@@ -190,6 +215,7 @@ import {
 
 const COMPONENT_META = {
   accordion: { title: "Accordion" },
+  "accordion-variants": { title: "Accordion variants" },
   alert: { title: "Alert" },
   "alert-dialog": { title: "Alert Dialog" },
   "aspect-ratio": { title: "Aspect Ratio" },
@@ -199,11 +225,13 @@ const COMPONENT_META = {
   carousel: { title: "Carousel" },
   button: { title: "Button" },
   checkbox: { title: "Checkbox" },
+  chip: { title: "Chip" },
   collapsible: { title: "Collapsible" },
   command: { title: "Command" },
   dialog: { title: "Dialog" },
   drawer: { title: "Drawer" },
   "dropdown-menu": { title: "Dropdown Menu" },
+  fab: { title: "FAB" },
   form: { title: "Form" },
   "hover-card": { title: "Hover Card" },
   "input-group": { title: "Input Group" },
@@ -212,13 +240,16 @@ const COMPONENT_META = {
   card: { title: "Card" },
   input: { title: "Input" },
   label: { title: "Label" },
+  list: { title: "List" },
   "otp-input": { title: "OTP Input" },
   pagination: { title: "Pagination" },
   popover: { title: "Popover" },
   progress: { title: "Progress" },
   "radio-group": { title: "Radio Group" },
   separator: { title: "Separator" },
+  "segmented-control": { title: "Segmented Control" },
   "scroll-area": { title: "Scroll Area" },
+  "search-bar": { title: "Search Bar" },
   sheet: { title: "Sheet" },
   skeleton: { title: "Skeleton" },
   slider: { title: "Slider" },
@@ -1607,6 +1638,48 @@ function AccordionExamples() {
   );
 }
 
+function AccordionVariantsPreview() {
+  return (
+    <View style={styles.stackMd}>
+      <AccordionVariantList />
+    </View>
+  );
+}
+
+function AccordionVariantsExamples() {
+  return (
+    <>
+      <Block title="Minimal list">
+        <AccordionVariantList />
+      </Block>
+      <Block title="Separate cards">
+        <AccordionVariantCards />
+      </Block>
+      <Block title="Grouped box">
+        <AccordionVariantGrouped />
+      </Block>
+      <Block title="Plus / minus">
+        <AccordionVariantPlusMinus />
+      </Block>
+      <Block title="Accent highlight">
+        <AccordionVariantAccent />
+      </Block>
+      <Block title="Leading icons">
+        <AccordionVariantLeadIcons />
+      </Block>
+      <Block title="Subtitled + icon ring">
+        <AccordionVariantSubtitled />
+      </Block>
+      <Block title="Profile rows">
+        <AccordionVariantProfile />
+      </Block>
+      <Block title="Nested sections">
+        <AccordionVariantNested />
+      </Block>
+    </>
+  );
+}
+
 function AlertDialogPreview() {
   const [open, setOpen] = useState(false);
 
@@ -2276,6 +2349,266 @@ function CommandExamples() {
             <CommandEmpty>No matching actions.</CommandEmpty>
           </CommandList>
         </Command>
+      </Block>
+    </>
+  );
+}
+
+function ListPreview() {
+  const iconColor = useThemeColor({}, "icon");
+
+  return (
+    <View style={styles.stackMd}>
+      <List>
+        <ListItem>
+          <ListItemIcon>
+            <MaterialIcons name="notifications-none" size={24} color={iconColor} />
+          </ListItemIcon>
+          <ListItemContent>
+            <ListItemTitle>Notifications</ListItemTitle>
+            <ListItemDescription>Push, email, and in-app alerts</ListItemDescription>
+          </ListItemContent>
+          <ListItemTrailing>
+            <MaterialIcons name="chevron-right" size={22} color={iconColor} />
+          </ListItemTrailing>
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            <MaterialIcons name="lock-outline" size={24} color={iconColor} />
+          </ListItemIcon>
+          <ListItemContent>
+            <ListItemTitle>Privacy</ListItemTitle>
+            <ListItemDescription>Who can see your activity</ListItemDescription>
+          </ListItemContent>
+          <ListItemTrailing>
+            <MaterialIcons name="chevron-right" size={22} color={iconColor} />
+          </ListItemTrailing>
+        </ListItem>
+      </List>
+    </View>
+  );
+}
+
+function ListExamples() {
+  const iconColor = useThemeColor({}, "icon");
+
+  return (
+    <>
+      <Block title="Static row (non-pressable)">
+        <List>
+          <ListItem pressable={false}>
+            <ListItemContent>
+              <ListItemTitle>Read-only detail</ListItemTitle>
+              <ListItemDescription>Uses the same layout without a press target.</ListItemDescription>
+            </ListItemContent>
+          </ListItem>
+        </List>
+      </Block>
+      <Block title="Compact trailing">
+        <List>
+          <ListItem>
+            <ListItemContent>
+              <ListItemTitle>Appearance</ListItemTitle>
+            </ListItemContent>
+            <ListItemTrailing>
+              <View style={styles.listTrailingRow}>
+                <Text variant="muted">System</Text>
+                <MaterialIcons name="chevron-right" size={22} color={iconColor} />
+              </View>
+            </ListItemTrailing>
+          </ListItem>
+        </List>
+      </Block>
+    </>
+  );
+}
+
+function SegmentedControlPreview() {
+  const [mode, setMode] = useState("list");
+
+  return (
+    <View style={styles.stackMd}>
+      <SegmentedControl
+        options={[
+          { value: "list", label: "List" },
+          { value: "map", label: "Map" },
+        ]}
+        value={mode}
+        onValueChange={setMode}
+      />
+      <Text variant="muted">Selected: {mode}</Text>
+    </View>
+  );
+}
+
+function SegmentedControlExamples() {
+  const [tab, setTab] = useState("all");
+
+  return (
+    <>
+      <Block title="Three segments">
+        <SegmentedControl
+          options={[
+            { value: "all", label: "All" },
+            { value: "unread", label: "Unread" },
+            { value: "mentions", label: "Mentions" },
+          ]}
+          value={tab}
+          onValueChange={setTab}
+        />
+        <Text variant="muted" style={{ marginTop: 8 }}>
+          Inbox filter: {tab}
+        </Text>
+      </Block>
+    </>
+  );
+}
+
+function FabPreview() {
+  const theme = useRegistryTheme();
+
+  const fabMenuActions = useMemo<FabMenuAction[]>(
+    () => [
+      {
+        id: "msg",
+        label: "New message",
+        onPress: () => {},
+        icon: (
+          <MaterialIcons name="message" size={22} color={theme.secondaryForeground} />
+        ),
+      },
+      {
+        id: "photo",
+        label: "New photo",
+        onPress: () => {},
+        icon: (
+          <MaterialIcons name="add-a-photo" size={22} color={theme.secondaryForeground} />
+        ),
+      },
+      {
+        id: "task",
+        label: "New task",
+        onPress: () => {},
+        icon: (
+          <MaterialIcons name="assignment" size={22} color={theme.secondaryForeground} />
+        ),
+      },
+    ],
+    [theme.secondaryForeground],
+  );
+
+  return (
+    <View style={styles.fabPreviewWrap}>
+      <FabMenu
+        actions={fabMenuActions}
+        accessibilityLabel="Create"
+        renderMain={(open) =>
+          open ? (
+            <MaterialIcons name="close" size={28} color={theme.primaryForeground} />
+          ) : (
+            <MaterialIcons name="add" size={28} color={theme.primaryForeground} />
+          )
+        }
+      />
+    </View>
+  );
+}
+
+function FabExamples() {
+  const theme = useRegistryTheme();
+
+  return (
+    <>
+      <Block title="Secondary surface">
+        <View style={styles.fabRow}>
+          <Fab variant="secondary" size="sm" accessibilityLabel="Add">
+            <MaterialIcons name="add" size={24} color={theme.secondaryForeground} />
+          </Fab>
+          <Fab variant="secondary" size="default" accessibilityLabel="Edit">
+            <MaterialIcons name="edit" size={24} color={theme.secondaryForeground} />
+          </Fab>
+          <Fab variant="secondary" size="lg" accessibilityLabel="Share">
+            <MaterialIcons name="share" size={26} color={theme.secondaryForeground} />
+          </Fab>
+        </View>
+      </Block>
+    </>
+  );
+}
+
+function SearchBarPreview() {
+  const [query, setQuery] = useState("");
+  const iconColor = useThemeColor({}, "icon");
+
+  return (
+    <View style={styles.stackMd}>
+      <SearchBar
+        value={query}
+        onChangeText={setQuery}
+        onClear={() => setQuery("")}
+        placeholder="Search places, people…"
+        leftSlot={<MaterialIcons name="search" size={22} color={iconColor} />}
+      />
+      <Text variant="muted">{query ? `Query: ${query}` : "Type to see clear affordance."}</Text>
+    </View>
+  );
+}
+
+function SearchBarExamples() {
+  const [q, setQ] = useState("wifi");
+  const iconColor = useThemeColor({}, "icon");
+
+  return (
+    <>
+      <Block title="Accessory slot">
+        <SearchBar
+          value={q}
+          onChangeText={setQ}
+          onClear={() => setQ("")}
+          leftSlot={<MaterialIcons name="search" size={22} color={iconColor} />}
+          rightSlot={
+            <Text variant="muted" style={{ fontSize: 13 }}>
+              Filter
+            </Text>
+          }
+        />
+      </Block>
+    </>
+  );
+}
+
+function ChipPreview() {
+  const [active, setActive] = useState(true);
+
+  return (
+    <View style={styles.stackMd}>
+      <View style={styles.chipRow}>
+        <Chip selected={active} onPress={() => setActive((v) => !v)}>
+          {active ? "Enabled" : "Disabled"}
+        </Chip>
+        <Chip variant="outline">Outline</Chip>
+        <Chip onRemove={() => {}}>Removable</Chip>
+      </View>
+    </View>
+  );
+}
+
+function ChipExamples() {
+  const [filters, setFilters] = useState<string[]>(["Design", "Mobile", "RN"]);
+
+  return (
+    <>
+      <Block title="Filter row">
+        <View style={styles.chipRow}>
+          {filters.map((f) => (
+            <Chip key={f} selected onRemove={() => setFilters((x) => x.filter((i) => i !== f))}>
+              {f}
+            </Chip>
+          ))}
+        </View>
+        <Text variant="muted" style={{ marginTop: 8 }}>
+          Tap × to remove (min 44pt touch on remove).
+        </Text>
       </Block>
     </>
   );
@@ -3146,6 +3479,28 @@ const styles = StyleSheet.create({
   commandItemTrailingIcon: {
     marginLeft: "auto",
   },
+  fabPreviewWrap: {
+    alignItems: "flex-end",
+    minHeight: 220,
+    justifyContent: "flex-end",
+  },
+  fabRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 16,
+    alignItems: "center",
+  },
+  chipRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    alignItems: "center",
+  },
+  listTrailingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
   stackLg: {
     gap: 18,
   },
@@ -3300,6 +3655,7 @@ export default function ComponentScreen() {
         <View style={styles.stackLg}>
           <Text variant="large">Preview</Text>
           {resolvedSlug === "accordion" && <AccordionPreview />}
+          {resolvedSlug === "accordion-variants" && <AccordionVariantsPreview />}
           {resolvedSlug === "alert-dialog" && <AlertDialogPreview />}
           {resolvedSlug === "alert" && <AlertPreview />}
           {resolvedSlug === "aspect-ratio" && <AspectRatioPreview />}
@@ -3317,10 +3673,12 @@ export default function ComponentScreen() {
           {resolvedSlug === "badge" && <BadgePreview />}
           {resolvedSlug === "avatar" && <AvatarPreview />}
           {resolvedSlug === "checkbox" && <CheckboxPreview />}
+          {resolvedSlug === "chip" && <ChipPreview />}
           {resolvedSlug === "collapsible" && <CollapsiblePreview />}
           {resolvedSlug === "command" && <CommandPreview />}
           {resolvedSlug === "dialog" && <DialogPreview />}
           {resolvedSlug === "drawer" && <DrawerPreview />}
+          {resolvedSlug === "fab" && <FabPreview />}
           {resolvedSlug === "form" && <FormPreview />}
           {resolvedSlug === "hover-card" && <HoverCardPreview />}
           {resolvedSlug === "dropdown-menu" && <DropdownMenuPreview />}
@@ -3328,7 +3686,10 @@ export default function ComponentScreen() {
           {resolvedSlug === "card" && <CardPreview />}
           {resolvedSlug === "separator" && <SeparatorPreview />}
           {resolvedSlug === "scroll-area" && <ScrollAreaPreview />}
+          {resolvedSlug === "search-bar" && <SearchBarPreview />}
+          {resolvedSlug === "segmented-control" && <SegmentedControlPreview />}
           {resolvedSlug === "label" && <LabelPreview />}
+          {resolvedSlug === "list" && <ListPreview />}
           {resolvedSlug === "popover" && <PopoverPreview />}
           {resolvedSlug === "pagination" && <PaginationPreview />}
           {resolvedSlug === "progress" && <ProgressPreview />}
@@ -3350,6 +3711,7 @@ export default function ComponentScreen() {
 
         <View style={styles.stackXl}>
           {resolvedSlug === "accordion" && <AccordionExamples />}
+          {resolvedSlug === "accordion-variants" && <AccordionVariantsExamples />}
           {resolvedSlug === "alert-dialog" && <AlertDialogExamples />}
           {resolvedSlug === "alert" && <AlertExamples />}
           {resolvedSlug === "aspect-ratio" && <AspectRatioExamples />}
@@ -3367,10 +3729,12 @@ export default function ComponentScreen() {
           {resolvedSlug === "badge" && <BadgeExamples />}
           {resolvedSlug === "avatar" && <AvatarExamples />}
           {resolvedSlug === "checkbox" && <CheckboxExamples />}
+          {resolvedSlug === "chip" && <ChipExamples />}
           {resolvedSlug === "collapsible" && <CollapsibleExamples />}
           {resolvedSlug === "command" && <CommandExamples />}
           {resolvedSlug === "dialog" && <DialogExamples />}
           {resolvedSlug === "drawer" && <DrawerExamples />}
+          {resolvedSlug === "fab" && <FabExamples />}
           {resolvedSlug === "form" && <FormExamples />}
           {resolvedSlug === "hover-card" && <HoverCardExamples />}
           {resolvedSlug === "dropdown-menu" && <DropdownMenuExamples />}
@@ -3378,7 +3742,10 @@ export default function ComponentScreen() {
           {resolvedSlug === "card" && <CardExamples />}
           {resolvedSlug === "separator" && <SeparatorExamples />}
           {resolvedSlug === "scroll-area" && <ScrollAreaExamples />}
+          {resolvedSlug === "search-bar" && <SearchBarExamples />}
+          {resolvedSlug === "segmented-control" && <SegmentedControlExamples />}
           {resolvedSlug === "label" && <LabelExamples />}
+          {resolvedSlug === "list" && <ListExamples />}
           {resolvedSlug === "popover" && <PopoverExamples />}
           {resolvedSlug === "pagination" && <PaginationExamples />}
           {resolvedSlug === "progress" && <ProgressExamples />}

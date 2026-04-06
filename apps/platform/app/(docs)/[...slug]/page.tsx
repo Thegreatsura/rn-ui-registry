@@ -21,6 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { getComponentLinks, getComponentPager } from "@/lib/docs-navigation";
+import { normalizeDocSlug } from "@/lib/normalize-doc-slug";
 import { docsSource } from "@/lib/docs-source";
 import { getRegistryCatalog } from "@/lib/registry-catalog";
 import { customMDXComponents } from "@/mdx-components";
@@ -124,7 +125,8 @@ export default async function DocsPage({
     );
   }
 
-  const componentSlug = page.slugs.at(-1);
+  const componentSlug = normalizeDocSlug(page.slugs.at(-1) ?? "");
+
   const catalog = await getRegistryCatalog();
   const componentDocs = getComponentLinks();
   const component = catalog
@@ -183,10 +185,10 @@ export default async function DocsPage({
 
         <section className="mb-6 min-w-0 space-y-4">
           {qrValue ? (
-            <div className="flex justify-start sm:justify-end">
+            <div className="flex flex-col items-start gap-1 sm:items-end">
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" type="button">
                     Scan to preview
                   </Button>
                 </PopoverTrigger>
@@ -198,6 +200,10 @@ export default async function DocsPage({
                   />
                 </PopoverContent>
               </Popover>
+              <p className="text-muted-foreground max-w-xs text-xs leading-5 sm:text-right">
+                Tap to show a QR code for the Expo showcase deep link. The web
+                preview below runs in the browser.
+              </p>
             </div>
           ) : null}
           <ComponentPreview

@@ -36,13 +36,24 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChevronRight } from "lucide-react";
+import { Chip } from "@/components/ui/chip";
+import { FabMenu } from "@/components/ui/fab";
+import {
+  ChevronRight,
+  ImagePlus,
+  ListTodo,
+  MessageSquare,
+  Plus,
+  Search,
+  X,
+} from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AccordionVariantGrouped } from "@/components/ui/accordion-variants";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -1029,14 +1040,23 @@ export function CommandInlinePreview() {
 function AccordionLivePreview() {
   return (
     <PreviewShell>
-      <div className="mx-auto flex w-full max-w-lg flex-col gap-4">
-        <Accordion type="single" defaultValue="item-1">
-          <AccordionItem value="item-1">
+      <div className="mx-auto w-full max-w-lg">
+        <Accordion type="single" defaultValue="item-1" collapsible>
+          <AccordionItem value="item-1" className="border-b px-1">
             <AccordionTrigger>Getting started</AccordionTrigger>
-            <AccordionContent className="pt-3">
-              <p className="text-muted-foreground text-sm leading-7">
+            <AccordionContent>
+              <p className="text-muted-foreground pb-4 text-sm leading-7">
                 Use accordion items to reveal grouped content one section at a
                 time.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2" className="border-b px-1">
+            <AccordionTrigger>Details</AccordionTrigger>
+            <AccordionContent>
+              <p className="text-muted-foreground pb-4 text-sm leading-7">
+                Open and close each section—animations use the Radix content
+                height variable.
               </p>
             </AccordionContent>
           </AccordionItem>
@@ -1050,6 +1070,26 @@ export function AccordionInlinePreview() {
   return (
     <PreviewShell className="min-h-[190px]">
       <AccordionLivePreview />
+    </PreviewShell>
+  )
+}
+
+function AccordionVariantsLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="mx-auto w-full max-w-lg">
+        <AccordionVariantGrouped />
+      </div>
+    </PreviewShell>
+  )
+}
+
+export function AccordionVariantsInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[260px]">
+      <div className="mx-auto w-full max-w-lg">
+        <AccordionVariantGrouped />
+      </div>
     </PreviewShell>
   )
 }
@@ -2149,6 +2189,155 @@ export {
   TableLivePreview as TableInlinePreview,
 };
 
+function ListLivePreview() {
+  const rows = [
+    { title: "Notifications", sub: "Push, email, and in-app" },
+    { title: "Privacy", sub: "Who can see your activity" },
+  ];
+  return (
+    <PreviewShell>
+      <div className="bg-card text-card-foreground divide-border w-full max-w-lg divide-y overflow-hidden rounded-xl border">
+        {rows.map((row) => (
+          <button
+            key={row.title}
+            type="button"
+            className="hover:bg-muted/50 flex min-h-[52px] w-full items-center gap-3 px-4 text-left transition-colors"
+          >
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-semibold">{row.title}</div>
+              <div className="text-muted-foreground text-xs">{row.sub}</div>
+            </div>
+            <ChevronRight className="text-muted-foreground size-4 shrink-0" />
+          </button>
+        ))}
+      </div>
+    </PreviewShell>
+  );
+}
+
+function SegmentedControlLivePreview() {
+  const [value, setValue] = useState("list");
+  const options = [
+    { value: "list", label: "List" },
+    { value: "map", label: "Map" },
+  ];
+  return (
+    <PreviewShell>
+      <div className="flex w-full max-w-md flex-col gap-3">
+        <div className="bg-muted text-muted-foreground inline-flex h-10 w-full rounded-lg border p-1">
+          {options.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setValue(opt.value)}
+              className={cn(
+                "flex-1 rounded-md text-sm font-semibold transition-all",
+                value === opt.value
+                  ? "bg-background text-foreground shadow-sm"
+                  : "hover:text-foreground",
+              )}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+        <p className="text-muted-foreground text-sm">Selected: {value}</p>
+      </div>
+    </PreviewShell>
+  );
+}
+
+function FabLivePreview() {
+  const fabMenuActions = useMemo(
+    () => [
+      {
+        id: "msg",
+        label: "New message",
+        onPress: () => {},
+        icon: <MessageSquare className="text-secondary-foreground size-5" strokeWidth={2} />,
+      },
+      {
+        id: "photo",
+        label: "New photo",
+        onPress: () => {},
+        icon: <ImagePlus className="text-secondary-foreground size-5" strokeWidth={2} />,
+      },
+      {
+        id: "task",
+        label: "New task",
+        onPress: () => {},
+        icon: <ListTodo className="text-secondary-foreground size-5" strokeWidth={2} />,
+      },
+    ],
+    [],
+  );
+
+  return (
+    <PreviewShell>
+      <div className="flex w-full min-h-[220px] items-end justify-end">
+        <FabMenu
+          actions={fabMenuActions}
+          accessibilityLabel="Create"
+          renderMain={(open) =>
+            open ? (
+              <X className="text-primary-foreground size-7" strokeWidth={2.5} />
+            ) : (
+              <Plus className="text-primary-foreground size-7" strokeWidth={2.5} />
+            )
+          }
+        />
+      </div>
+    </PreviewShell>
+  );
+}
+
+function SearchBarLivePreview() {
+  const [q, setQ] = useState("");
+  return (
+    <PreviewShell>
+      <div className="flex w-full max-w-md flex-col gap-3">
+        <div className="border-input flex min-h-12 w-full items-center gap-2 rounded-xl border bg-background px-3">
+          <Search className="text-muted-foreground size-5 shrink-0" />
+          <Input
+            className="h-10 flex-1 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
+            placeholder="Search places, people…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+          />
+          {q ? (
+            <button
+              type="button"
+              className="text-muted-foreground hover:text-foreground text-lg leading-none"
+              onClick={() => setQ("")}
+              aria-label="Clear search"
+            >
+              ×
+            </button>
+          ) : null}
+        </div>
+        <p className="text-muted-foreground text-sm">
+          {q ? `Query: ${q}` : "Type to see the clear affordance."}
+        </p>
+      </div>
+    </PreviewShell>
+  );
+}
+
+function ChipLivePreview() {
+  const [on, setOn] = useState(true);
+  return (
+    <PreviewShell>
+      <div className="flex min-h-[100px] flex-wrap items-center justify-center gap-3">
+        <Chip selected={on} onClick={() => setOn((v) => !v)}>
+          {on ? "Enabled" : "Disabled"}
+        </Chip>
+        <Chip variant="outline">Outline</Chip>
+        <Chip onRemove={() => {}}>Removable</Chip>
+      </div>
+    </PreviewShell>
+  );
+}
+
 export function ComponentLivePreview({ slug }: { slug: string }) {
   switch (slug) {
     case "button":
@@ -2157,6 +2346,8 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
       return <BreadcrumbLivePreview />;
     case "accordion":
       return <AccordionLivePreview />;
+    case "accordion-variants":
+      return <AccordionVariantsLivePreview />;
     case "alert":
       return <AlertInlinePreview />;
     case "alert-dialog":
@@ -2235,7 +2426,27 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
       return <ProgressLivePreview />;
     case "otp-input":
       return <OTPLivePreview />;
+    case "list":
+      return <ListLivePreview />;
+    case "segmented-control":
+      return <SegmentedControlLivePreview />;
+    case "fab":
+      return <FabLivePreview />;
+    case "search-bar":
+      return <SearchBarLivePreview />;
+    case "chip":
+      return <ChipLivePreview />;
     default:
-      return null;
+      return (
+        <PreviewShell>
+          <p className="text-muted-foreground max-w-md text-center text-sm leading-7">
+            No web preview is registered for this slug yet. Use{" "}
+            <span className="text-foreground font-medium">Scan to preview</span>{" "}
+            to open the native Expo showcase, or switch to the{" "}
+            <span className="text-foreground font-medium">Code</span> tab for the
+            source.
+          </p>
+        </PreviewShell>
+      );
   }
 }
