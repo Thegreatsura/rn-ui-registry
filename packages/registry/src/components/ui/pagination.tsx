@@ -4,8 +4,11 @@ import {
     StyleSheet,
     View,
     type PressableProps,
+    type PressableStateCallbackType,
+    type StyleProp,
     type TextProps,
     type ViewProps,
+    type ViewStyle,
 } from 'react-native';
 
 import { Text as UiText, TextStyleContext } from './text';
@@ -31,24 +34,27 @@ type PaginationLinkProps = PressableProps & {
 function PaginationLink({ style, active, disabled, children, ...props }: PaginationLinkProps) {
     const theme = useRegistryTheme();
 
+    const resolveStyle = (state: PressableStateCallbackType): StyleProp<ViewStyle> =>
+        typeof style === 'function' ? style(state) : style;
+
     return (
         <Pressable
             accessibilityRole="button"
             accessibilityState={{ disabled: Boolean(disabled), selected: Boolean(active) }}
             disabled={disabled}
             hitSlop={4}
-            style={({ pressed }) => [
+            style={(state) => [
                 styles.link,
                 {
                     backgroundColor: active
                         ? theme.primary
-                        : pressed
+                        : state.pressed
                           ? theme.muted
                           : theme.background,
                     borderColor: active ? theme.primary : theme.border,
                     opacity: disabled ? 0.38 : 1,
                 },
-                style as object,
+                resolveStyle(state),
             ]}
             {...props}
         >
@@ -65,13 +71,15 @@ function PaginationLink({ style, active, disabled, children, ...props }: Paginat
     );
 }
 
+function chevronMergedStyle(
+    style: PaginationLinkProps['style'],
+): (state: PressableStateCallbackType) => StyleProp<ViewStyle> {
+    return (state) => [styles.chevronSlot, typeof style === 'function' ? style(state) : style];
+}
+
 function PaginationPrevious({ children, style, ...props }: PaginationLinkProps) {
     return (
-        <PaginationLink
-            accessibilityLabel="Previous page"
-            style={[styles.chevronSlot, style]}
-            {...props}
-        >
+        <PaginationLink accessibilityLabel="Previous page" style={chevronMergedStyle(style)} {...props}>
             {children ?? <UiText style={styles.chevron}>‹</UiText>}
         </PaginationLink>
     );
@@ -79,11 +87,7 @@ function PaginationPrevious({ children, style, ...props }: PaginationLinkProps) 
 
 function PaginationNext({ children, style, ...props }: PaginationLinkProps) {
     return (
-        <PaginationLink
-            accessibilityLabel="Next page"
-            style={[styles.chevronSlot, style]}
-            {...props}
-        >
+        <PaginationLink accessibilityLabel="Next page" style={chevronMergedStyle(style)} {...props}>
             {children ?? <UiText style={styles.chevron}>›</UiText>}
         </PaginationLink>
     );

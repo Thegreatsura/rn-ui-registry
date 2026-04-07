@@ -10,6 +10,7 @@
     "version": "0.0.0",
     "exports": {
         "./components/ui/button": "./src/components/ui/button.tsx",
+        "./components/ui/button-variants": "./src/components/ui/button-variants/index.tsx",
         "./components/ui/text": "./src/components/ui/text.tsx",
         "./components/ui/input": "./src/components/ui/input.tsx",
         "./components/ui/badge": "./src/components/ui/badge.tsx",

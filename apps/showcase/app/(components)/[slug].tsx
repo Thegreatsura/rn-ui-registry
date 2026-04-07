@@ -57,6 +57,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import { ButtonVariantsShowcase } from "@/components/ui/button-variants";
 import {
   Carousel,
   CarouselContent,
@@ -224,6 +225,7 @@ const COMPONENT_META = {
   breadcrumb: { title: "Breadcrumb" },
   carousel: { title: "Carousel" },
   button: { title: "Button" },
+  "button-variants": { title: "Button variants" },
   checkbox: { title: "Checkbox" },
   chip: { title: "Chip" },
   collapsible: { title: "Collapsible" },
@@ -476,6 +478,34 @@ function ButtonExamples() {
         </View>
       </Block>
     </>
+  );
+}
+
+function ButtonVariantsPreview() {
+  return (
+    <ScrollView
+      nestedScrollEnabled
+      style={{ maxHeight: 440 }}
+      contentContainerStyle={{ paddingBottom: 12 }}
+      showsVerticalScrollIndicator={false}
+    >
+      <ButtonVariantsShowcase />
+    </ScrollView>
+  );
+}
+
+function ButtonVariantsExamples() {
+  return (
+    <Block title="All 20 presets">
+      <ScrollView
+        nestedScrollEnabled
+        style={{ maxHeight: 560 }}
+        contentContainerStyle={{ paddingBottom: 12 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <ButtonVariantsShowcase />
+      </ScrollView>
+    </Block>
   );
 }
 
@@ -3662,6 +3692,7 @@ export default function ComponentScreen() {
           {resolvedSlug === "carousel" && <CarouselPreview />}
           {resolvedSlug === "breadcrumb" && <BreadcrumbPreview />}
           {resolvedSlug === "button" && <ButtonPreview />}
+          {resolvedSlug === "button-variants" && <ButtonVariantsPreview />}
           {resolvedSlug === "spotlight-button" && (
             <SpotlightButtonPreview
               primarySurface={primarySurface}
@@ -3718,6 +3749,7 @@ export default function ComponentScreen() {
           {resolvedSlug === "carousel" && <CarouselExamples />}
           {resolvedSlug === "breadcrumb" && <BreadcrumbExamples />}
           {resolvedSlug === "button" && <ButtonExamples />}
+          {resolvedSlug === "button-variants" && <ButtonVariantsExamples />}
           {resolvedSlug === "spotlight-button" && (
             <SpotlightButtonExamples
               primarySurface={primarySurface}

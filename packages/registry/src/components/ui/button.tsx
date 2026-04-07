@@ -21,6 +21,10 @@ type ButtonProps = Omit<PressableProps, 'children'> & {
     className?: string;
     variant?: ButtonVariant;
     size?: ButtonSize;
+    /** Fully rounded control (pill). */
+    shape?: 'default' | 'pill';
+    /** Stretch to parent width (e.g. stacked CTAs). */
+    fullWidth?: boolean;
 };
 
 function getButtonStyle(variant: ButtonVariant, theme: ReturnType<typeof useRegistryTheme>): StyleProp<ViewStyle> {
@@ -97,7 +101,16 @@ function getSizeStyle(size: ButtonSize): StyleProp<ViewStyle> {
     }
 }
 
-function Button({ style, variant = 'default', size = 'default', disabled, children, ...props }: ButtonProps) {
+function Button({
+    style,
+    variant = 'default',
+    size = 'default',
+    shape = 'default',
+    fullWidth = false,
+    disabled,
+    children,
+    ...props
+}: ButtonProps) {
     const theme = useRegistryTheme();
 
     return (
@@ -112,6 +125,7 @@ function Button({ style, variant = 'default', size = 'default', disabled, childr
 
                 return [
                     styles.pressable,
+                    fullWidth && styles.pressableFullWidth,
                     resolvedStyle,
                 ];
             }}
@@ -122,6 +136,7 @@ function Button({ style, variant = 'default', size = 'default', disabled, childr
                     <View
                         style={[
                             styles.baseButton,
+                            shape === 'pill' && styles.pillShape,
                             getButtonStyle(variant, theme),
                             getSizeStyle(size),
                             pressed && variant !== 'link'
@@ -143,6 +158,13 @@ function Button({ style, variant = 'default', size = 'default', disabled, childr
 const styles = StyleSheet.create({
     pressable: {
         alignSelf: 'flex-start',
+    },
+    pressableFullWidth: {
+        alignSelf: 'stretch',
+        width: '100%',
+    },
+    pillShape: {
+        borderRadius: 999,
     },
     baseButton: {
         alignItems: 'center',

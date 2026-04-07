@@ -1,0 +1,59 @@
+---
+title: Button variants
+description: Twenty opinionated button patterns on top of Button—elevation, glass, pills, loading and async states, toggles, steppers, badges, split rows, and motion (pulse / spring).
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies:
+  - button
+install:
+  - watermelon add button-variants
+qrValue: showcase://components/button-variants
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/button-variants/index.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+import { CompPreview } from "@/components/mdx/component-preview";
+import { ButtonVariantsPresetsInlinePreview } from "@/components/showcase/component-live-preview";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import {
+  ButtonVariantsShowcase,
+  ButtonVariantElevated,
+  ButtonVariantLoading,
+  BUTTON_VARIANT_ROWS,
+} from "@/components/ui/button-variants";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Use **`ButtonVariantsShowcase`** for a labeled grid of all 20, or import individual **`ButtonVariant*`** modules from `components/ui/button-variants/` (one component file per preset, plus `index.tsx`, `types.ts`, and in the registry package `shared-styles.ts`). Each wraps the base **`Button`** with layout, motion, or local state. The base **`Button`** also supports **`shape="pill"`** and **`fullWidth`** where needed.
+
+  <DocSubsection>
+    <CompPreview code={`<ButtonVariantsShowcase />`}>
+      <ButtonVariantsPresetsInlinePreview />
+    </CompPreview>
+  </DocSubsection>
+</DocSection>
+
+## Presets
+
+<DocSection>
+  <ApiTable
+    rows={[
+      { prop: "ButtonVariantElevated … DownloadTrailing", type: "components", default: "—", description: "See source file for the full list of 20 named exports." },
+      { prop: "ButtonVariantsShowcase", type: "() => JSX", default: "—", description: "Scrollable grid with labels." },
+      { prop: "BUTTON_VARIANT_ROWS", type: "{ id, label, render }[]", default: "—", description: "Metadata for building custom layouts." },
+    ]}
+  />
+</DocSection>
