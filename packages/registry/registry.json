@@ -22,6 +22,140 @@
                 }
             }
         },
+        "button-variants": {
+            "name": "button-variants",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/button-variants/index.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/types.ts",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/shared-styles.ts",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-elevated.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-soft.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-pill.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-dashed-frame.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-icon-leading.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-loading.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-async-success.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-toggle.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-stepper.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-destructive-solid.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-link-chevron.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-block.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-compact.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-pulse.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-spring-scale.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-badge.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-split-row.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-glass.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-icon-favorite.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                },
+                {
+                    "path": "components/ui/button-variants/button-variant-download-trailing.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "button",
+                "text",
+                "spinner"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
         "text": {
             "name": "text",
             "type": "components:ui",

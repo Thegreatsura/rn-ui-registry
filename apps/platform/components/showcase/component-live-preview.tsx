@@ -18,6 +18,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import { ButtonVariantsShowcase } from "@/components/ui/button-variants";
 import { Input } from "@/components/ui/input";
 import { SpotlightButtonDemo } from "@/components/showcase/spotlight-button-demo";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
@@ -214,6 +215,26 @@ function ButtonLivePreview() {
         <p className="text-muted-foreground text-sm">
           This preview is live. Click the primary button to change its label.
         </p>
+      </div>
+    </PreviewShell>
+  );
+}
+
+function ButtonVariantsLivePreview() {
+  return (
+    <PreviewShell>
+      <div className="mx-auto max-h-[min(520px,70vh)] w-full max-w-lg overflow-y-auto pr-1">
+        <ButtonVariantsShowcase />
+      </div>
+    </PreviewShell>
+  );
+}
+
+export function ButtonVariantsPresetsInlinePreview() {
+  return (
+    <PreviewShell className="min-h-[320px]">
+      <div className="mx-auto max-h-[400px] w-full max-w-lg overflow-y-auto">
+        <ButtonVariantsShowcase />
       </div>
     </PreviewShell>
   );
@@ -2342,6 +2363,8 @@ export function ComponentLivePreview({ slug }: { slug: string }) {
   switch (slug) {
     case "button":
       return <ButtonLivePreview />;
+    case "button-variants":
+      return <ButtonVariantsLivePreview />;
     case "breadcrumb":
       return <BreadcrumbLivePreview />;
     case "accordion":

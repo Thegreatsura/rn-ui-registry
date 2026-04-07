@@ -24,6 +24,11 @@ const CATEGORIES = [
   { id: "carousel", name: "Carousel", icon: "rectangle.on.rectangle" as const },
   { id: "breadcrumb", name: "Breadcrumb", icon: "point.topleft.down.curvedto.point.bottomright.up" as const },
   { id: "button", name: "Button", icon: "square.and.pencil" as const },
+  {
+    id: "button-variants",
+    name: "Button variants",
+    icon: "square.and.pencil" as const,
+  },
   { id: "checkbox", name: "Checkbox", icon: "checkmark.square" as const },
   { id: "collapsible", name: "Collapsible", icon: "chevron.down" as const },
   { id: "command", name: "Command", icon: "magnifyingglass" as const },
