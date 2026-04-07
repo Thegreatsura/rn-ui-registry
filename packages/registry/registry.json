@@ -150,6 +150,30 @@
                 }
             }
         },
+        "accordion-variants": {
+            "name": "accordion-variants",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/accordion-variants.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "accordion",
+                "avatar",
+                "text"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
         "alert-dialog": {
             "name": "alert-dialog",
             "type": "components:ui",
@@ -846,6 +870,114 @@
             "files": [
                 {
                     "path": "components/ui/tooltip.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "text"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "chip": {
+            "name": "chip",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/chip.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "text"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "fab": {
+            "name": "fab",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/fab.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "list": {
+            "name": "list",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/list.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "text"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "search-bar": {
+            "name": "search-bar",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/search-bar.tsx",
+                    "content": "",
+                    "type": "registry:ui"
+                }
+            ],
+            "dependencies": [],
+            "registryDependencies": [
+                "text"
+            ],
+            "tailwind": {
+                "config": {
+                    "theme": {
+                        "extend": {}
+                    }
+                }
+            }
+        },
+        "segmented-control": {
+            "name": "segmented-control",
+            "type": "components:ui",
+            "files": [
+                {
+                    "path": "components/ui/segmented-control.tsx",
                     "content": "",
                     "type": "registry:ui"
                 }

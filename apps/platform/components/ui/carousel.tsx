@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -11,6 +12,7 @@ type CarouselContextValue = {
   setIndex: (index: number) => void
   scrollToIndex: (index: number) => void
   loop: boolean
+  viewportRef: React.RefObject<HTMLDivElement | null>
 }
 
 const CarouselContext = React.createContext<CarouselContextValue | null>(null)
@@ -75,7 +77,7 @@ function Carousel({
       const clamped = clampIndex(nextIndex, count, loop)
       const viewport = viewportRef.current
 
-      if (viewport) {
+      if (viewport && viewport.clientWidth > 0) {
         viewport.scrollTo({
           left: clamped * viewport.clientWidth,
           behavior: "smooth",
@@ -87,6 +89,27 @@ function Carousel({
     [count, loop, setIndex]
   )
 
+  // After slides mount, align scroll for non-zero defaultIndex (viewport width may be 0 on first paint)
+  React.useEffect(() => {
+    if (count <= 0 || defaultIndex === 0) {
+      return
+    }
+    const viewport = viewportRef.current
+    if (!viewport) {
+      return
+    }
+    const apply = () => {
+      if (viewport.clientWidth <= 0) {
+        return
+      }
+      const t = clampIndex(defaultIndex, count, loop)
+      viewport.scrollTo({ left: t * viewport.clientWidth, behavior: "auto" })
+    }
+    apply()
+    const id = requestAnimationFrame(apply)
+    return () => cancelAnimationFrame(id)
+  }, [count, defaultIndex, loop])
+
   return (
     <CarouselContext.Provider
       value={{
@@ -96,6 +119,7 @@ function Carousel({
         setIndex,
         scrollToIndex,
         loop,
+        viewportRef,
       }}
     >
       <div
@@ -103,7 +127,7 @@ function Carousel({
         className={cn("relative w-full", className)}
         {...props}
       >
-        <div ref={viewportRef}>{children}</div>
+        {children}
       </div>
     </CarouselContext.Provider>
   )
@@ -114,7 +138,7 @@ function CarouselContent({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { setCount, setIndex } = useCarouselContext()
+  const { setCount, setIndex, viewportRef } = useCarouselContext()
 
   React.useEffect(() => {
     setCount(React.Children.count(children))
@@ -122,9 +146,10 @@ function CarouselContent({
 
   return (
     <div
+      ref={viewportRef}
       data-slot="carousel-content"
       className={cn(
-        "flex snap-x snap-mandatory overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+        "flex w-full touch-pan-x snap-x snap-mandatory overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
         className
       )}
       onScroll={(event) => {
@@ -174,12 +199,12 @@ function CarouselPrevious({
         scrollToIndex(index - 1)
       }}
       className={cn(
-        "inline-flex size-10 items-center justify-center rounded-full border bg-background text-sm font-medium shadow-sm transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40",
+        "inline-flex size-10 shrink-0 items-center justify-center rounded-full border bg-background text-sm font-medium shadow-sm transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40",
         className
       )}
       {...props}
     >
-      {children ?? "<"}
+      {children ?? <ChevronLeft className="size-4" strokeWidth={2} />}
     </button>
   )
 }
@@ -205,12 +230,12 @@ function CarouselNext({
         scrollToIndex(index + 1)
       }}
       className={cn(
-        "inline-flex size-10 items-center justify-center rounded-full border bg-background text-sm font-medium shadow-sm transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40",
+        "inline-flex size-10 shrink-0 items-center justify-center rounded-full border bg-background text-sm font-medium shadow-sm transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40",
         className
       )}
       {...props}
     >
-      {children ?? ">"}
+      {children ?? <ChevronRight className="size-4" strokeWidth={2} />}
     </button>
   )
 }

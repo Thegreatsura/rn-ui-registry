@@ -80,6 +80,7 @@ program
         await (0, config_js_1.setConfig)(cwd, config);
         await (0, files_js_1.ensureComponentsDirectory)(cwd, config);
         await (0, files_js_1.ensureUtilsFile)(cwd, config);
+        await (0, files_js_1.ensureCssFile)(cwd, config);
         const requiredDeps = [
             'clsx',
             'tailwind-merge',

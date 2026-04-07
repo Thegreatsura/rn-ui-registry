@@ -1,4 +1,4 @@
 {
   "title": "Components",
-  "pages": ["button", "text", "input", "badge", "avatar", "breadcrumb", "card", "accordion", "alert-dialog", "alert", "aspect-ratio", "carousel", "collapsible", "command", "dialog", "drawer", "dropdown-menu", "form", "hover-card", "input-group", "kbd", "label", "popover", "pagination", "radio-group", "separator", "scroll-area", "sheet", "slider", "spinner", "tabs", "table", "textarea", "skeleton", "switch", "checkbox", "progress", "otp-input", "toggle", "toggle-group", "tooltip", "spotlight-button"]
+  "pages": ["button", "text", "input", "badge", "avatar", "breadcrumb", "card", "accordion", "accordion-variants", "alert-dialog", "alert", "aspect-ratio", "carousel", "collapsible", "command", "dialog", "drawer", "dropdown-menu", "form", "hover-card", "input-group", "kbd", "label", "popover", "pagination", "radio-group", "separator", "scroll-area", "sheet", "slider", "spinner", "tabs", "table", "textarea", "skeleton", "switch", "checkbox", "progress", "otp-input", "toggle", "toggle-group", "tooltip", "spotlight-button"]
 }

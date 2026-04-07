@@ -1,0 +1,36 @@
+---
+title: Segmented Control
+description: Single-choice horizontal segments for filters, view modes, and compact toggles on small screens.
+kind: component
+category: Components
+image: /logo.png
+featured: false
+dependencies: []
+install:
+  - watermelon add segmented-control
+qrValue: showcase://components/segmented-control
+appStoreHref: https://apps.apple.com/app/expo-go/id982107779
+playStoreHref: https://play.google.com/store/apps/details?id=host.exp.exponent
+sourceHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/src/components/ui/segmented-control.tsx
+registryHref: https://github.com/vanshpatelx/RN/blob/main/packages/registry/registry.json
+---
+
+import { CodeBlock } from "@/components/showcase/code-block";
+import { ApiTable, DocSection, DocSubsection } from "@/components/showcase/docs-primitives";
+
+## Import
+
+<DocSection>
+  <CodeBlock language="tsx" title="Import" showLineNumbers={false}>
+    {`import { SegmentedControl } from "@/components/ui/segmented-control";`}
+  </CodeBlock>
+</DocSection>
+
+## Usage
+
+<DocSection>
+  Pass `options` with `value` / `label`, and control selection with `value` and `onValueChange`.
+  <DocSubsection>
+    <ApiTable rows={[{ prop: "options", type: "{ value: string; label: string }[]", default: "-", description: "Segment definitions." }, { prop: "value", type: "string", default: "-", description: "Selected segment value." }, { prop: "onValueChange", type: "(value: string) => void", default: "-", description: "Called when the user selects a segment." }]} />
+  </DocSubsection>
+</DocSection>

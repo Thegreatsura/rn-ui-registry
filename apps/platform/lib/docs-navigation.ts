@@ -1,4 +1,5 @@
 import { docsSource } from "@/lib/docs-source";
+import { normalizeDocSlug } from "@/lib/normalize-doc-slug";
 
 export type GuideLink = {
   title: string;
@@ -57,7 +58,9 @@ export function getComponentLinks(): ComponentLink[] {
       const pageData = page.data as DocsNavigationPageData;
 
       return {
-      slug: page.slugs.at(-1) ?? page.url.split("/").at(-1) ?? "",
+      slug: normalizeDocSlug(
+        page.slugs.at(-1) ?? page.url.split("/").at(-1) ?? "",
+      ),
       title: pageData.title,
       description: pageData.description ?? "",
       category: pageData.category ?? COMPONENTS_CATEGORY,

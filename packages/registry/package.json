@@ -16,6 +16,7 @@
         "./components/ui/avatar": "./src/components/ui/avatar.tsx",
         "./components/ui/breadcrumb": "./src/components/ui/breadcrumb.tsx",
         "./components/ui/accordion": "./src/components/ui/accordion.tsx",
+        "./components/ui/accordion-variants": "./src/components/ui/accordion-variants.tsx",
         "./components/ui/alert-dialog": "./src/components/ui/alert-dialog.tsx",
         "./components/ui/aspect-ratio": "./src/components/ui/aspect-ratio.tsx",
         "./components/ui/carousel": "./src/components/ui/carousel.tsx",

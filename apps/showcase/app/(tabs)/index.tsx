@@ -6,6 +6,11 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 const CATEGORIES = [
   { id: "accordion", name: "Accordion", icon: "list.bullet.indent" as const },
   {
+    id: "accordion-variants",
+    name: "Accordion variants",
+    icon: "list.bullet.indent" as const,
+  },
+  {
     id: "alert-dialog",
     name: "Alert Dialog",
     icon: "exclamationmark.triangle" as const,
@@ -94,6 +99,15 @@ const CATEGORIES = [
   { id: "label", name: "Label", icon: "tag.fill" as const },
   { id: "text", name: "Typography", icon: "textformat" as const },
   { id: "tooltip", name: "Tooltip", icon: "info.bubble" as const },
+  { id: "list", name: "List", icon: "list.bullet" as const },
+  {
+    id: "segmented-control",
+    name: "Segmented Control",
+    icon: "square.split.2x1" as const,
+  },
+  { id: "fab", name: "FAB", icon: "plus.circle.fill" as const },
+  { id: "search-bar", name: "Search Bar", icon: "magnifyingglass.circle" as const },
+  { id: "chip", name: "Chip", icon: "tag" as const },
 ];
 
 export default function HomeScreen() {
